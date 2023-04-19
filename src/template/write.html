@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Daily</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/write.css">
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
+
+</head>
+<body>
+  <!-- layout -->
+  <h1 class="a11y-hidden">Mini Daily</h1>
+  <div class="wrapper">
+    <div class="inner">
+      <section class="section-profile">
+        <h2 class="a11y-hidden">왼쪽 프로필 영역</h2>
+        <article class="clock">
+          <h2 class="a11y-hidden">clock</h2>
+          <span class="time">
+          </span>
+        </article>
+        <article class="profile">
+          <h2 class="a11y-hidden">유저 프로필</h2>
+          <img class="profile-img" src="../img/profile.png" alt="유저 프로필 이미지">
+          <span class="profile-name">User</span>
+          <div class="introduce-box">
+            <p class="profile-introduce">
+             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eius voluptatem incidunt voluptate cum aperiam, dolorum atque minima at dignissimos saepe, cupiditate et asperiores dicta cumque ex vitae provident, officia dolor.
+            </p>
+          </div>
+        </article>
+        <article class="calendar">
+          <h2 class="a11y-hidden">달력</h2>
+          <table>
+            <caption>
+              <time datetime="2023-04">
+                <span class="year">2023</span>년
+                <span class="month">4</span>월
+              </time>
+            </caption>
+            <tbody>
+              <tr>
+                <th scope="col">일</th>
+                <th scope="col">월</th>
+                <th scope="col">화</th>
+                <th scope="col">수</th>
+                <th scope="col">목</th>
+                <th scope="col">금</th>
+                <th scope="col">토</th>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <button type="button" class="prev">
+            <span class="a11y-hidden">이전달</span>&#60;
+          </button>
+           <button type="button" class="next">
+            <span class="a11y-hidden">다음달</span>&#62;
+          </button>
+        </article>
+      </section>
+      <!-- layout -->
+      <section class="section-contents">
+        <h2 class="a11y-hidden">오른쪽 콘텐츠 영역</h2>
+        <form class="post-form">
+          <input class="input-title" type="text" placeholder="제목">
+          <div id="editor"></div>
+          <button type="button" class="btn-submit">작성하기</button>
+        </form>
+      </section>
+      <div class="links">
+        <a href="/">홈</a>
+        <a href="#">다이어리</a>
+        <a href="write.html">글작성</a>
+        <a href="#">미니게임</a>
+        <a href="#">운세보기</a>
+      </div>
+    </div>
+  </div>
+  <script src="../js/main/calendar.js"></script>
+  <script src="../js/main/clock.js"></script>
+  <script src="../js/main/main.js"></script>
+  <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.2/purify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuid.min.js"></script>
+  <script src="../js/write.js"></script>
+</body>
+</html>
