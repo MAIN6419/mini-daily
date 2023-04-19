@@ -1,0 +1,53 @@
+let year = new Date().getFullYear();
+let month = new Date().getMonth() + 1;
+
+calendar(year, month);
+
+function calendar(newYear, newMonth) {
+  // 1. 무슨 요일에 시작하는지 알아야 한다.
+  const time = new Date(newYear, newMonth - 1, 1);
+  // 2. 해당 월에 날이 며칠이나 있는지
+  // const timeLength = 32 - new Data(newYear, newMonth - 1, 32).getDate();
+  const timeLength = new Date(newYear, newMonth, 0).getDate();
+
+  let year = time.getFullYear();
+  let month = time.getMonth();
+  let date = time.getDate();
+  let day = time.getDay();
+
+  const captionYear = document.querySelector(".year");
+  const captionMonth = document.querySelector(".month");
+  const timeEl = document.querySelector(".calendar time");
+  const days = document.querySelectorAll("tr td");
+
+  for (let i = 0; i < days.length; i++) {
+    days[i].classList.remove("today");
+    days[i].innerHTML = "&nbsp";
+  }
+
+  for (let i = day; i < day + timeLength; i++) {
+    if (
+      year === new Date().getFullYear() &&
+      month === new Date().getMonth() &&
+      date === new Date().getDate()
+    ) {
+      days[i].classList.add("today");
+    }
+    days[i].textContent = date++;
+  }
+
+  captionYear.textContent = year;
+  captionMonth.textContent = month + 1;
+  timeEl.dateTime = `${year}-${month + 1}`;
+}
+
+const btns = document.querySelectorAll(".calendar button");
+btns.forEach((item) =>
+  item.addEventListener("click", () => {
+    if (item.classList.contains("prev")) {
+      calendar(year, --month);
+    } else {
+      calendar(year, ++month);
+    }
+  })
+);
