@@ -1,0 +1,60 @@
+.section-contents{
+  overflow-y: scroll;
+  position: relative;
+}
+.daily-wrapper{
+  width: 80%;
+  margin: 0 auto;
+  position: relative;
+}
+.daily-title{
+  font-size: 14px;
+  background-color: #eee;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  padding: 8px 20px;
+}
+.daily-info{
+  padding: 5px 20px 20px 20px;
+}
+.daily-createdAt{
+  font-size: 14px;
+  color: #bdbdbd;
+}
+.daily-contents{
+  font-size: 14px;
+  white-space: pre-wrap;
+  line-height: 1.2;
+  margin: 20px 0;
+}
+.dailyList-link{
+  position: absolute;
+  top: 0px;
+  left: -45px;
+  background: url(../img/back-btn.png) no-repeat center / 30px #eee;
+  width: 35px;
+  height: 35px;
+  border-radius: 5px;
+}
+.daily-btns{
+  position: absolute;
+  top: 35px;
+  right: 20px;
+}
+.edit-btn{
+  border: none;
+  background: url(../img/edit-icon.png) no-repeat center / 20px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+.del-btn{
+  border: none;
+  background: url(../img/delete-icon.png) no-repeat center / 17px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+
+

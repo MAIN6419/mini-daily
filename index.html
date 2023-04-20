@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="ko-KR">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
     <title>Mini Daily</title>
-    <link rel="stylesheet" href="./src/css/style.css" />
-    <link rel="stylesheet" href="./src/css/home.css" />
+    <link rel="stylesheet" href="./src/css/style.css" >
+    <link rel="stylesheet" href="./src/css/home.css" >
   </head>
   <body>
     <!-- layout -->
@@ -25,7 +25,7 @@
               class="profile-img"
               src="./src/img/profile.png"
               alt="유저 프로필 이미지"
-            />
+            >
             <span class="profile-name">User</span>
             <div class="introduce-box">
               <p class="profile-introduce">
@@ -138,38 +138,21 @@
               </ul>
             </div>
             <div class="newGameRecord">
-              <h2>최근게임기록</h2>
-              <ul>
-                <li>
-                  <a href="#">
-                    <time datetime="2019-04-19">2023-04-19-19:20</time>
-                    <span> 30초</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <time datetime="2019-04-19">2023-04-19-19:20</time>
-                    <span>20초</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <time datetime="2019-04-19">2023-04-19-19:20</time>
-                    <span>10초</span>
-                  </a>
-                </li>
-              </ul>
+              <h2>오늘의 운세</h2>
+              <p>오늘의 운세는....</p>
             </div>
           </div>
-          <img
+          <!-- gif 이미지를 mp4로 변환 용량을 50% 줄임 -->
+          <video
             class="home-img"
-            src="https://i.pinimg.com/originals/9f/92/6c/9f926c8c220127d81c8ba6897aa8d5db.gif"
-            alt="홈 화면 배경 gif 이미지"
-          />
+            src="./src/img/main-bg.mp4"
+            autoplay loop muted playsinline
+          >
+          </video>
         </section>
         <div class="links">
           <a href="/">홈</a>
-          <a href="./src/template/daily.html">다이어리</a>
+          <a href="./src/template/dailyList.html">다이어리</a>
           <a href="./src/template/write.html">글작성</a>
           <a href="#">미니게임</a>
           <a href="#">운세보기</a>

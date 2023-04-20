@@ -10,11 +10,17 @@
   font-size: 16px;
   box-sizing: border-box;
 }
+.input-contents{
+  width: 700px;
+  padding: 20px;
+  height: 500px;
+  box-sizing: border-box;
+  resize: none;
+  line-height: 1.5;
+  font-size: 14px;
+}
 .btn-submit{
   padding: 10px 30px;
   font-size: 20px;
 }
-#editor {
-  width: 100%;
-  max-width: 700px; /* 최대 너비 지정 */
-}
+

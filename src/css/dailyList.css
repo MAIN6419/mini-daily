@@ -1,0 +1,37 @@
+.section-contents{
+  overflow-y: scroll;
+}
+.daily-lists {
+  width: 80%;
+  margin: 0 auto;
+}
+.daily-link {
+  display: block;
+  padding: 20px 20px 30px 20px;
+  height: 100px;
+}
+.daily-item {
+  border: 2px solid lightblue;
+  margin-bottom: 20px;
+}
+.item-title {
+  margin-bottom: 5px;
+}
+.item-createdAt {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #bdbdbd;
+}
+.item-contents {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-height: 1.2;
+  -webkit-line-clamp: 3;
+  white-space: pre-wrap;
+}
+.none-item{
+  text-align: center;
+  margin-top: 50px;
+}

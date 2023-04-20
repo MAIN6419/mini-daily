@@ -6,8 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mini Daily</title>
   <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/write.css">
-  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css">
+  <link rel="stylesheet" href="../css/dailyList.css">
 
 </head>
 <body>
@@ -107,6 +106,7 @@
               </tr>
             </tbody>
           </table>
+ 
           <button type="button" class="prev">
             <span class="a11y-hidden">이전달</span>&#60;
           </button>
@@ -117,12 +117,10 @@
       </section>
       <!-- layout -->
       <section class="section-contents">
-        <h2 class="a11y-hidden">오른쪽 콘텐츠 영역</h2>
-        <form class="post-form">
-          <input class="input-title" type="text" placeholder="제목">
-          <textarea class="input-contents" placeholder="내용"></textarea>
-          <button type="button" class="btn-submit">작성하기</button>
-        </form>
+        <h2 class="a11y-hidden">다이어리 글 목록</h2>
+        <ul class="daily-lists">
+          <!-- 다이어리 -->
+        </ul>
       </section>
       <div class="links">
         <a href="/">홈</a>
@@ -133,10 +131,10 @@
       </div>
     </div>
   </div>
+  <script src="../js/main/libray.js"></script>
   <script src="../js/main/calendar.js"></script>
   <script src="../js/main/clock.js"></script>
   <script src="../js/main/main.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuid.min.js"></script>
-  <script src="../js/write.js"></script>
+  <script src="../js/dailyList.js"></script>
 </body>
 </html>
