@@ -6,12 +6,10 @@ if(localStorage.getItem('daily')){
 const $inputTitle = document.querySelector(".input-title");
 const $inputcontents= document.querySelector(".input-contents");
 const $submitBtn = document.querySelector(".btn-submit");
-$inputTitle.addEventListener('input', (e)=>{
-  e.target.value = e.target.value.trim();
-})
+
 $submitBtn.addEventListener('click', ()=>{
   // 유효성 검사
-  if(!$inputTitle.value){
+  if(!$inputTitle.value.trim()){
     alert("제목을 입력해주세요!");
     return;
   }

@@ -1,0 +1,180 @@
+@import url("./main.css");
+.section-contents {
+  position: relative;
+  overflow: hidden;
+  background-color:aliceblue;
+}
+.game-wrapper {
+  margin-top: 30px;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 80px);
+  grid-template-rows: repeat(3, 110px);
+  place-content: center;
+  grid-gap: 30px 20px;
+}
+.card {
+  width: 80px;
+  height: 110px;
+  perspective: 300px;
+}
+.card:hover {
+  cursor: pointer;
+}
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  transform: rotateY(180deg);
+}
+
+.card-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  transform: translate(-50%, -50%);
+  background-image: url(../img/game-sprite.png);
+  background-size: 352px 248px;
+}
+.card.flipped .card-inner {
+  transform: rotateY(0deg);
+}
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background-repeat: no-repeat;
+  background-color: lavenderblush;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+.card-front {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 45px;
+}
+.card-back {
+  transform: rotateY(180deg);
+  background-color: gold;
+  position: relative;
+  overflow: hidden;
+}
+.card-back::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: url(../img/game-sprite.png) no-repeat -268px -2px / 352px 248px;
+  width: 80px;
+  height: 110px;
+}
+.timer-box {
+  margin: 20px auto;
+  width: 180px;
+  height: 40px;
+  padding: 10px 20px;
+  border: 3px solid black;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.best-record{
+  display: block;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: red;
+}
+.game-btns {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: right;
+}
+.game-btns button {
+  background-color: orange;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 15px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.btn-reset {
+  width: 55px;
+  height: 45px;
+  pointer-events: none;
+  position: relative;
+}
+.btn-reset::after,
+.btn-pause::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  transform: translate(-50%, -50%);
+}
+.btn-reset::after {
+  background: url(../img/game-sprite.png) no-repeat -621.5px -86.5px / 880px 620px;
+  width: 27px;
+  height: 26.5px;
+}
+.btn-pause {
+  width: 55px;
+  height: 45px;
+  position: relative;
+}
+.btn-pause::after {
+  background: url(../img/game-sprite.png) no-repeat -628px -53px / 880px 620px;
+  width: 14px;
+  height: 20px;
+}
+.modal-wrapper {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(240, 248, 255, 0.75);
+  display: none;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+.modal-wrapper.active {
+  display: flex;
+}
+.game-title {
+  font-size: 30px;
+  text-align: center;
+  color: royalblue;
+  margin-bottom: 30px;
+}
+.modal-wrapper .button-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.btn-start,
+.btn-load {
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: gold;
+  border: none;
+  cursor: pointer;
+}
+.btn-load {
+  display: none;
+}

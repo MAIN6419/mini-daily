@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko-KR">
   <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mini Daily</title>
-    <link rel="stylesheet" href="./src/css/style.css" >
-    <link rel="stylesheet" href="./src/css/home.css" >
+    <link rel="stylesheet" href="./src/css/home.css" />
   </head>
   <body>
     <!-- layout -->
@@ -14,7 +13,7 @@
     <div class="wrapper">
       <div class="inner">
         <section class="section-profile">
-          <h2 class="a11y-hidden">왼쪽 프로필 영역</h2>
+          <h2 class="a11y-hidden">프로필 영역</h2>
           <article class="clock">
             <h2 class="a11y-hidden">clock</h2>
             <span class="time"> </span>
@@ -25,7 +24,7 @@
               class="profile-img"
               src="./src/img/profile.png"
               alt="유저 프로필 이미지"
-            >
+            />
             <span class="profile-name">User</span>
             <div class="introduce-box">
               <p class="profile-introduce">
@@ -123,38 +122,28 @@
         <section class="section-contents">
           <h2 class="a11y-hidden">오른쪽 콘텐츠 영역</h2>
           <div class="list-box">
-            <div class="newPost">
-              <h2>최신포스트</h2>
-              <ul>
-                <li>
-                  <a href="#">오늘의 일기</a>
-                </li>
-                <li>
-                  <a href="#">개발에 대하여</a>
-                </li>
-                <li>
-                  <a href="#">오늘의 계획</a>
-                </li>
+            <div class="recent-dailyBox">
+              <h2>최신 다이어리</h2>
+              <ul class="recent-dailyLists">
+                <!-- 최신글 -->
               </ul>
             </div>
-            <div class="newGameRecord">
+            <div class="today-FortuneBox">
               <h2>오늘의 운세</h2>
-              <p>오늘의 운세는....</p>
+              <p>아직 운세를 보지 않았네요.</p>
             </div>
           </div>
-          <!-- gif 이미지를 mp4로 변환 용량을 50% 줄임 -->
-          <video
-            class="home-img"
-            src="./src/img/main-bg.mp4"
-            autoplay loop muted playsinline
-          >
-          </video>
+          <figure>
+            <figcaption class="bg-caption">Mini Room</figcaption>
+            <img  class="home-img" src="./src/img/main-bg.png" alt="홈 배경 이미지">
+          </figure>
+
         </section>
         <div class="links">
           <a href="/">홈</a>
           <a href="./src/template/dailyList.html">다이어리</a>
           <a href="./src/template/write.html">글작성</a>
-          <a href="#">미니게임</a>
+          <a href="./src/template/miniGame.html">미니게임</a>
           <a href="#">운세보기</a>
         </div>
       </div>
@@ -162,5 +151,6 @@
     <script src="./src/js/main/clock.js"></script>
     <script src="./src/js/main/calendar.js"></script>
     <script src="./src/js/main/main.js"></script>
+    <script src="./src/js/home/home.js"></script>
   </body>
 </html>

@@ -1,3 +1,4 @@
+@import url('./main.css');
 .section-contents{
   overflow-y: scroll;
   position: relative;
@@ -6,6 +7,9 @@
   width: 80%;
   margin: 0 auto;
   position: relative;
+}
+.daily-wrapper.inactive{
+  display: none;
 }
 .daily-title{
   font-size: 14px;
@@ -41,20 +45,62 @@
   top: 35px;
   right: 20px;
 }
-.edit-btn{
+.btn-edit{
   border: none;
   background: url(../img/edit-icon.png) no-repeat center / 20px;
   width: 20px;
   height: 20px;
   cursor: pointer;
 }
-.del-btn{
+.btn-del{
   border: none;
   background: url(../img/delete-icon.png) no-repeat center / 17px;
   width: 20px;
   height: 20px;
   cursor: pointer;
 }
-
+.edit-form{
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.edit-form.active{
+  display: flex;
+}
+.input-title{
+  width: 700px;
+  padding: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+.input-contents{
+  width: 700px;
+  padding: 20px;
+  height: 500px;
+  box-sizing: border-box;
+  resize: none;
+  line-height: 1.5;
+  font-size: 14px;
+}
+.btn-editCompleted,
+.btn-cancel{
+  padding: 10px 30px;
+  font-size: 20px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 3px 3px 0px 1px #555;
+  cursor: pointer;
+  transition: all .5s;
+}
+.btn-editCompleted{
+  background-color: gold;
+  margin-left: 20px;
+}
+.btn-editCompleted:active,
+.btn-cancel:active{
+  box-shadow: 1px 1px 0px 1px #111;
+  transform: translateY(5px);
+}
 
 

@@ -5,7 +5,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mini Daily</title>
-  <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/daily.css">
 
 </head>
@@ -15,7 +14,7 @@
   <div class="wrapper">
     <div class="inner">
       <section class="section-profile">
-        <h2 class="a11y-hidden">왼쪽 프로필 영역</h2>
+        <h2 class="a11y-hidden">프로필 영역</h2>
         <article class="clock">
           <h2 class="a11y-hidden">clock</h2>
           <span class="time">
@@ -121,14 +120,13 @@
           <h3 class="daily-title">존재하지 않는 게시글</h3>
           <div class="daily-info">
             <time class="daily-createdAt" datetime="2023"></time>
-            <p class="daily-contents">
-            </p>
+            <p class="daily-contents"></p>
           </div>
           <div class="daily-btns">
-            <button class="edit-btn" type="button">
+            <button class="btn-edit" type="button">
               <span class="a11y-hidden">수정</span>
             </button>
-            <button class="del-btn" type="button">
+            <button class="btn-del" type="button">
               <span class="a11y-hidden">삭제</span>
             </button>
           </div>
@@ -136,12 +134,21 @@
             <span class="a11y-hidden">다이어리 목록으로 돌아가기 링크</span>
           </a>
         </div>
+        <form class="edit-form">
+          <input class="input-title" type="text" placeholder="제목">
+          <textarea class="input-contents" placeholder="내용"></textarea>
+          <div class="edit-btns">
+            <button type="button" class="btn-cancel">취소하기</button>
+            <button type="button" class="btn-editCompleted">수정하기</button>
+          </div>
+
+        </form>
       </section>
       <div class="links">
         <a href="/">홈</a>
         <a href="dailyList.html">다이어리</a>
         <a href="write.html">글작성</a>
-        <a href="#">미니게임</a>
+        <a href="miniGame.html">미니게임</a>
         <a href="#">운세보기</a>
       </div>
     </div>
@@ -150,6 +157,6 @@
   <script src="../js/main/calendar.js"></script>
   <script src="../js/main/clock.js"></script>
   <script src="../js/main/main.js"></script>
-  <script src="../js/daily.js"></script>
+  <script src="../js/daily/daily.js"></script>
 </body>
 </html>

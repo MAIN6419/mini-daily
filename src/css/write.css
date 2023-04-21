@@ -1,3 +1,4 @@
+@import url('./main.css');
 .post-form{
   display: flex;
   flex-direction: column;
@@ -20,7 +21,17 @@
   font-size: 14px;
 }
 .btn-submit{
+  background-color: gold;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 3px 3px 0px 1px #333;
   padding: 10px 30px;
   font-size: 20px;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+.btn-submit:active{
+  box-shadow: 1px 1px 0px 1px #333;
+  transform: translateY(5px);
 }
 

@@ -10,6 +10,7 @@ function calendar(newYear, newMonth) {
   // const timeLength = 32 - new Data(newYear, newMonth - 1, 32).getDate();
   const timeLength = new Date(newYear, newMonth, 0).getDate();
 
+  // 매달 1일을 구한 time 변수에 각각에 해당하는 연, 월, 일, 요일을 구해 변수에 넣는다.
   let year = time.getFullYear();
   let month = time.getMonth();
   let date = time.getDate();
@@ -20,11 +21,12 @@ function calendar(newYear, newMonth) {
   const timeEl = document.querySelector(".calendar time");
   const days = document.querySelectorAll("tr td");
 
+  // 오늘날 배경 표시 초기가화 및 비어있는 날짜에 공백을 넣어 디자인을 맞춰줌
   for (let i = 0; i < days.length; i++) {
     days[i].classList.remove("today");
     days[i].innerHTML = "&nbsp";
   }
-
+  // ㅅ;긴
   for (let i = day; i < day + timeLength; i++) {
     if (
       year === new Date().getFullYear() &&
