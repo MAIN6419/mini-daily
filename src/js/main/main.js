@@ -20,6 +20,9 @@ function changeLinks(){
     $links[3].classList.add("active");
     $links[3].style.backgroundColor = 'aliceblue'
   }
+  else{
+    $links[4].classList.add("active");
+  }
 }
 
 

@@ -8,12 +8,12 @@ const $resetBtn = document.querySelector(".btn-reset");
 const $bestRecord = document.querySelector(".best-record");
 
 const catSpriteInfo = [
-  { x: -34 / 5, y: -64 / 5, width: 205 / 5, height: 182 / 5 },
-  { x: -297 / 5, y: -289 / 5, width: 174 / 5, height: 190 / 5 },
-  { x: -514 / 5, y: -1024 / 5, width: 205 / 5, height: 175 / 5 },
-  { x: -1017 / 5, y: -1009 / 5, width: 174 / 5, height: 190 / 5 },
-  { x: -1017 / 5, y: -754 / 5, width: 189 / 5, height: 212 / 5 },
-  { x: -504 / 5, y: -527 / 5, width: 197 / 5, height: 174 / 5 },
+  { x: -44 / 5, y: -74 / 5, width: 205 / 5, height: 182 / 5 },
+  { x: -307 / 5, y: -299 / 5, width: 174 / 5, height: 190 / 5 },
+  { x: -524 / 5, y: -1034 / 5, width: 205 / 5, height: 175 / 5 },
+  { x: -1027 / 5, y: -1019 / 5, width: 174 / 5, height: 190 / 5 },
+  { x: -1027 / 5, y: -764 / 5, width: 189 / 5, height: 212 / 5 },
+  { x: -514 / 5, y: -537 / 5, width: 197 / 5, height: 174 / 5 },
 ];
 const randomCardArray1 = [];
 const randomCardArray2 = [];

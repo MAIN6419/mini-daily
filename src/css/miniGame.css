@@ -37,8 +37,8 @@
   left: 50%;
   display: block;
   transform: translate(-50%, -50%);
-  background-image: url(../img/game-sprite.png);
-  background-size: 352px 248px;
+  background-image: url(../img/sprite.png);
+  background-size: 355px 263px;
 }
 .card.flipped .card-inner {
   transform: rotateY(0deg);
@@ -68,12 +68,13 @@
   position: relative;
   overflow: hidden;
 }
+
 .card-back::after {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
-  background: url(../img/game-sprite.png) no-repeat -268px -2px / 352px 248px;
+  background: url(../img/sprite.png) no-repeat -270px -4px / 356px 263px;
   width: 80px;
   height: 110px;
 }
@@ -126,7 +127,7 @@
   transform: translate(-50%, -50%);
 }
 .btn-reset::after {
-  background: url(../img/game-sprite.png) no-repeat -621.5px -86.5px / 880px 620px;
+  background: url(../img/sprite.png) no-repeat -627px -91px / 890px 658px;
   width: 27px;
   height: 26.5px;
 }
@@ -136,7 +137,7 @@
   position: relative;
 }
 .btn-pause::after {
-  background: url(../img/game-sprite.png) no-repeat -628px -53px / 880px 620px;
+  background: url(../img/sprite.png) no-repeat -633px -58px / 890px 658px;
   width: 14px;
   height: 20px;
 }
