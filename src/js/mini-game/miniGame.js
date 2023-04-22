@@ -27,6 +27,7 @@ let totalTime = 0;
 let startPauseTime = 0;
 let totalPauseTime = 0;
 
+
 if(localStorage.getItem('gameRecord')){
   $bestRecord.textContent = `최고기록 : ${localStorage.getItem('gameRecord')}초`
 }
@@ -40,7 +41,7 @@ function cardSetting() {
     const $cardInner = document.createElement("div");
     const $cardFront = document.createElement("div");
     const $cardBack = document.createElement("div");
-    const $cardImg = document.createElement("span");
+    const $cardImg = document.createElement("div");
 
     $card.setAttribute("class", "card");
     $card.addEventListener("click", clickCard);
@@ -86,6 +87,7 @@ function shuffle(array) {
 }
 function clickCard() {
   if (checked === false) {
+    playSound(soundArray);
     this.classList.toggle("flipped");
     cardArray.push(this);
     cardArray[0].style.pointerEvents = "none";
@@ -97,9 +99,8 @@ function clickCard() {
     if (cardArray.length === 2) checked = !checked;
 
     // 카드 일치시
-    if (
-      cardArray[0].getAttribute("name") === cardArray[1].getAttribute("name")
-    ) {
+    if (cardArray[0].getAttribute("name") === cardArray[1].getAttribute("name")) {
+      setTimeout(() => playSound(soundArray3), 300);
       compareCards();
       return;
     }
@@ -107,6 +108,7 @@ function clickCard() {
     // 카드가 일치하지 않을 시
     setTimeout(function () {
       // 카드를 다시 뒤집음
+      playSound(soundArray2);
       cardArray.forEach((card) => card.classList.toggle("flipped"));
       cardArray[0].style.pointerEvents = "auto";
       cardArray.splice(0);
@@ -130,12 +132,16 @@ function compareCards() {
     const prevRecord = parseFloat(localStorage.getItem('gameRecord'))
     const newRecord =  prevRecord > parseFloat(totalTime) ? true : false;
     setTimeout(() => {
-      alert(newRecord ? `축하합니다. 신 기록 달성~\n 총 클리어 시간은 ${totalTime}초로 이전 기록 보다 ${prevRecord - parseFloat(totalTime)}초 빠릅니다.`
+      alert(newRecord ? `축하합니다. 신 기록 달성~\n 총 클리어 시간은 ${totalTime}초로 이전 기록 보다 ${(prevRecord - parseFloat(totalTime)).toFixed(2)}초 빠릅니다.`
       : 
       `총 클리어 시간은 ${totalTime}초 입니다.`);
+      if(!localStorage.getItem('gameRecord')){
+        localStorage.setItem('gameRecord', totalTime);
+        $bestRecord.textContent = `최고기록 : ${totalTime}초`;
+      }
       if(newRecord){
         localStorage.setItem('gameRecord', totalTime);
-        $bestRecord.textContent = totalTime;
+        $bestRecord.textContent = `최고기록 : ${totalTime}초`;
       }
       
     }, 500);
@@ -147,15 +153,20 @@ function startGame() {
   $modal.classList.toggle("active");
   shuffle(randomCardArray1);
   shuffle(randomCardArray2);
+  soundSetting(soundArray, "../audio/card_effect.mp3");
+  soundSetting(soundArray2, "../audio/card_effect2.mp3");
+  soundSetting(soundArray3, "../audio/card_effect3.wav");
   cardSetting();
   $gameWrapper.style.pointerEvents = "none";
   $pauseBtn.style.pointerEvents = "none";
   $resetBtn.style.pointerEvents = "none";
   const $card = document.querySelectorAll(".card");
+  playSound(soundArray);
   for (let i = 0; i < $card.length; i++) {
     // 카드를 하나씩 뒤집히는 효과를 주기 위해 지연
     setTimeout(() => {
       $card[i].classList.add("flipped");
+      playSound(soundArray);
     }, 1000 + 100 * i);
     // 카드가 모두 뒤집힌 뒤 카드를 1초 동안 보여주고 뒤집음
     setTimeout(() => {
@@ -164,6 +175,7 @@ function startGame() {
   }
   setTimeout(() => {
     // 카드 뒤집기
+    playSound(soundArray2);
     $gameWrapper.style.pointerEvents = "auto";
     $pauseBtn.style.pointerEvents = "auto";
     $resetBtn.style.pointerEvents = "auto";

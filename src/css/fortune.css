@@ -1,0 +1,132 @@
+@import url('./main.css');
+.section-contents{
+  background-color: #333;
+  overflow: hidden;
+  position: relative;
+}
+.title{
+  font-size: 25px;
+  color: #fff;
+  text-align: center;
+  margin: 20px 0px;
+}
+.description{
+  color: gold;
+  text-align: center;
+}
+.carousel-wrapper{
+  width: 210px;
+  height: 280px;
+  position: absolute;
+  perspective: 1200px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.carousel {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  /* perspective가 적용된 자식 요소들에 3D 효과 원근감*/
+  transform-style: preserve-3d; 
+  transition: all .5s;
+}
+
+.card {
+  position: absolute;
+  /* 셀 배치를 약간씩 떨어뜨림*/
+  width: 190px;
+  height: 260px;
+  transition: all .5s;
+  left: 10px;
+  top: 10px;
+  perspective : 1200px;
+}
+.card-inner{
+  position : relative;
+  width:100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition : all .6s;
+  cursor: pointer;
+  pointer-events: none;
+}
+.card:first-child .card-inner{
+  pointer-events: auto;
+}
+.pre-btn, .next-btn{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  width: 50px;
+  height: 50px;
+}
+.card-front, 
+.card-back{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+}
+.card-inner.active{
+  transform: rotateY(180deg);
+}
+.card-front{
+  background-color: orangered;
+  box-shadow: 0px 0px 0px 2px black;
+}
+.card-back {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #999;
+  transform: rotateY(180deg);
+  padding: 10px;
+  box-sizing: border-box;
+  box-shadow: inset 0px 0px 0px 2px #fff;
+  color: #fff;
+}
+.fortune-result{
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  font-size: 14px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.5;
+}
+.pre-btn{
+  background: url(../img/prev.png) no-repeat center / cover;
+  left: 10px;
+}
+.next-btn{
+  background: url(../img/next.png) no-repeat center / cover;
+  right: 10px;
+}
+.btn-reset{
+  position: absolute;
+  left: 50%;
+  bottom: 50px;
+  transform: translateX(-50%);
+  background-color: gold;
+  border: none;
+  font-size: 20px;
+  padding: 10px 20px;
+  margin: 0 auto;
+  border-radius: 5px;
+  display: none;
+}
+.btn-reset.active{
+  display: block;
+}
+
+.fortune-title{
+  opacity: 0;
+  transition: all 0.5s;
+}
+
+

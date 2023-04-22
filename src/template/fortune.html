@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="나의 미니 다이어리 사이트">
   <title>Mini Daily</title>
-  <link rel="stylesheet" href="../css/daily.css">
+  <link rel="stylesheet" href="../css/fortune.css">
 
 </head>
 <body>
@@ -116,14 +116,23 @@
       </section>
       <!-- layout -->
       <section class="section-contents">
-        <h2 class="a11y-hidden">다이어리</h2>
-
+        <h2 class="title">오늘의 운세</h2>
+        <p class="description">마음에 드는 카드 1장을 클릭 해주세요.</p>
+        <section class="carousel-wrapper">
+          <h3 class="a11y-hidden">운세보기</h3>
+          <ul class="carousel">
+          </ul>        
+        </section>
+        <button class="pre-btn"><span class="a11y-hidden">이전</span></button>
+        <button class="next-btn"><span class="a11y-hidden">다음</span></button>
+        <button class="btn-reset">운세 다시보기</button>
       </section>
       <div class="links">
-        <a href="./">홈</a>
+        <a href="../../">홈</a>
         <a href="dailyList.html">다이어리</a>
         <a href="write.html">글작성</a>
         <a href="miniGame.html">미니게임</a>
+        <a href="photoAlbum.html">사진첩</a>
         <a href="fortune.html">운세보기</a>
       </div>
     </div>

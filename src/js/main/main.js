@@ -18,10 +18,15 @@ function changeLinks(){
   }
   else if(pageName==='miniGame'){
     $links[3].classList.add("active");
-    $links[3].style.backgroundColor = 'aliceblue'
+    $links[3].style.backgroundColor = 'aliceblue';
+  }
+  else if(pageName==='photoAlbum'){
+    $links[4].classList.add("active");
+    $links[4].style.backgroundColor = '#bdbdbd';
   }
   else{
-    $links[4].classList.add("active");
+    $links[5].classList.add("active");
+
   }
 }
 
