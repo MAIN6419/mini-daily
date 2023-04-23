@@ -26,10 +26,10 @@ settingCards();
 const carouselCard = document.querySelectorAll(".card");
 cardAngle();
 // 클릭했을 때 회전각도 구하기
-const ratateAngle = 360 / carouselCard.length;
+const rotateAngle = 360 / carouselCard.length;
 
 // Math.tan를 사용 => 각도를 라디안 값으로 변환
-const radian = ((ratateAngle / 2) * Math.PI) / 180;
+const radian = ((rotateAngle / 2) * Math.PI) / 180;
 
 //원의 중심점에서 떨어진 거리 구하기 (밑변의 길이 / tan(각도에 해당하는 라디안))
 const colTz = Math.round(250 / 2 / Math.tan(radian));
@@ -42,7 +42,7 @@ function cardAngle() {
     el.style.zIndex = `${-idx}`;
     setTimeout(() => {
       el.style.transform = `rotateY(${
-        ratateAngle * idx
+        rotateAngle * idx
       }deg) translateZ(${colTz}px)`;
     }, 300 * idx);
   });
@@ -56,21 +56,15 @@ function cardAngle() {
 }
 
 // 클릭 시 회전 시키기
-preBtn.addEventListener("click", () => {
-  angle -= ratateAngle;
+function rotateCards(dir) {
+  dir==='prev' ? angle += rotateAngle : angle-= rotateAngle;
   stopAutoPlay();
   carousel.style.transform = carousel.classList.contains("row")
-    ? `rotateX(${-angle}deg)`
-    : `rotateY(${-angle}deg)`;
-});
-
-nextBtn.addEventListener("click", () => {
-  angle += ratateAngle;
-  stopAutoPlay();
-  carousel.style.transform = carousel.classList.contains("row")
-    ? `rotateX(${-angle}deg)`
-    : `rotateY(${-angle}deg)`;
-});
+    ? `rotateX(${angle}deg)`
+    : `rotateY(${angle}deg)`;
+}
+preBtn.addEventListener("click", () => rotateCards('prev'));
+nextBtn.addEventListener("click", () => rotateCards('next'));
 
 function settingCards() {
   for (let i = 0; i < photoData.length; i++) {
@@ -84,14 +78,14 @@ function settingCards() {
 axisBtn.addEventListener("click", () => {
   carousel.classList.toggle("row");
   carousel.style.transform = carousel.classList.contains("row")
-    ? `rotateX(${-angle}deg)`
-    : `rotateY(${-angle}deg)`;
+    ? `rotateX(${angle}deg)`
+    : `rotateY(${angle}deg)`;
   if (carousel.classList.contains("row")) {
     carouselWrapper.style.perspectiveOrigin = "center";
     carouselCard.forEach(
       (el, idx) =>
         (el.style.transform = `rotateX(${
-          ratateAngle * idx
+          rotateAngle * idx
         }deg) translateZ(${rowTz}px)`)
     );
   } else {
@@ -99,7 +93,7 @@ axisBtn.addEventListener("click", () => {
     carouselCard.forEach(
       (el, idx) =>
         (el.style.transform = `rotateY(${
-          ratateAngle * idx
+          rotateAngle * idx
         }deg) translateZ(${colTz}px)`)
     );
   }
@@ -120,10 +114,10 @@ autoplayBtn.addEventListener("click", () => {
   }
 });
 function autoPlay() {
-  isChangePlayDir ? angle-=ratateAngle : angle += ratateAngle;
+  isChangePlayDir ? angle+=rotateAngle : angle -= rotateAngle;
   carousel.style.transform = carousel.classList.contains("row")
-    ? `rotateX(${-angle}deg)`
-    : `rotateY(${-angle}deg)`;
+    ? `rotateX(${angle}deg)`
+    : `rotateY(${angle}deg)`;
 }
  function stopAutoPlay() {
   isAutoplay = false;
@@ -147,7 +141,6 @@ slider.addEventListener('oninput' ,()=>{
   playSpeed.innerHTML = slider.value;
   if (isAutoplay) {
     clearInterval(interval);
-    autoplayBtnImg.setAttribute("src", "./images/stop.png");
     interval = setInterval(autoPlay, autoPlaySpeed * 1000);
   }
 })

@@ -7,10 +7,9 @@
 .title{
   text-align: center;
   margin-top: 20px;
-  width: 280px;
+  width: 220px;
   margin: 20px auto;
-  background: url(../img/carmera.png) no-repeat left center / 50px;
-  font-size: 30px;
+  background: url(../img/carmera.png) no-repeat left center / 40px;
 }
 .carousel-wrapper{
   width: 250px;

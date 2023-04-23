@@ -1,9 +1,11 @@
-const $recentDailyLists = document.querySelector(".recent-dailyLists")
+const $recentDailyLists = document.querySelector(".recent-dailyLists");
+const $fortuneContents = document.querySelector(".fortune-cotents")
 let data = [];
 if(localStorage.getItem('daily')){
   data = JSON.parse(localStorage.getItem('daily'));
 }
 rederRecentDaily();
+renderFortune();
   function rederRecentDaily() {
     if(data.length===0){
       $recentDailyLists.innerHTML+=`
@@ -21,5 +23,14 @@ rederRecentDaily();
       $recentLink.setAttribute('href', `src/template/daily.html?id=${item.id}`)
       $recentDailyLists.appendChild($dailyItem);
       $dailyItem.appendChild($recentLink);
+    }
+  }
+
+  function renderFortune(){
+    if(localStorage.getItem('fortune')){
+      $fortuneContents.textContent = localStorage.getItem('fortune');
+    }
+    else{
+      $fortuneContents.textContent = '아직 운세를 보지 않았네요.'
     }
   }

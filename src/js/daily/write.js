@@ -25,7 +25,7 @@ $submitBtn.addEventListener('click', ()=>{
       contents: $inputcontents.value,
       createdAt : new Date().getTime(),
     }
-    data.push(newPost);
+    data.unshift(newPost);
     localStorage.setItem('daily',JSON.stringify(data));
     $inputTitle.value = '';
     $inputcontents.value= '';

@@ -18,7 +18,6 @@
   color: violet;
 }
 .today-FortuneBox h2{
-  margin-bottom: 5px;
   color: darkblue;
 }
 .recent-dailyBox .recent-item{
@@ -38,8 +37,16 @@
 .recent-dailyLists{
   min-height: 78px;
 }
-.today-FortuneBox p{
+.fortune-cotents{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  word-break: keep-all;
   font-size: 14px;
+  min-height: 78px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #bdbdbd;
 }
 figure{
   border-top-left-radius: 10px;

@@ -26,7 +26,8 @@ function changeLinks(){
   }
   else{
     $links[5].classList.add("active");
-
+    $links[5].style.backgroundColor = '#333';
+    $links[5].style.color = '#fff';
   }
 }
 
