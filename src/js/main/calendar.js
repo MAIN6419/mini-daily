@@ -27,7 +27,7 @@ function calendar(newYear, newMonth) {
     days[i].classList.remove("today");
     days[i].innerHTML = "&nbsp";
   }
-  // ㅅ;긴
+
   for (let i = day; i < day + timeLength; i++) {
     if (
       year === new Date().getFullYear() &&

@@ -1,8 +1,8 @@
 'use strict';
-const $links = document.querySelectorAll(".links a");
 const url = window.location.href;
 const page = url.split('/').pop(); // 마지막 '/' 이후의 문자열을 추출합니다.
 const pageName = page.split('.')[0]; // 파일 확장자를 제거하여 페이지 이름을 추출합니다.
+const $links = document.querySelectorAll(".links a");
 const $dailyLinks = document.querySelectorAll(".daily-link");
 
 changeLinks();

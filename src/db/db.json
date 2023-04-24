@@ -1,11 +1,21 @@
 {
   "gameSpritePos" : [
     { "x": -8 , "y": -358, "width": 44, "height": 52 },
-    { "x": -68, "y": -358, "width": 52, "height": 49},
+    { "x": -68, "y": -354, "width": 52, "height": 49},
     { "x": -139, "y": -361, "width": 36, "height": 34 },
     { "x": -200, "y": -357, "width": 34, "height": 42 },
     { "x": -261, "y": -361, "width": 33, "height": 34 },
     { "x": -412, "y": -301, "width": 35, "height": 38 }
+  ],
+  "photoData":[
+    "https://cdn.pixabay.com/photo/2014/06/21/08/43/rabbit-373691_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2012/12/21/10/06/kitten-71514_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2016/06/05/22/42/otter-1438378_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2016/01/11/22/38/animal-1134504_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2019/02/07/10/05/white-lion-3980831_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2018/07/13/10/17/cat-3535399_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2012/02/28/10/24/animal-18218_960_720.jpg",
+    "https://cdn.pixabay.com/photo/2015/02/05/12/09/chihuahua-624924_960_720.jpg"
   ],
   "fortuneData" : [
     "당신은 마음의 평화를 찾을 것입니다. 하지만 이를 찾기 위해서는 어떠한 장애물도 어렵지 않게 넘어가야 할 것입니다. 그리고 그 과정에서 더욱 강해지고 자기 자신에게 더욱 믿음이 생길 것입니다. 자신감을 가지고 미래를 향해 나아가세요. 성공이 당신을 기다리고 있습니다.",
