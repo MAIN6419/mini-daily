@@ -7,7 +7,7 @@ function fetchPhotoData() {
     .then((data) => data.photoData)
     .catch((error) => console.log(error));
 }
-// 데이터를 받은 후 처리
+// 데이터를 받은 후 처리 하기 위해 사용
 async function initPhoto() {
   try {
     const $sectionContents = document.querySelector(".section-contents");

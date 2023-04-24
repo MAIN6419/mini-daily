@@ -2,7 +2,7 @@
 const soundArray = [];
 const soundArray2 = [];
 const soundArray3 = [];
-function soundSetting(soundArray, soundSrc) {
+ function soundSetting(soundArray, soundSrc) {
     for (let i = 0; i < 10; i++) {
       const sound = new Audio();
       sound.src = soundSrc;
@@ -27,3 +27,5 @@ function soundSetting(soundArray, soundSrc) {
       }
     }
   }
+
+  export {playSound, soundSetting, soundArray, soundArray2, soundArray3}

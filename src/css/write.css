@@ -10,6 +10,7 @@
   padding: 10px;
   font-size: 16px;
   box-sizing: border-box;
+  border: 2px solid #bdbdbd;
 }
 .input-contents{
   width: 700px;
@@ -19,6 +20,7 @@
   resize: none;
   line-height: 1.5;
   font-size: 14px;
+  border: 2px solid #bdbdbd;
 }
 .btn-submit{
   background-color: gold;

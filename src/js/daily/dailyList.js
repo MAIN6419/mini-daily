@@ -1,4 +1,5 @@
 'use strict';
+import { getCreatedAt } from "../commons/libray.js";
 const $dailyLists = document.querySelector('.daily-lists');
 const $sectionContents = document.querySelector(".section-contents");
 let data = [];

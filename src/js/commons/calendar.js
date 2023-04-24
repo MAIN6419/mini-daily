@@ -1,10 +1,7 @@
-'use strict';
-let year = new Date().getFullYear();
-let month = new Date().getMonth() + 1;
-
-calendar(year, month);
-
-function calendar(newYear, newMonth) {
+"use strict";
+export function calendar() {
+  let newYear = new Date().getFullYear();
+  let newMonth = new Date().getMonth() + 1;
   // 1. 무슨 요일에 시작하는지 알아야 한다.
   const time = new Date(newYear, newMonth - 1, 1);
   // 2. 해당 월에 날이 며칠이나 있는지
