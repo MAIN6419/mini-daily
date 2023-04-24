@@ -1,6 +1,8 @@
-const preBtn = document.querySelector(".pre-btn");
-const nextBtn = document.querySelector(".next-btn");
+'use strict';
+const prevBtn = document.querySelector(".btn-prev");
+const nextBtn = document.querySelector(".btn-next");
 const axisBtn = document.querySelector(".axis-btn");
+const carouselControler = document.querySelector(".carousel-controler")
 const carousel = document.querySelector(".carousel");
 const carouselWrapper = document.querySelector(".carousel-wrapper");
 const autoplayBtn = document.querySelector(".autoplay-btn");
@@ -12,7 +14,7 @@ const photoData = [
   "https://cdn.pixabay.com/photo/2012/12/21/10/06/kitten-71514_960_720.jpg",
   "https://cdn.pixabay.com/photo/2016/06/05/22/42/otter-1438378_960_720.jpg",
   "https://cdn.pixabay.com/photo/2016/01/11/22/38/animal-1134504_960_720.jpg",
-  "https://cdn.pixabay.com/photo/2016/11/23/13/31/red-panda-1852860_960_720.jpg",
+  "https://cdn.pixabay.com/photo/2019/02/07/10/05/white-lion-3980831_960_720.jpg",
   "https://cdn.pixabay.com/photo/2018/07/13/10/17/cat-3535399_960_720.jpg",
   "https://cdn.pixabay.com/photo/2012/02/28/10/24/animal-18218_960_720.jpg",
   "https://cdn.pixabay.com/photo/2015/02/05/12/09/chihuahua-624924_960_720.jpg",
@@ -47,11 +49,9 @@ function cardAngle() {
     }, 300 * idx);
   });
   setTimeout(() => {
-    preBtn.style.pointerEvents = "auto";
-    nextBtn.style.pointerEvents = "auto";
-    autoplayBtn.style.pointerEvents = "auto";
-    axisBtn.style.pointerEvents = "auto";
-
+    prevBtn.classList.add("active");
+    nextBtn.classList.add("active");
+    carouselControler.classList.add("active")
   }, 300 * carouselCard.length);
 }
 
@@ -63,15 +63,18 @@ function rotateCards(dir) {
     ? `rotateX(${angle}deg)`
     : `rotateY(${angle}deg)`;
 }
-preBtn.addEventListener("click", () => rotateCards('prev'));
+prevBtn.addEventListener("click", () => rotateCards('prev'));
 nextBtn.addEventListener("click", () => rotateCards('next'));
 
 function settingCards() {
+  // fragement 사용 브라우저 최적화
+  const frag = document.createDocumentFragment();
   for (let i = 0; i < photoData.length; i++) {
-    carousel.innerHTML += `
-    <li class="card"></li>
-    `;
+    const card = document.createElement("li");
+    card.setAttribute('class', 'card');
+    frag.appendChild(card);
   }
+  carousel.appendChild(frag);
 }
 
 // 축 전환 시키기
@@ -103,8 +106,8 @@ dirBtn.addEventListener('click',()=>{
   isChangePlayDir = !isChangePlayDir;
 })
 
-let interval = setInterval(autoPlay, autoPlaySpeed * 1000);
-clearInterval(interval);
+let interval;
+
 autoplayBtn.addEventListener("click", () => {
   isAutoplay = !isAutoplay;
   if (isAutoplay) {

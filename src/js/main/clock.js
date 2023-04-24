@@ -1,5 +1,7 @@
+'use strict';
 // dom에서 시간을 표시하는 요소를 가져옵니다.
 const $time = document.querySelector(".time");
+const fortune = localStorage.getItem('fortune');
 function updateTime() {
   // 현재 날짜 정보를 가져온다.
   const now = new Date();
@@ -23,6 +25,16 @@ function updateTime() {
     let year = new Date().getFullYear();
     let month = new Date().getMonth() + 1;
     calendar(year, month);
+  }
+  // 하루가 지나면 운세보기 초기화
+  if(fortune) {
+    const fortuneCreatedAt = new Date(JSON.parse(fortune).createdAt);
+    const currentDate = new Date();
+    // 운세 데이터가 만들어진 날짜와 현재 날짜를 비교
+    // 날짜 차이가 난다면 하루가 지난것 이므로 운세 데이터를 삭제
+    if (currentDate.getDate() !== fortuneCreatedAt.getDate()) {
+      localStorage.removeItem('fortune');
+    }
   }
 }
 // 처음 화면에 출력될 때 1초후에 함수가 실행되기 때문에

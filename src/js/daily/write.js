@@ -1,4 +1,4 @@
-
+'use strict';
 let data = [];
 if(localStorage.getItem('daily')){
   data = JSON.parse(localStorage.getItem('daily'));

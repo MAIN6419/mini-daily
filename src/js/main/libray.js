@@ -1,4 +1,5 @@
-function getCreatedAt(unixTime) {
+'use strict';
+ function getCreatedAt(unixTime) {
   // new Date(유닉스 타임)을 해주면 현재 표준시를 구할 수 있습니다.
   const date = new Date(parseInt(unixTime));
   // 구한 표준시에서 연도를 구합니다.

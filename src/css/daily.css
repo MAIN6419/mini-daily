@@ -50,9 +50,9 @@
   transform: translate(-50%, -50%);
 }
 .dailyList-link::after{
-  background: url(../img/sprite.png) no-repeat -636px -24px / 890px 658px;
-  width: 7px;
-  height: 13px;
+  background: url(../img/sprite.png) no-repeat -477px -304px / 620px 416px;
+  width: 8px;
+  height: 15px;
 }
 .daily-btns{
   position: absolute;
@@ -68,9 +68,9 @@
   position: relative;
 }
 .btn-edit::after{
-  background: url(../img/sprite.png) no-repeat -11px -848px / 1186px 877px;
-  width: 20px;
-  height: 20px;
+  background: url(../img/sprite.png) no-repeat -475px -354px / 620px 416px;
+  width: 22px;
+  height: 22px;
 }
 .btn-del{
   border: none;
@@ -81,9 +81,9 @@
   position: relative;
 }
 .btn-del::after{
-  background: url(../img/sprite.png) no-repeat -38px -635px / 890px 658px;
-  width: 13px;
-  height: 18px;
+  background: url(../img/sprite.png) no-repeat -542px -352px / 620px 416px;
+  width: 20px;
+  height: 20px;
 }
 .edit-form{
   display: none;

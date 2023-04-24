@@ -1,3 +1,4 @@
+'use strict';
 const $dailyLists = document.querySelector('.daily-lists');
 const $sectionContents = document.querySelector(".section-contents");
 let data = [];
@@ -6,7 +7,6 @@ if (localStorage.getItem('daily')) {
 }
 
 function renderDailyList(data) {
-  console.log(data)
   if (data.length === 0) {
     $dailyLists.innerHTML += `
     <li class="none-item">
@@ -68,8 +68,7 @@ function handleScroll() {
   // scrollTop 요소의 수직 스크롤 바의 현재 위치를 반환
   // clientHeight 현재 요소의 높이 
   // scrollHeight 스크롤 가능한 전체 영역의 높이
-  // 1 차이가 더 나서 -1를 빼줌
-  if ($sectionContents.scrollTop + $sectionContents.clientHeight >= $sectionContents.scrollHeight - 1) {
+  if ($sectionContents.scrollTop + $sectionContents.clientHeight >= $sectionContents.scrollHeight - 20) {
     addItems();
   }
 }

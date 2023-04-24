@@ -1,3 +1,4 @@
+'use strict';
 const soundArray = [];
 const soundArray2 = [];
 const soundArray3 = [];

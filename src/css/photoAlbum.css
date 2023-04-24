@@ -9,7 +9,18 @@
   margin-top: 20px;
   width: 220px;
   margin: 20px auto;
-  background: url(../img/carmera.png) no-repeat left center / 40px;
+  position: relative;
+}
+.title::after{
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  display: block;
+  background: url(../img/sprite.png) no-repeat -552px -295px / 620px 416px;
+  width: 27px;
+  height: 24px;
 }
 .carousel-wrapper{
   width: 250px;
@@ -42,23 +53,45 @@
   box-shadow: 0px 0px 0px 8px rgba(255, 255, 255, 1);
 }
 
-.pre-btn, .next-btn{
+.btn-prev, .btn-next{
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 53%;
+  transform: translateY(-47%);
   border: none;
-  width: 50px;
-  height: 50px;
   cursor: pointer;
   pointer-events: none;
+  background: none;
+  width: 50px;
+  height: 50px;
+  opacity: 0;
+  transition: all 1s;
 }
-.pre-btn{
-  background: url(../img/prev.png) no-repeat center / cover;
+.btn-prev.active, .btn-next.active{
+  pointer-events: auto;
+  opacity: 1;
+}
+.btn-prev{
   left: 10px;
 }
-.next-btn{
-  background: url(../img/next.png) no-repeat center / cover;
+.btn-next{
   right: 10px;
+}
+.btn-prev::after,
+.btn-next::after{
+  content: "";
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  width: 50px;
+  height: 50px;
+}
+.btn-prev::after{
+  background: url(../img/sprite.png) no-repeat -312px -353px / 620px 416px;
+}
+.btn-next::after{
+  background: url(../img/sprite.png) no-repeat  -372px -353px/ 620px 416px;
 }
 .carousel-controler{
   position: absolute;
@@ -71,22 +104,38 @@
   border-radius: 10px;
   margin: 20px auto;
   background-color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+  opacity: 0;
+}
+.carousel-controler.active{
+  opacity: 1;
+  pointer-events: auto;
+  animation: downUp 1s;
 }
 .carousel-controler button{
   padding: 3px 5px;
+  cursor: pointer;
+  background-color: #eee;
+  border-radius: 5px;
+  border: 2px solid #999;
 }
 .playSpeed{
   display: block;
 }
 .slider{
+  cursor: pointer;
   margin-top: 10px;
   width: 200px;
 }
-.autoplay-btn{
-  pointer-events: none;
+
+@keyframes downUp{
+  from{
+    transform: translateX(-50%) translateY(100%);
+  }
+  to{
+    transform: translateX(-50%) translateY(0%);
+  }
 }
-.axis-btn{
-  pointer-events: none;
-}
+
 
 

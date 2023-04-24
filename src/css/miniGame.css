@@ -33,12 +33,9 @@
 
 .card-img {
   position: absolute;
-  top: 50%;
-  left: 50%;
   display: block;
-  transform: translate(-50%, -50%);
   background-image: url(../img/sprite.png);
-  background-size: 355px 263px;
+  background-size: 620px 416px;
 }
 .card.flipped .card-inner {
   transform: rotateY(0deg);
@@ -51,7 +48,6 @@
   backface-visibility: hidden;
   background-repeat: no-repeat;
   background-color: lavenderblush;
-  border: 2px solid black;
   border-radius: 5px;
 }
 .card-front {
@@ -61,12 +57,14 @@
   align-items: center;
   justify-content: center;
   font-size: 45px;
+  border: 2px solid black;
 }
 .card-back {
   transform: rotateY(180deg);
   background-color: gold;
   position: relative;
   overflow: hidden;
+  border: 2px solid black;
 }
 
 .card-back::after {
@@ -74,7 +72,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  background: url(../img/sprite.png) no-repeat -270px -4px / 356px 263px;
+  background: url(../img/sprite.png) no-repeat -162px -2px / 245px 166px;
   width: 80px;
   height: 110px;
 }
@@ -84,12 +82,22 @@
   padding: 10px 20px 10px 40px;
   border: 3px solid black;
   border-radius: 5px;
-  background: url(../img/clock.png) no-repeat left 10px center / 25px #fff;
   font-size: 25px;
   font-weight: bold;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  position: relative;
+}
+.timer-box::after{
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  background: url(../img/sprite.png) no-repeat  -590px -294px / 620px 416px;
+  width: 20px;
+  height: 25px;
 }
 
 .best-record{
@@ -129,9 +137,9 @@
   transform: translate(-50%, -50%);
 }
 .btn-reset::after {
-  background: url(../img/sprite.png) no-repeat -627px -91px / 890px 658px;
-  width: 27px;
-  height: 26.5px;
+  background: url(../img/sprite.png) no-repeat -508px -353px / 620px 416px;
+  width: 23px;
+  height: 23px;
 }
 .btn-pause {
   width: 55px;
@@ -139,9 +147,9 @@
   position: relative;
 }
 .btn-pause::after {
-  background: url(../img/sprite.png) no-repeat -633px -58px / 890px 658px;
+  background: url(../img/sprite.png) no-repeat -518px -297px / 620px 416px;
   width: 14px;
-  height: 20px;
+  height: 21px;
 }
 .modal-wrapper {
   position: absolute;

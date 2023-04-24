@@ -1,3 +1,4 @@
+'use strict';
 const $links = document.querySelectorAll(".links a");
 const url = window.location.href;
 const page = url.split('/').pop(); // 마지막 '/' 이후의 문자열을 추출합니다.
@@ -26,7 +27,7 @@ function changeLinks(){
   }
   else{
     $links[5].classList.add("active");
-    $links[5].style.backgroundColor = '#333';
+    $links[5].style.backgroundColor = '#0b0b0d';
     $links[5].style.color = '#fff';
   }
 }

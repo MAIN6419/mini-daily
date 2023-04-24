@@ -1,3 +1,4 @@
+'use strict';
 const $dailyTilte = document.querySelector(".daily-title");
 const $dailyCreatedAt = document.querySelector(".daily-createdAt");
 const $dailyContents = document.querySelector(".daily-contents");

@@ -1,3 +1,4 @@
+'use strict';
 const $recentDailyLists = document.querySelector(".recent-dailyLists");
 const $fortuneContents = document.querySelector(".fortune-cotents")
 let data = [];
@@ -13,8 +14,7 @@ renderFortune();
       `
       return;
     }
-    const recentData = data.slice(-3);
-    recentData.reverse();
+    const recentData = data.slice(0, 3);
     for(const item of recentData){
       const $dailyItem = document.createElement('li');
       const $recentLink = document.createElement('a');
@@ -28,7 +28,7 @@ renderFortune();
 
   function renderFortune(){
     if(localStorage.getItem('fortune')){
-      $fortuneContents.textContent = localStorage.getItem('fortune');
+      $fortuneContents.textContent = JSON.parse(localStorage.getItem('fortune')).result;
     }
     else{
       $fortuneContents.textContent = '아직 운세를 보지 않았네요.'

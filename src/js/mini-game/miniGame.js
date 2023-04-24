@@ -1,3 +1,4 @@
+'use strict';
 const $gameWrapper = document.querySelector(".game-wrapper");
 const $timer = document.querySelector(".timer-box span");
 const $startBtn = document.querySelector(".btn-start");
@@ -7,14 +8,15 @@ const $pauseBtn = document.querySelector(".btn-pause");
 const $resetBtn = document.querySelector(".btn-reset");
 const $bestRecord = document.querySelector(".best-record");
 
-const catSpriteInfo = [
-  { x: -44 / 5, y: -74 / 5, width: 205 / 5, height: 182 / 5 },
-  { x: -307 / 5, y: -299 / 5, width: 174 / 5, height: 190 / 5 },
-  { x: -524 / 5, y: -1034 / 5, width: 205 / 5, height: 175 / 5 },
-  { x: -1027 / 5, y: -1019 / 5, width: 174 / 5, height: 190 / 5 },
-  { x: -1027 / 5, y: -764 / 5, width: 189 / 5, height: 212 / 5 },
-  { x: -514 / 5, y: -537 / 5, width: 197 / 5, height: 174 / 5 },
+const spritePos = [
+  { x: -16 / 2, y: -715 / 2, width: 88 / 2, height: 103 / 2 },
+  { x: -135 / 2, y: -707 / 2, width: 103 / 2, height: 97 / 2 },
+  { x: -278 / 2, y: -722 / 2, width: 71 / 2, height: 68 / 2 },
+  { x: -400 / 2, y: -714 / 2, width: 67 / 2, height: 83 / 2 },
+  { x: -522 / 2, y: - 721/ 2, width: 65 / 2, height: 68 / 2 },
+  { x: -824 / 2, y: -601 / 2, width: 70 / 2, height: 75 / 2 },
 ];
+
 const randomCardArray1 = [];
 const randomCardArray2 = [];
 const cardArray = [];
@@ -36,6 +38,7 @@ else{
 }
 
 function cardSetting() {
+  const $frag = document.createDocumentFragment();
   for (let i = 0; i < totalCard; i++) {
     const $card = document.createElement("div");
     const $cardInner = document.createElement("div");
@@ -49,32 +52,33 @@ function cardSetting() {
     $cardFront.setAttribute("class", "card-front");
     $cardImg.setAttribute("class", "card-img");
     $cardBack.setAttribute("class", "card-back");
-    $gameWrapper.appendChild($card);
     $card.appendChild($cardInner);
     $cardInner.appendChild($cardFront);
     $cardInner.appendChild($cardBack);
     $cardFront.appendChild($cardImg);
-
+    $frag.appendChild($card)
+  
     if (i < totalCard / 2) {
       $cardImg.style.backgroundPosition = `${
-        catSpriteInfo[randomCardArray1[i]].x
-      }px ${catSpriteInfo[randomCardArray1[i]].y}px`;
-      $cardImg.style.width = `${catSpriteInfo[randomCardArray1[i]].width}px`;
-      $cardImg.style.height = `${catSpriteInfo[randomCardArray1[i]].height}px`;
+        spritePos[randomCardArray1[i]].x
+      }px ${spritePos[randomCardArray1[i]].y}px`;
+      $cardImg.style.width = `${spritePos[randomCardArray1[i]].width}px`;
+      $cardImg.style.height = `${spritePos[randomCardArray1[i]].height}px`;
       $card.setAttribute("name", randomCardArray1[i]);
     } else {
       $cardImg.style.backgroundPosition = `${
-        catSpriteInfo[randomCardArray2[i % (totalCard / 2)]].x
-      }px ${catSpriteInfo[randomCardArray2[i % (totalCard / 2)]].y}px`;
+        spritePos[randomCardArray2[i % (totalCard / 2)]].x
+      }px ${spritePos[randomCardArray2[i % (totalCard / 2)]].y}px`;
       $cardImg.style.width = `${
-        catSpriteInfo[randomCardArray2[i % (totalCard / 2)]].width
+        spritePos[randomCardArray2[i % (totalCard / 2)]].width
       }px`;
       $cardImg.style.height = `${
-        catSpriteInfo[randomCardArray2[i % (totalCard / 2)]].height
+        spritePos[randomCardArray2[i % (totalCard / 2)]].height
       }px`;
       $card.setAttribute("name", randomCardArray2[i % (totalCard / 2)]);
     }
   }
+  $gameWrapper.appendChild($frag);
 }
 // 랜덤으로 0~8 난수를 뽑아 배열을 만들어 주는 함수 이것을 통해 카드의 이미지와 name이 달라짐
 function shuffle(array) {
@@ -101,7 +105,7 @@ function clickCard() {
     // 카드 일치시
     if (cardArray[0].getAttribute("name") === cardArray[1].getAttribute("name")) {
       setTimeout(() => playSound(soundArray3), 300);
-      compareCards();
+      completedCards();
       return;
     }
 
@@ -118,7 +122,7 @@ function clickCard() {
   }
 }
 
-function compareCards() {
+function completedCards() {
   completedCardArray.push(cardArray[0]);
   completedCardArray.push(cardArray[1]);
   cardArray.forEach((el) => (el.style.pointerEvents = "none"));
