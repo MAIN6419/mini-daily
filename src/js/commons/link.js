@@ -2,9 +2,10 @@
 const url = window.location.href;
 const page = url.split('/').pop(); // 마지막 '/' 이후의 문자열을 추출합니다.
 const pageName = page.split('.')[0]; // 파일 확장자를 제거하여 페이지 이름을 추출합니다.
-const $links = document.querySelectorAll(".links a");
+
 
 export function changeLinks(){
+  const $links = document.querySelectorAll(".links a");
   $links.forEach(el=>el.classList.remove("active"));
   if(pageName===''){
     $links[0].classList.add("active");
