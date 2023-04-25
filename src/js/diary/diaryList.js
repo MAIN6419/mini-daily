@@ -1,11 +1,8 @@
 'use strict';
 import { getCreatedAt } from "../commons/libray.js";
-const $diaryList = document.querySelector('.diary-lists');
 const $sectionContents = document.querySelector(".section-contents");
-let data = [];
-if (localStorage.getItem('diary')) {
-  data = JSON.parse(localStorage.getItem('diary'));
-}
+const $diaryList = $sectionContents .querySelector('.diary-lists');
+const data = JSON.parse(localStorage.getItem('diary')) || [];
 
 function renderDiaryList(data) {
   if (data.length === 0) {
@@ -15,15 +12,16 @@ function renderDiaryList(data) {
          게시글을 한 번 작성해보세요~
     </li>
     `;
-    return; // 더 이상 출력할 요소가 없으면 함수를 종료합니다.
+    return;
   }
+  const $frag = document.createDocumentFragment();
   for (const item of data) {
     const $diaryItem = document.createElement("li");
     $diaryItem.setAttribute("class", "diary-item");
 
     const $diaryLink = document.createElement("a");
     $diaryLink.setAttribute("href", `diary.html?id=${item.id}`);
-    $diaryLink.setAttribute("class", "diary-link");
+    $diaryLink.setAttribute("class", "diaryItem-link");
 
     const $itemTitle = document.createElement("h3");
     $itemTitle.setAttribute("class", "item-title");
@@ -42,11 +40,12 @@ function renderDiaryList(data) {
     $diaryLink.appendChild($itemCreatedAt);
     $diaryLink.appendChild($itemContents);
     $diaryItem.appendChild($diaryLink);
-    $diaryList.appendChild($diaryItem);
+    $frag.appendChild($diaryItem);
   }
+  $diaryList.appendChild($frag);
 }
 
-
+// 무한스크롤 구현
 const itemsPerPage = 4;
 let startIndex = 0;
 let endIndex = itemsPerPage;

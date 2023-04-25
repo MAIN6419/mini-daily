@@ -1,38 +1,35 @@
 <!DOCTYPE html>
 <html lang="ko-KR">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="나의 미니 다이어리 사이트">
-  <title>Mini Daily</title>
-  <link rel="stylesheet" href="../css/write.css">
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script src="../js/commons/template.js" type="module"></script>
-</head>
-<body>
-  <!-- layout -->
-  <h1 class="a11y-hidden">Mini Daily</h1>
-  <div class="wrapper">
-    <div class="inner">
-      <section class="section-profile">
-       
-      </section>
-      <!-- layout -->
-      <section class="section-contents">
-        <h2 class="a11y-hidden">다이어리 작성 콘텐츠 영역</h2>
-        <form class="post-form">
-          <input class="input-title" type="text" placeholder="제목">
-          <textarea class="input-contents" placeholder="내용"></textarea>
-          <button type="button" class="btn-submit">작성하기</button>
-        </form>
-      </section>
-      <div class="links">
-
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="나의 미니 다이어리 사이트">
+    <title>Mini Daily</title>
+    <link rel="stylesheet" href="../css/write.css">
+  </head>
+  <body>
+    <h1 class="a11y-hidden">Mini Daily</h1>
+    <div class="wrapper">
+      <div class="inner">
+        <section class="section-profile">
+          <!-- section-profile template -->
+        </section>
+        <section class="section-contents">
+          <h2 class="a11y-hidden">다이어리 작성 콘텐츠 영역</h2>
+          <form class="post-form">
+            <input class="input-title" type="text" placeholder="제목" />
+            <textarea class="input-contents" placeholder="내용"></textarea>
+            <button type="button" class="btn-submit">작성하기</button>
+          </form>
+        </section>
+        <div class="links">
+          <!-- links template -->
+        </div>
       </div>
     </div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuid.min.js"></script>
-  <script src="../js/diary/write.js"></script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuid.min.js"></script>
+    <script src="../js/commons/commons.js" type="module"></script>
+    <script src="../js/diary/write.js"></script>
+  </body>
 </html>

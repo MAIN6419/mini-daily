@@ -1,28 +1,30 @@
 'use strict';
 import { getCreatedAt } from "../commons/libray.js";
-const $diaryTitle = document.querySelector(".diary-title");
-const $diaryCreatedAt = document.querySelector(".diary-createdAt");
-const $diaryContents = document.querySelector(".diary-contents");
-const $editBtn = document.querySelector(".btn-edit");
-const $deleteBtn = document.querySelector(".btn-del");
-const $diaryWrapper = document.querySelector(".diary-wrapper");
-const $editForm = document.querySelector(".edit-form");
-const $candelBtn = document.querySelector(".btn-cancel");
-const $editCompletedBtn = document.querySelector(".btn-editCompleted");
-const $inputTitle = document.querySelector(".edit-form .input-title");
-const $inputContents = document.querySelector(".edit-form .input-contents");
+
+const $sectionContents = document.querySelector(".section-contents");
+const $diaryWrapper = $sectionContents.querySelector(".diary-wrapper");
+const $diaryTitle = $diaryWrapper .querySelector(".diary-title");
+const $diaryCreatedAt = $diaryWrapper .querySelector(".diary-createdAt");
+const $diaryContents = $diaryWrapper .querySelector(".diary-contents");
+const $editBtn = $diaryWrapper .querySelector(".btn-edit");
+const $deleteBtn = $diaryWrapper .querySelector(".btn-del");
+
+const $editForm = $sectionContents.querySelector(".edit-form");
+const $candelBtn = $editForm.querySelector(".btn-cancel");
+const $editCompletedBtn = $editForm.querySelector(".btn-editCompleted");
+const $inputTitle = $editForm.querySelector(".input-title");
+const $inputContents = $editForm.querySelector(".input-contents");
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
-let data = [];
+const data = JSON.parse(localStorage.getItem("diary")) ||[];
 
-if (localStorage.getItem("diary")) {
-  data = JSON.parse(localStorage.getItem("diary"));
-}
-if (data.length !== 0) {
   renderdiary();
-}
 
 function renderdiary() {
+  if (!data.length) {
+    $diaryTitle.textContent = '존재하지 않는 게시물';
+    return;
+  }
   const filterData = data.find((el) => el.id === id);
   $diaryTitle.textContent = filterData.title;
   $diaryCreatedAt.textContent = getCreatedAt(filterData.createdAt);
@@ -42,7 +44,9 @@ $editBtn.addEventListener("click", () => {
 });
 $deleteBtn.addEventListener("click", () => {
   if (confirm("정말 삭제하시겠습니까?")) {
-    data = data.filter((el) => el.id !== id);
+    const filterData = data.filter((el) => el.id !== id);
+    data.splice(0);
+    data.push(...filterData);
     localStorage.setItem("diary", JSON.stringify(data));
     location.href = "diaryList.html";
   }

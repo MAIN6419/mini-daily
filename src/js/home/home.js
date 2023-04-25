@@ -1,10 +1,9 @@
 'use strict';
-const $recentDiaryLists = document.querySelector(".recent-diaryLists");
-const $fortuneContents = document.querySelector(".fortune-cotents")
-let data = [];
-if(localStorage.getItem('diary')){
-  data = JSON.parse(localStorage.getItem('diary'));
-}
+const $sectionContents = document.querySelector(".section-contents")
+const $recentDiaryLists = $sectionContents.querySelector(".recent-diaryLists");
+const $fortuneContents = $sectionContents.querySelector(".fortune-cotents")
+const data = JSON.parse(localStorage.getItem('diary')) || [];
+
 rederRecentDiary();
 renderFortune();
   function rederRecentDiary() {

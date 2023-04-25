@@ -36,4 +36,10 @@
   box-shadow: 1px 1px 0px 1px #333;
   transform: translateY(5px);
 }
+.links .write-link{
+  background-color: #fff;
+  font-weight: bold;
+  border-left: none;
+  z-index: 10;
+}
 

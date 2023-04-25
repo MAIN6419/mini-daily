@@ -1,8 +1,6 @@
 'use strict';
-let data = [];
-if(localStorage.getItem('diary')){
-  data = JSON.parse(localStorage.getItem('diary'));
-}
+const data = JSON.parse(localStorage.getItem('diary')) || [];
+
 const $inputTitle = document.querySelector(".input-title");
 const $inputcontents= document.querySelector(".input-contents");
 const $submitBtn = document.querySelector(".btn-submit");

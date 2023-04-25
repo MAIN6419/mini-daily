@@ -15,14 +15,14 @@ import {
   soundArray2,
   soundArray3,
 } from "./audio.js";
-
-const $gameWrapper = document.querySelector(".game-wrapper");
-const $bestRecord = document.querySelector(".best-record");
+const $sectionContents = document.querySelector(".section-contents");
+const $gameWrapper = $sectionContents.querySelector(".game-wrapper");
+const $bestRecord = $sectionContents.querySelector(".best-record");
 function fetchSpritePos() {
   return fetch("../db/db.json")
     .then((res) => res.json())
     .then((data) => data.gameSpritePos)
-    .catch((error) => console.log(error));
+    .catch((error) => console.log(new Error(error)));
 }
 
 async function cardSetting() {
@@ -70,7 +70,7 @@ async function cardSetting() {
     }
     $gameWrapper.appendChild($frag);
   } catch (error) {
-    console.log(error);
+    console.log(new Error(error));
   }
 }
 // 랜덤으로 0~8 난수를 뽑아 배열을 만들어 주는 함수 이것을 통해 카드의 이미지와 name이 달라짐

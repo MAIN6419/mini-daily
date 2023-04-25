@@ -14,15 +14,15 @@ async function initPhoto() {
     const $prevBtn = $sectionContents.querySelector(".btn-prev");
     const $nextBtn = $sectionContents.querySelector(".btn-next");
     const $axisBtn = $sectionContents.querySelector(".axis-btn");
+    const $carouselWrapper = $sectionContents.querySelector(".carousel-wrapper");
+    const $carousel = $carouselWrapper.querySelector(".carousel");
     const $carouselControler = $sectionContents.querySelector(
       ".carousel-controler"
     );
-    const $carousel = $sectionContents.querySelector(".carousel");
-    const $carouselWrapper = $sectionContents.querySelector(".carousel-wrapper");
-    const $autoplayBtn = $sectionContents.querySelector(".autoplay-btn");
-    const $dirBtn = $sectionContents.querySelector(".dir-btn");
-    const $slider = $sectionContents.querySelector(".slider");
-    const $playSpeed = $sectionContents.querySelector(".playSpeed span");
+    const $autoplayBtn = $carouselControler.querySelector(".autoplay-btn");
+    const $dirBtn = $carouselControler.querySelector(".dir-btn");
+    const $slider = $carouselControler.querySelector(".slider");
+    const $playSpeed = $carouselControler.querySelector(".playSpeed span");
     const photoData = [];
     let angle = 0;
     let isAutoplay = false;
@@ -34,7 +34,7 @@ async function initPhoto() {
     photoData.push(...data);
 
     settingCards();
-    const $carouselCard = document.querySelectorAll(".card");
+    const $carouselCard = $carousel.querySelectorAll(".card");
     cardAngle();
 
     const rotateAngle = 360 / $carouselCard.length;
@@ -65,15 +65,15 @@ async function initPhoto() {
     }
 
     // 클릭 시 회전 시키기
-    function rotateCards(e) {
+    function rotateCard(e) {
       e.target === $prevBtn ? (angle += rotateAngle) : (angle -= rotateAngle);
       stopAutoPlay();
       $carousel.style.transform = $carousel.classList.contains("row")
         ? `rotateX(${angle}deg)`
         : `rotateY(${angle}deg)`;
     }
-    $prevBtn.addEventListener("click", (e) => rotateCards(e));
-    $nextBtn.addEventListener("click", (e) => rotateCards(e));
+    $prevBtn.addEventListener("click", (e) => rotateCard(e));
+    $nextBtn.addEventListener("click", (e) => rotateCard(e));
 
     function settingCards() {
       // fragement 사용 브라우저 최적화
@@ -151,6 +151,6 @@ async function initPhoto() {
       }
     });
   } catch (error) {
-    console.log(error);
+    console.log(new Error(error));
   }
 }

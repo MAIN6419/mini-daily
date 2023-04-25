@@ -189,3 +189,9 @@
 .btn-load {
   display: none;
 }
+.links .game-link{
+  background-color: aliceblue;
+  font-weight: bold;
+  border-left: none;
+  z-index: 10;
+}

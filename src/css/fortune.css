@@ -148,13 +148,13 @@
   top: 50%;
   transform: translateY(-50%);
   border: none;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.5s;
   cursor: pointer;
+  pointer-events: none;
+  background: none;
   width: 50px;
   height: 50px;
-  background: none;
+  opacity: 0;
+  transition: all 1s;
 }
 .btn-prev.active, .btn-next.active{
   pointer-events: auto;
@@ -170,8 +170,8 @@
 .btn-next::after{
   content: "";
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top:50%;
+  left:50%;
   transform: translate(-50%, -50%);
   display: block;
   width: 50px;
@@ -216,7 +216,13 @@
     transform: translate(-50%, 0);
   }
 }
-
+.links .fortune-link{
+  background-color: #0a0a0f;
+  font-weight: bold;
+  border-left: none;
+  z-index: 10;
+  color: #fff;
+}
 
 
 

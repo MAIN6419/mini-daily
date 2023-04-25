@@ -11,13 +11,15 @@ function fetchFortuneData() {
 // 데이터를 받아온 후 처리
 async function initFortune() {
   try {
-    const $fortuneTitle = document.querySelector(".fortune-title");
-    const $description = document.querySelector(".description");
-    const $prevBtn = document.querySelector(".btn-prev");
-    const $nextBtn = document.querySelector(".btn-next");
-    const $resetBtn = document.querySelector(".btn-reset");
-    const $carousel = document.querySelector(".carousel");
-    const $carouselWrapper = document.querySelector(".carousel-wrapper");
+    const $sectionContents = document.querySelector(".section-contents");
+    const $fortuneTitle = $sectionContents.querySelector(".fortune-title");
+    const $description = $sectionContents.querySelector(".description");
+    const $prevBtn = $sectionContents.querySelector(".btn-prev");
+    const $nextBtn = $sectionContents.querySelector(".btn-next");
+    const $resetBtn = $sectionContents.querySelector(".btn-reset");
+    const $carouselWrapper = $sectionContents.querySelector(".carousel-wrapper");
+    const $carousel = $carouselWrapper.querySelector(".carousel");
+
     const totalCard = 10;
     // 운세 데이터에서 랜덤하게 뽑은 데이터를 넣어줄 배열
     const randomData = [];
@@ -38,9 +40,9 @@ async function initFortune() {
     settingCards();
 
     // Dom에서 생성된 카드 요소들을 찾습니다.
-    const $cardInner = document.querySelectorAll(".card-inner");
-    const $card = document.querySelectorAll(".card");
-    const $fortuneResult = document.querySelectorAll(".fortune-result");
+    const $card = $carousel.querySelectorAll(".card");
+    const $cardInner = $carousel.querySelectorAll(".card-inner");
+    const $fortuneResult = $carousel.querySelectorAll(".fortune-result");
 
     // 카드별 각도와 거리를 부여해 줍니다.
     setCardAngle($card, $cardInner);
@@ -85,8 +87,8 @@ async function initFortune() {
       })
     );
     // 각 버튼에 부여할 이벤트
-    const clickPrevBtn = () => rotateCard("prev", $cardInner);
-    const clickNextBtn = () => rotateCard("next", $cardInner);
+    const clickPrevBtn = (e) => rotateCard(e, $cardInner);
+    const clickNextBtn = (e) => rotateCard(e, $cardInner);
     // 각 버튼에 이벤트 부여
     $prevBtn.addEventListener("click", clickPrevBtn);
     $nextBtn.addEventListener("click", clickNextBtn);
@@ -147,10 +149,9 @@ async function initFortune() {
       }, 300 * totalCard + 300);
     }
 
-    // 클릭 시 회전 인자로 direction를 받아 'prev'인 경우 시계 방향으로 회전 'next'인 경우 반시계 방향으로 회전
-    function rotateCard(dir, cardInner) {
+    function rotateCard(e, cardInner) {
       // 회전 방향 구별
-      dir === "prev" ? index-- : index++;
+      e.target === $prevBtn ? index-- : index++;
       // 인덱스가 범위 지정
       if (index > totalCard - 1) {
         index = 0;
@@ -166,7 +167,7 @@ async function initFortune() {
       cardInner[index].style.pointerEvents = "auto";
       cardInner[nextIndex].style.pointerEvents = "auto";
       // 회전 방향에 따라 캐러셀 각도 더하거나 빼줌
-      dir === "prev" ? (angle += rotateAngle) : (angle -= rotateAngle);
+      e.target === $prevBtn ? (angle += rotateAngle) : (angle -= rotateAngle);
       $carousel.style.transform = `rotateY(${angle}deg)`;
     }
 
@@ -181,14 +182,14 @@ async function initFortune() {
       // 다시 카드를 세팅
       settingCards();
       // 다시 세팅한 카드 요소들을 가져온다.
-      const $cardInner = document.querySelectorAll(".card-inner");
-      const $card = document.querySelectorAll(".card");
-      const $fortuneResult = document.querySelectorAll(".fortune-result");
+      const $cardInner = $carousel.querySelectorAll(".card-inner");
+      const $card = $carousel.querySelectorAll(".card");
+      const $fortuneResult = $carousel.querySelectorAll(".fortune-result");
       // 카드 각도 세팅 및 클릭할 수 있는 3장의 카드 활성화
       setCardAngle($card, $cardInner);
       // 기존 버튼에 이벤트를 지우고 새로 이벤트를 넣어줘야한다. => 요소가 변했기 때문
-      const clickPrevBtn = () => rotateCard("prev", $cardInner);
-      const clickNextBtn = () => rotateCard("next", $cardInner);
+      const clickPrevBtn = (e) => rotateCard(e, $cardInner);
+      const clickNextBtn = (e) => rotateCard(e, $cardInner);
       $prevBtn.addEventListener("click", clickPrevBtn);
       $nextBtn.addEventListener("click", clickNextBtn);
       $fortuneTitle.classList.add("active");

@@ -123,6 +123,12 @@
   margin-top: 10px;
   width: 200px;
 }
+.links .photoAlbum-link{
+  background-color: wheat;
+  font-weight: bold;
+  border-left: none;
+  z-index: 10;
+}
 
 @keyframes downUp{
   from{
