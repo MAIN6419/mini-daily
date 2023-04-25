@@ -9,7 +9,7 @@ export function changeLinks(){
   if(pageName===''){
     $links[0].classList.add("active");
   }
-  else if(pageName==='dailyList'||pageName==='daily'){
+  else if(pageName==='diaryList'||pageName==='diary'){
     $links[1].classList.add("active");
   }
   else if(pageName==='write'){
@@ -21,7 +21,7 @@ export function changeLinks(){
   }
   else if(pageName==='photoAlbum'){
     $links[4].classList.add("active");
-    $links[4].style.backgroundColor = '#bdbdbd';
+    $links[4].style.backgroundColor = 'wheat';
   }
   else{
     $links[5].classList.add("active");

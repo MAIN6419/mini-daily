@@ -1,6 +1,6 @@
 @import url('./main.css');
 .section-contents{
-  background-color: #bdbdbd;
+  background-color: wheat;
   overflow: hidden;
   position: relative;
 }
@@ -99,7 +99,7 @@
   text-align: center;
   border-radius: 10px;
   margin: 20px auto;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.7);
   pointer-events: none;
   opacity: 0;
 }

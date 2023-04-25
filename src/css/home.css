@@ -2,7 +2,7 @@
 @import url('./main.css');
 .list-box{
   display: flex;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
   gap: 50px;
 }
 .recent-dailyBox,
@@ -48,20 +48,8 @@
   box-sizing: border-box;
   border-bottom: 1px solid #bdbdbd;
 }
-figure{
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border: 2px solid #dedede;
-  overflow: hidden;
-}
-.bg-caption{
-  color:lightskyblue;
-  font-size: 20px;
-  padding: 10px 15px;
-  background-color: #f9f9f9;
-  box-sizing: border-box;
-}
 .home-img{
+  display: block;
+  margin: 0 auto;
   width: 100%;
-  vertical-align: top;
 }

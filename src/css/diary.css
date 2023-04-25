@@ -3,35 +3,35 @@
   overflow-y: scroll;
   position: relative;
 }
-.daily-wrapper{
+.diary-wrapper{
   width: 80%;
   margin: 0 auto;
   position: relative;
 }
-.daily-wrapper.inactive{
+.diary-wrapper.inactive{
   display: none;
 }
-.daily-title{
+.diary-title{
   font-size: 14px;
   background-color: #eee;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   padding: 8px 20px;
 }
-.daily-info{
+.diary-info{
   padding: 5px 20px 20px 20px;
 }
-.daily-createdAt{
+.diary-createdAt{
   font-size: 14px;
   color: #bdbdbd;
 }
-.daily-contents{
+.diary-contents{
   font-size: 14px;
   white-space: pre-wrap;
   line-height: 1.2;
   margin: 20px 0;
 }
-.dailyList-link{
+.diaryList-link{
   position: absolute;
   top: 0px;
   left: -45px;
@@ -40,7 +40,7 @@
   border-radius: 5px;
   background-color: #eee;
 }
-.dailyList-link::after,
+.diaryList-link::after,
 .btn-edit::after,
 .btn-del::after{
   content: "";
@@ -49,12 +49,12 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.dailyList-link::after{
+.diaryList-link::after{
   background: url(../img/sprite.png) no-repeat -477px -304px / 620px 416px;
   width: 8px;
   height: 15px;
 }
-.daily-btns{
+.diary-btns{
   position: absolute;
   top: 35px;
   right: 20px;

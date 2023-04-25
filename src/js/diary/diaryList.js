@@ -1,6 +1,6 @@
 'use strict';
 import { getCreatedAt } from "../commons/libray.js";
-const $dailyLists = document.querySelector('.daily-lists');
+const $diaryList = document.querySelector('.daily-lists');
 const $sectionContents = document.querySelector(".section-contents");
 let data = [];
 if (localStorage.getItem('daily')) {
@@ -9,7 +9,7 @@ if (localStorage.getItem('daily')) {
 
 function renderDailyList(data) {
   if (data.length === 0) {
-    $dailyLists.innerHTML += `
+    $diaryList.innerHTML += `
     <li class="none-item">
          현재 게시글이 없어요.
          게시글을 한 번 작성해보세요~
@@ -18,12 +18,12 @@ function renderDailyList(data) {
     return; // 더 이상 출력할 요소가 없으면 함수를 종료합니다.
   }
   for (const item of data) {
-    const $dailyItem = document.createElement("li");
-    $dailyItem.setAttribute("class", "daily-item");
+    const $diaryItem = document.createElement("li");
+    $diaryItem.setAttribute("class", "diary-item");
 
-    const $dailyLink = document.createElement("a");
-    $dailyLink.setAttribute("href", `daily.html?id=${item.id}`);
-    $dailyLink.setAttribute("class", "daily-link");
+    const $diaryLink = document.createElement("a");
+    $diaryLink.setAttribute("href", `diary.html?id=${item.id}`);
+    $diaryLink.setAttribute("class", "diary-link");
 
     const $itemTitle = document.createElement("h3");
     $itemTitle.setAttribute("class", "item-title");
@@ -38,11 +38,11 @@ function renderDailyList(data) {
     $itemContents.setAttribute("class", "item-contents");
     $itemContents.textContent = item.contents;
 
-    $dailyLink.appendChild($itemTitle);
-    $dailyLink.appendChild($itemCreatedAt);
-    $dailyLink.appendChild($itemContents);
-    $dailyItem.appendChild($dailyLink);
-    $dailyLists.appendChild($dailyItem);
+    $diaryLink.appendChild($itemTitle);
+    $diaryLink.appendChild($itemCreatedAt);
+    $diaryLink.appendChild($itemContents);
+    $diaryItem.appendChild($diaryLink);
+    $diaryList.appendChild($diaryItem);
   }
 }
 

@@ -2,16 +2,16 @@
 .section-contents{
   overflow-y: scroll;
 }
-.daily-lists {
+.diary-lists {
   width: 80%;
   margin: 0 auto;
 }
-.daily-link {
+.diary-link {
   display: block;
   padding: 20px 20px 30px 20px;
   height: 100px;
 }
-.daily-item {
+.diary-item {
   border: 2px solid lightblue;
   margin-bottom: 20px;
 }

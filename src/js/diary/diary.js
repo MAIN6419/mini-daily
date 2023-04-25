@@ -1,11 +1,11 @@
 'use strict';
 import { getCreatedAt } from "../commons/libray.js";
-const $dailyTilte = document.querySelector(".daily-title");
-const $dailyCreatedAt = document.querySelector(".daily-createdAt");
-const $dailyContents = document.querySelector(".daily-contents");
+const $diaryTitle = document.querySelector(".daily-title");
+const $diaryCreatedAt = document.querySelector(".daily-createdAt");
+const $diaryContents = document.querySelector(".daily-contents");
 const $editBtn = document.querySelector(".btn-edit");
 const $deleteBtn = document.querySelector(".btn-del");
-const $dailyWrapper = document.querySelector(".daily-wrapper");
+const $diaryWrapper = document.querySelector(".daily-wrapper");
 const $editForm = document.querySelector(".edit-form");
 const $candelBtn = document.querySelector(".btn-cancel");
 const $editCompletedBtn = document.querySelector(".btn-editCompleted");
@@ -24,19 +24,19 @@ if (data.length !== 0) {
 
 function renderDaily() {
   const filterData = data.find((el) => el.id === id);
-  $dailyTilte.textContent = filterData.title;
-  $dailyCreatedAt.textContent = getCreatedAt(filterData.createdAt);
-  $dailyCreatedAt.setAttribute(
+  $diaryTitle.textContent = filterData.title;
+  $diaryCreatedAt.textContent = getCreatedAt(filterData.createdAt);
+  $diaryCreatedAt.setAttribute(
     "datetime",
     new Date(filterData.createdAt).toISOString()
   );
-  $dailyContents.textContent = filterData.contents;
+  $diaryContents.textContent = filterData.contents;
 }
 
 $editBtn.addEventListener("click", () => {
   const filterData = data.find((el) => el.id === id);
   $editForm.classList.toggle("active");
-  $dailyWrapper.classList.toggle("inactive");
+  $diaryWrapper.classList.toggle("inactive");
   $inputTitle.value = filterData.title;
   $inputContents.value = filterData.contents;
 });
@@ -49,7 +49,7 @@ $deleteBtn.addEventListener("click", () => {
 });
 $candelBtn.addEventListener("click", () => {
   $editForm.classList.toggle("active");
-  $dailyWrapper.classList.toggle("inactive");
+  $diaryWrapper.classList.toggle("inactive");
 });
 $editCompletedBtn.addEventListener("click", () => {
   const filterData = data.find((el) => el.id === id);
@@ -67,9 +67,9 @@ $editCompletedBtn.addEventListener("click", () => {
   }
   if (confirm("정말 수정 하겠습니까?")) {
     $editForm.classList.toggle("active");
-    $dailyWrapper.classList.toggle("inactive");
-    $dailyTilte.textContent = $inputTitle.value;
-    $dailyContents.textContent = $inputContents.value;
+    $diaryWrapper.classList.toggle("inactive");
+    $diaryTitle.textContent = $inputTitle.value;
+    $diaryContents.textContent = $inputContents.value;
     data.find((el, idx) => {
       if (el.id === id) {
         data[idx].title = $inputTitle.value;
