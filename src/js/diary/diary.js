@@ -1,11 +1,11 @@
 'use strict';
 import { getCreatedAt } from "../commons/libray.js";
-const $diaryTitle = document.querySelector(".daily-title");
-const $diaryCreatedAt = document.querySelector(".daily-createdAt");
-const $diaryContents = document.querySelector(".daily-contents");
+const $diaryTitle = document.querySelector(".diary-title");
+const $diaryCreatedAt = document.querySelector(".diary-createdAt");
+const $diaryContents = document.querySelector(".diary-contents");
 const $editBtn = document.querySelector(".btn-edit");
 const $deleteBtn = document.querySelector(".btn-del");
-const $diaryWrapper = document.querySelector(".daily-wrapper");
+const $diaryWrapper = document.querySelector(".diary-wrapper");
 const $editForm = document.querySelector(".edit-form");
 const $candelBtn = document.querySelector(".btn-cancel");
 const $editCompletedBtn = document.querySelector(".btn-editCompleted");
@@ -15,14 +15,14 @@ const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
 let data = [];
 
-if (localStorage.getItem("daily")) {
-  data = JSON.parse(localStorage.getItem("daily"));
+if (localStorage.getItem("diary")) {
+  data = JSON.parse(localStorage.getItem("diary"));
 }
 if (data.length !== 0) {
-  renderDaily();
+  renderdiary();
 }
 
-function renderDaily() {
+function renderdiary() {
   const filterData = data.find((el) => el.id === id);
   $diaryTitle.textContent = filterData.title;
   $diaryCreatedAt.textContent = getCreatedAt(filterData.createdAt);
@@ -43,8 +43,8 @@ $editBtn.addEventListener("click", () => {
 $deleteBtn.addEventListener("click", () => {
   if (confirm("정말 삭제하시겠습니까?")) {
     data = data.filter((el) => el.id !== id);
-    localStorage.setItem("daily", JSON.stringify(data));
-    location.href = "dailyList.html";
+    localStorage.setItem("diary", JSON.stringify(data));
+    location.href = "diaryList.html";
   }
 });
 $candelBtn.addEventListener("click", () => {
@@ -74,7 +74,7 @@ $editCompletedBtn.addEventListener("click", () => {
       if (el.id === id) {
         data[idx].title = $inputTitle.value;
         data[idx].contents = $inputContents.value;
-        localStorage.setItem("daily", JSON.stringify(data));
+        localStorage.setItem("diary", JSON.stringify(data));
       }
     });
   }

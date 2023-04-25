@@ -7,7 +7,7 @@ const pageName = page.split('.')[0]; // 파일 확장자를 제거하여 페이�
 export function changeLinks(){
   const $links = document.querySelectorAll(".links a");
   $links.forEach(el=>el.classList.remove("active"));
-  if(pageName===''){
+  if(pageName===''||pageName==="index"){
     $links[0].classList.add("active");
   }
   else if(pageName==='diaryList'||pageName==='diary'){

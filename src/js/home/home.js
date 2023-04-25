@@ -20,7 +20,8 @@ renderFortune();
       const $recentLink = document.createElement('a');
       $dailyItem.setAttribute('class', 'recent-item');
       $recentLink.textContent = item.title;
-      $recentLink.setAttribute('href', `src/template/daily.html?id=${item.id}`)
+      $recentLink.setAttribute('href', `src/template/diary.html?id=${item.id}`)
+   
       $recentDailyLists.appendChild($dailyItem);
       $dailyItem.appendChild($recentLink);
     }

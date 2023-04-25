@@ -1,7 +1,7 @@
 'use strict';
 let data = [];
-if(localStorage.getItem('daily')){
-  data = JSON.parse(localStorage.getItem('daily'));
+if(localStorage.getItem('diary')){
+  data = JSON.parse(localStorage.getItem('diary'));
 }
 const $inputTitle = document.querySelector(".input-title");
 const $inputcontents= document.querySelector(".input-contents");
@@ -26,10 +26,10 @@ $submitBtn.addEventListener('click', ()=>{
       createdAt : new Date().getTime(),
     }
     data.unshift(newPost);
-    localStorage.setItem('daily',JSON.stringify(data));
+    localStorage.setItem('diary',JSON.stringify(data));
     $inputTitle.value = '';
     $inputcontents.value= '';
-    location.href = `daily.html?id=${id}`;
+    location.href = `diary.html?id=${id}`;
   }
 
 })

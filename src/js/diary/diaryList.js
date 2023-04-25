@@ -1,13 +1,13 @@
 'use strict';
 import { getCreatedAt } from "../commons/libray.js";
-const $diaryList = document.querySelector('.daily-lists');
+const $diaryList = document.querySelector('.diary-lists');
 const $sectionContents = document.querySelector(".section-contents");
 let data = [];
-if (localStorage.getItem('daily')) {
-  data = JSON.parse(localStorage.getItem('daily'));
+if (localStorage.getItem('diary')) {
+  data = JSON.parse(localStorage.getItem('diary'));
 }
 
-function renderDailyList(data) {
+function renderDiaryList(data) {
   if (data.length === 0) {
     $diaryList.innerHTML += `
     <li class="none-item">
@@ -57,7 +57,7 @@ function addItems() {
   endIndex += itemsPerPage;
   const slicedData = data.slice(startIndex, endIndex);
   if(slicedData.length===0) return;
-  renderDailyList(slicedData);
+  renderDiaryList(slicedData);
   // 데이터가 없을 경우 스크롤 함수를 실행하지 않음
   // 현재 데이터가 4개 이하인 경우
   if (endIndex >= data.length) {
@@ -75,7 +75,7 @@ function handleScroll() {
 }
 
 // 초기에는 배열의 첫 번째 요소부터 세 개를 출력
-renderDailyList(slicedData);
+renderDiaryList(slicedData);
 
 // 스크롤이 끝까지 내려가면 다음 3개 요소를 출력
 $sectionContents.addEventListener('scroll', handleScroll);
