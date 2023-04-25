@@ -1,1 +1,1 @@
-# mini-daily
+# mini-diary
