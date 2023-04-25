@@ -1,29 +1,29 @@
 'use strict';
-const $recentDailyLists = document.querySelector(".recent-dailyLists");
+const $recentDiaryLists = document.querySelector(".recent-diaryLists");
 const $fortuneContents = document.querySelector(".fortune-cotents")
 let data = [];
-if(localStorage.getItem('daily')){
-  data = JSON.parse(localStorage.getItem('daily'));
+if(localStorage.getItem('diary')){
+  data = JSON.parse(localStorage.getItem('diary'));
 }
-rederRecentDaily();
+rederRecentDiary();
 renderFortune();
-  function rederRecentDaily() {
+  function rederRecentDiary() {
     if(data.length===0){
-      $recentDailyLists.innerHTML+=`
-      <li class="none-daily">현재 다이어리가 없어요~</li>
+      $recentDiaryLists.innerHTML+=`
+      <li class="none-diary">현재 다이어리가 없어요~</li>
       `
       return;
     }
     const recentData = data.slice(0, 3);
     for(const item of recentData){
-      const $dailyItem = document.createElement('li');
+      const $diaryItem = document.createElement('li');
       const $recentLink = document.createElement('a');
-      $dailyItem.setAttribute('class', 'recent-item');
+      $diaryItem.setAttribute('class', 'recent-item');
       $recentLink.textContent = item.title;
       $recentLink.setAttribute('href', `src/template/diary.html?id=${item.id}`)
    
-      $recentDailyLists.appendChild($dailyItem);
-      $dailyItem.appendChild($recentLink);
+      $recentDiaryLists.appendChild($diaryItem);
+      $diaryItem.appendChild($recentLink);
     }
   }
 
