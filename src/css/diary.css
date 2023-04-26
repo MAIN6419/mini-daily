@@ -85,6 +85,8 @@
   width: 20px;
   height: 20px;
 }
+
+/* edit-form */
 .edit-form{
   display: none;
   flex-direction: column;
@@ -123,8 +125,8 @@
   background-color: gold;
   margin-left: 20px;
 }
-.btn-editCompleted:active,
-.btn-cancel:active{
+.btn-editCompleted:hover,
+.btn-cancel:hover{
   box-shadow: 1px 1px 0px 1px #111;
   transform: translateY(5px);
 }

@@ -32,7 +32,8 @@
   transition: all 0.5s;
   cursor: pointer;
 }
-.btn-submit:active{
+.btn-submit:hover
+{
   box-shadow: 1px 1px 0px 1px #333;
   transform: translateY(5px);
 }

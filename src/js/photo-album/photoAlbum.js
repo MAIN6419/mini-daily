@@ -23,7 +23,7 @@ async function initPhoto() {
     const $dirBtn = $carouselControler.querySelector(".dir-btn");
     const $slider = $carouselControler.querySelector(".slider");
     const $playSpeed = $carouselControler.querySelector(".playSpeed span");
-    const photoData = [];
+
     let angle = 0;
     let isAutoplay = false;
     let isChangePlayDir = false;
@@ -31,7 +31,7 @@ async function initPhoto() {
     let interval;
 
     const data = await fetchPhotoData();
-    photoData.push(...data);
+    const photoData = data;
 
     settingCards();
     const $carouselCard = $carousel.querySelectorAll(".card");
@@ -153,4 +153,8 @@ async function initPhoto() {
   } catch (error) {
     console.log(new Error(error));
   }
+
+
 }
+
+
