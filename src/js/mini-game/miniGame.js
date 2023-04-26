@@ -18,18 +18,23 @@ const $pauseBtn = $sectionContents.querySelector(".btn-pause");
 const $resetBtn = $sectionContents.querySelector(".btn-reset");
 const $bestRecord = $sectionContents.querySelector(".best-record");
 
-const randomCardArray1 = [];
-const randomCardArray2 = [];
+const randomCardArray = [];
 const cardArray = [];
 const completedCardArray = [];
-let checked = false;
-let totalCard = 12;
-let timeInterval;
-let startTime = 0;
-let totalTime = 0;
-let startPauseTime = 0;
-let endPauseTime = 0;
-let totalPauseTime = 0;
+const variables = { 
+  checked : false, 
+  totalCard : 12, 
+  timeInterval : null, 
+  totalTime: 0, 
+  startTime: 0, 
+  startPauseTime:0 ,
+  endPauseTime: 0,
+  totalPauseTime: 0,
+  startFlipTime: 0,
+  stopFlipTime:0,
+  timerId: null
+}
+
 
 if (localStorage.getItem("gameRecord")) {
   $bestRecord.textContent = `최고기록 : ${localStorage.getItem(
@@ -44,8 +49,7 @@ $startBtn.addEventListener("click", startGame);
 
 async function startGame() {
   $modal.classList.toggle("active");
-  shuffle(randomCardArray1);
-  shuffle(randomCardArray2);
+  shuffle();
   soundSetting(soundArray, "../audio/card_effect.mp3");
   soundSetting(soundArray2, "../audio/card_effect2.mp3");
   soundSetting(soundArray3, "../audio/card_effect3.wav");
@@ -60,11 +64,12 @@ async function startGame() {
     setTimeout(() => {
       $card[i].classList.add("flipped");
       playSound(soundArray);
-    }, 1000 + 100 * i);
-    // 카드가 모두 뒤집힌 뒤 카드를 1초 동안 보여주고 뒤집음
+    }, 1000 + 120 * i);
+    // 카드가 모두 뒤집힌 뒤 카드를 0.5초 동안 보여주고 뒤집음
     setTimeout(() => {
       $card[i].classList.remove("flipped");
-    }, 1000 + 1000 + 100 * totalCard);
+    }, 1000 + 500 + 120 * variables.totalCard);
+    //  초기 딜레이 + 카드를 보여줄 시간 + 카드가 총 뒤집어지는 시간
   }
   setTimeout(() => {
     // 카드 뒤집기
@@ -73,34 +78,46 @@ async function startGame() {
     $pauseBtn.style.pointerEvents = "auto";
     $resetBtn.style.pointerEvents = "auto";
     // 시작 시간 측정
-    startTime = new Date().getTime();
-    timeInterval = setInterval(() => {
-      totalTime = ((new Date().getTime() - startTime) / 1000).toFixed(2);
-      $timer.innerHTML = Math.floor(totalTime);
+    variables.startTime = new Date().getTime();
+    variables.timeInterval = setInterval(() => {
+      variables.totalTime = ((new Date().getTime() - variables.startTime) / 1000).toFixed(2);
+      $timer.innerHTML = Math.floor(variables.totalTime);
     }, 10);
-  }, 1000 + 1000 + 100 * totalCard);
+  }, 1000 + 500 + 120 * variables.totalCard);
 }
 
 $loadBtn.addEventListener("click", () => {
-  clearInterval(timeInterval);
+  variables.timerId = setTimeout(() => {  
+    if (variables.totalTime !== 0 && variables.checked) {
+      playSound(soundArray2);
+      cardArray.forEach((card) => card.classList.toggle("flipped"));
+      cardArray[0].style.pointerEvents = "auto";
+      cardArray.splice(0);
+    }
+    variables.checked = false;
+  }, 1000 - (variables.stopFlipTime - variables.startFlipTime));
+  clearInterval(variables.timeInterval);
   $modal.classList.remove("active");
-  if (completedCardArray.length === totalCard) return;
-  endPauseTime = new Date().getTime();
-  totalPauseTime += endPauseTime - startPauseTime;
-  timeInterval = setInterval(() => {
-    totalTime = (
-      (new Date().getTime() - startTime - totalPauseTime) /
+  if (completedCardArray.length === variables.totalCard) return;
+  variables.endPauseTime = new Date().getTime();
+  variables.totalPauseTime += variables.endPauseTime - variables.startPauseTime;
+  variables.timeInterval = setInterval(() => {
+    variables.totalTime = (
+      (new Date().getTime() - variables.startTime - variables.totalPauseTime) /
       1000
     ).toFixed(2);
-    if (totalTime < 0) totalTime = 0;
-    $timer.innerHTML = Math.floor(totalTime);
+    if (variables.totalTime < 0) variables.totalTime = 0;
+    $timer.innerHTML = Math.floor(variables.totalTime);
   }, 10);
 });
 
 $pauseBtn.addEventListener("click", () => {
-  clearInterval(timeInterval);
+  variables.stopFlipTime = Date.now();
+  clearTimeout(variables.timerId); // 이전에 설정된 타이머 취소
+  variables.timerId = null; // 클릭한 시점 초기화
+  clearInterval(variables.timeInterval);
   $modal.classList.add("active");
-  startPauseTime = new Date().getTime();
+  variables.startPauseTime = new Date().getTime();
   $loadBtn.style.display = "inline-block";
   $startBtn.innerHTML = "다시하기";
   $startBtn.removeEventListener("click", startGame);
@@ -109,14 +126,16 @@ $pauseBtn.addEventListener("click", () => {
 
 $resetBtn.addEventListener("click", resetGame);
 function resetGame() {
+  soundArray.splice(0);
+  soundArray2.splice(0);
+  soundArray3.splice(0);
   cardArray.splice(0);
   completedCardArray.splice(0);
-  randomCardArray1.splice(0);
-  randomCardArray2.splice(0);
-  totalTime = 0;
-  totalPauseTime = 0;
-  checked = false;
-  clearInterval(timeInterval);
+  randomCardArray.splice(0);
+  variables.totalTime = 0;
+  variables.totalPauseTime = 0;
+  variables.checked = false;
+  clearInterval(variables.timeInterval);
   $timer.innerHTML = 0;
   while ($gameWrapper.hasChildNodes()) {
     $gameWrapper.firstChild.remove();
@@ -125,22 +144,9 @@ function resetGame() {
   $modal.classList.remove("active");
 }
 
-function setChecked(boolean) {
-  checked = boolean
-}
-
 export {
-  totalCard,
-  randomCardArray1,
-  randomCardArray2,
+  variables,
+  randomCardArray,
   completedCardArray,
   cardArray,
-  timeInterval,
-  startTime,
-  totalTime,
-  startPauseTime,
-  endPauseTime,
-  totalPauseTime,
-  checked,
-  setChecked
 };
