@@ -5,22 +5,37 @@ import { calendar } from "./calendar.js";
 
 const host = window.location.host;
 
-let baseUrl = ''; 
-
-if (host.includes('github.io')) {
-  baseUrl = '/mini-diary';
+let baseUrl = "";
+if (host.includes("github.io")) {
+  baseUrl = "/mini-diary";
 }
 
 (async function () {
   await loadTemplate();
+  
+  // clock
   updateTime();
-  calendar();
   setInterval(updateTime, 1000);
-}());
+
+  // calendar
+  let year = new Date().getFullYear();
+  let month = new Date().getMonth() + 1;
+  calendar(year, month);
+  const btns = document.querySelectorAll(".calendar button");
+  btns.forEach((item) =>
+    item.addEventListener("click", () => {
+      if (item.classList.contains("prev")) {
+        calendar(year, --month);
+      } else {
+        calendar(year, ++month);
+      }
+    })
+  );
+})();
 
 async function loadTemplate() {
   const sectionProfile = document.querySelector(".section-profile");
-  sectionProfile.innerHTML += `
+  sectionProfile.innerHTML = `
   <h2 class="a11y-hidden">프로필 영역</h2>
           <article class="clock">
             <h2 class="a11y-hidden">clock</h2>
@@ -127,7 +142,7 @@ async function loadTemplate() {
           </article>
   `;
   const links = document.querySelector(".links");
-  links.innerHTML += `
+  links.innerHTML = `
     <a class="home-link"href="${baseUrl}/">홈</a>
     <a class="diary-link" href="${baseUrl}/src/template/diaryList.html">다이어리</a>
     <a class="write-link" href="${baseUrl}/src/template/write.html">글작성</a>
