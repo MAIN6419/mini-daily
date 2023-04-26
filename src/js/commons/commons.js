@@ -12,7 +12,7 @@ if (host.includes("github.io")) {
 
 (async function () {
   await loadTemplate();
-  
+
   // clock
   updateTime();
   setInterval(updateTime, 1000);
@@ -36,7 +36,6 @@ if (host.includes("github.io")) {
 async function loadTemplate() {
   const sectionProfile = document.querySelector(".section-profile");
   sectionProfile.innerHTML = `
-  <h2 class="a11y-hidden">프로필 영역</h2>
           <article class="clock">
             <h2 class="a11y-hidden">clock</h2>
             <span class="time"> </span>

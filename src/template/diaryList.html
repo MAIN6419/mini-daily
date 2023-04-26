@@ -19,10 +19,19 @@
     <div class="wrapper">
       <div class="inner">
         <section class="section-profile">
+          <h2 class="a11y-hidden">프로필 영역</h2>
           <!-- sectopm-profile -->
         </section>
         <section class="section-contents">
-          <h2 class="a11y-hidden">다이어리 글 목록 영역</h2>
+          <h2 class="a11y-hidden">다이어리 글 목록</h2>
+          <article>
+            <h2 class="a11y-hidden">검색바</h2>
+            <div class="search-bar">
+              <label for="input-search" class="a11y-hidden">다이어리 제목 검색창</label>
+              <input type="text" id="input-search" class="input-search" placeholder="제목 검색">
+            </div>
+            
+          </article>
           <ul class="diary-lists">
             <!-- 다이어리 -->
           </ul>
@@ -32,6 +41,7 @@
         </div>
       </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <script src="../js/diary/diaryList.js" type="module"></script>
   </body>
 </html>

@@ -22,7 +22,7 @@
   left: 0;
   transform: translateY(-50%);
   display: block;
-  background: url(../img/sprite.png) no-repeat -433px -353px / 620px 416px;
+  background: url(../img/sprite.png) no-repeat -512px -294px / 620px 416px;
   width: 27px;
   height: 27px;
 }

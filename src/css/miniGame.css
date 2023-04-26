@@ -147,9 +147,9 @@
   position: relative;
 }
 .btn-pause::after {
-  background: url(../img/sprite.png) no-repeat -518px -297px / 620px 416px;
+  background: url(../img/sprite.png) no-repeat -558px -297px / 620px 416px;
   width: 14px;
-  height: 21px;
+  height: 20px;
 }
 .modal-wrapper {
   position: absolute;

@@ -1,10 +1,11 @@
-'use strict';
+"use strict";
 
 import { getCreatedAt } from "../commons/libray.js";
 
 const $sectionContents = document.querySelector(".section-contents");
-const $diaryList = $sectionContents .querySelector('.diary-lists');
-const data = JSON.parse(localStorage.getItem('diary')) || [];
+const $diaryList = $sectionContents.querySelector(".diary-lists");
+const data = JSON.parse(localStorage.getItem("diary")) || [];
+const $inputSearch = document.querySelector(".input-search");
 
 function renderDiaryList(data) {
   if (data.length === 0) {
@@ -31,7 +32,10 @@ function renderDiaryList(data) {
 
     const $itemCreatedAt = document.createElement("time");
     $itemCreatedAt.setAttribute("class", "item-createdAt");
-    $itemCreatedAt.setAttribute("datetime", new Date(item.createdAt).toISOString());
+    $itemCreatedAt.setAttribute(
+      "datetime",
+      new Date(item.createdAt).toISOString()
+    );
     $itemCreatedAt.textContent = getCreatedAt(item.createdAt);
 
     const $itemContents = document.createElement("p");
@@ -45,32 +49,35 @@ function renderDiaryList(data) {
     $frag.appendChild($diaryItem);
   }
   $diaryList.appendChild($frag);
+  slicedData = slicedData.concat(data); // 이전 데이터와 합쳐줍니다.
 }
 
 // 무한스크롤 구현
 const itemsPerPage = 4;
 let startIndex = 0;
 let endIndex = itemsPerPage;
-const slicedData = data.slice(startIndex, endIndex);
+let slicedData = data.slice(startIndex, endIndex);
 
 function addItems() {
   startIndex += itemsPerPage;
   endIndex += itemsPerPage;
-  const slicedData = data.slice(startIndex, endIndex);
-  if(slicedData.length===0) return;
+  const slicedDataForSearch = $inputSearch.value.trim() ? data.filter((el) => el.title.includes($inputSearch.value)) : data;
+  const slicedData = slicedDataForSearch.slice(startIndex, endIndex);
+  if (slicedData.length === 0) return;
   renderDiaryList(slicedData);
-  // 데이터가 없을 경우 스크롤 함수를 실행하지 않음
-  // 현재 데이터가 4개 이하인 경우
-  if (endIndex >= data.length) {
-    $sectionContents.removeEventListener('scroll', handleScroll);
+  if (endIndex >= slicedDataForSearch.length) {
+    $sectionContents.removeEventListener("scroll", handleScroll);
   }
 }
 
 function handleScroll() {
   // scrollTop 요소의 수직 스크롤 바의 현재 위치를 반환
-  // clientHeight 현재 요소의 높이 
+  // clientHeight 현재 요소의 높이
   // scrollHeight 스크롤 가능한 전체 영역의 높이
-  if ($sectionContents.scrollTop + $sectionContents.clientHeight >= $sectionContents.scrollHeight - 20) {
+  if (
+    $sectionContents.scrollTop + $sectionContents.clientHeight >=
+    $sectionContents.scrollHeight - 20
+  ) {
     addItems();
   }
 }
@@ -78,5 +85,40 @@ function handleScroll() {
 // 초기에는 배열의 첫 번째 요소부터 세 개를 출력
 renderDiaryList(slicedData);
 
-// 스크롤이 끝까지 내려가면 다음 3개 요소를 출력
-$sectionContents.addEventListener('scroll', handleScroll);
+// 스크롤이 끝까지 내려가면 다음 4개 요소를 출력
+$sectionContents.addEventListener("scroll", handleScroll);
+
+$inputSearch.addEventListener("input", (e) => debouncedSearch(e));
+
+// 검색 기능
+function search(keyword) {
+  if (keyword.trim()) {
+    startIndex = 0;
+    endIndex = itemsPerPage;
+    slicedData = data.filter((el) => el.title.includes(keyword)).slice(startIndex, endIndex);
+    if(slicedData.length===0) {
+      $diaryList.innerHTML = `   
+      <li class="none-item">
+        현재 검색한 다이어리가 존재하지 않습니다.
+      </li>`
+      return;
+    }
+    $diaryList.innerHTML = "";
+    renderDiaryList(slicedData);
+    if (endIndex >= data.length) {
+      $sectionContents.removeEventListener("scroll", handleScroll);
+    } else {
+      $sectionContents.addEventListener("scroll", handleScroll);
+    }
+  } else {
+    startIndex = 0;
+    endIndex = itemsPerPage;
+    slicedData = data.slice(startIndex, endIndex);
+    $diaryList.innerHTML = "";
+    renderDiaryList(slicedData);
+    $sectionContents.addEventListener("scroll", handleScroll);
+  }
+}
+const debouncedSearch = _.debounce((e) => {
+  search(e.target.value);
+}, 500);
