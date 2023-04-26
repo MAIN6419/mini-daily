@@ -1,4 +1,5 @@
 "use strict";
+import {calendar} from "./calendar.js";
 
 export function updateTime() {
   // dom에서 시간을 표시하는 요소를 가져옵니다.
@@ -34,6 +35,8 @@ export function updateTime() {
     // 운세 데이터가 만들어진 날짜와 현재 날짜를 비교
     // 날짜 차이가 난다면 하루가 지난것 이므로 운세 데이터를 삭제
     if (currentDate.getDate() !== fortuneCreatedAt.getDate()) {
+      const $fortuneCotents= document.querySelector('.fortune-cotents');
+      $fortuneCotents.textContent = '아직 운세를 보지 않았네요.';
       localStorage.removeItem("fortune");
     }
   }

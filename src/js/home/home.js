@@ -1,5 +1,7 @@
 'use strict';
 
+import { getCreatedAt } from "../commons/libray.js";
+
 const $sectionContents = document.querySelector(".section-contents")
 const $recentDiaryLists = $sectionContents.querySelector(".recent-diaryLists");
 const $fortuneContents = $sectionContents.querySelector(".fortune-cotents")
@@ -18,12 +20,20 @@ renderFortune();
     for(const item of recentData){
       const $diaryItem = document.createElement('li');
       const $recentLink = document.createElement('a');
+      const $createdAt = document.createElement('time');
+
       $diaryItem.setAttribute('class', 'recent-item');
+
       $recentLink.textContent = item.title;
-      $recentLink.setAttribute('href', `src/template/diary.html?id=${item.id}`)
-   
+      $recentLink.setAttribute('href', `src/template/diary.html?id=${item.id}`);
+
+      $createdAt.setAttribute("class", "createdAt");
+      $createdAt.setAttribute("datetime", new Date(item.createdAt).toISOString());
+      $createdAt.textContent = getCreatedAt(item.createdAt);
+
       $recentDiaryLists.appendChild($diaryItem);
       $diaryItem.appendChild($recentLink);
+      $diaryItem.append($createdAt);
     }
   }
 

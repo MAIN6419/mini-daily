@@ -1,4 +1,4 @@
-@import url('./main.css');
+@import url('./commons.css');
 .section-contents{
   overflow-y: scroll;
   position: relative;

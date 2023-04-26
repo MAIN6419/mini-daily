@@ -50,6 +50,7 @@ $deleteBtn.addEventListener("click", () => {
     data.push(...filterData);
     localStorage.setItem("diary", JSON.stringify(data));
     location.href = "diaryList.html";
+    alert("삭제가 완료되었습니다.")
   }
 });
 $candelBtn.addEventListener("click", () => {
@@ -70,7 +71,7 @@ $editCompletedBtn.addEventListener("click", () => {
     alert("수정한 내용이 없습니다!");
     return;
   }
-  if (confirm("정말 수정 하겠습니까?")) {
+  if (confirm("정말 수정하겠습니까?")) {
     $editForm.classList.toggle("active");
     $diaryWrapper.classList.toggle("inactive");
     $diaryTitle.textContent = $inputTitle.value;
@@ -80,6 +81,7 @@ $editCompletedBtn.addEventListener("click", () => {
         data[idx].title = $inputTitle.value;
         data[idx].contents = $inputContents.value;
         localStorage.setItem("diary", JSON.stringify(data));
+        alert("수정이 완료되었습니다.")
       }
     });
   }

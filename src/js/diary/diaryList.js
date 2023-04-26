@@ -88,7 +88,7 @@ renderDiaryList(slicedData);
 // 스크롤이 끝까지 내려가면 다음 4개 요소를 출력
 $sectionContents.addEventListener("scroll", handleScroll);
 
-$inputSearch.addEventListener("input", (e) => debouncedSearch(e));
+$inputSearch.addEventListener("input", (e) => debounceSearch(e));
 
 // 검색 기능
 function search(keyword) {
@@ -119,6 +119,6 @@ function search(keyword) {
     $sectionContents.addEventListener("scroll", handleScroll);
   }
 }
-const debouncedSearch = _.debounce((e) => {
+const debounceSearch = _.debounce((e) => {
   search(e.target.value);
 }, 500);
