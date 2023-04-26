@@ -1,4 +1,5 @@
 'use strict';
+
 const $sectionContents = document.querySelector(".section-contents")
 const $recentDiaryLists = $sectionContents.querySelector(".recent-diaryLists");
 const $fortuneContents = $sectionContents.querySelector(".fortune-cotents")

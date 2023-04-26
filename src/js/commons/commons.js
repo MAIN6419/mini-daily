@@ -1,6 +1,8 @@
 "use strict";
+
 import { updateTime } from "./clock.js";
 import { calendar } from "./calendar.js";
+
 const host = window.location.host;
 
 let baseUrl = ''; 
@@ -126,7 +128,7 @@ async function loadTemplate() {
   `;
   const links = document.querySelector(".links");
   links.innerHTML += `
-    <a class="home-link"href="../../">홈</a>
+    <a class="home-link"href="${baseUrl}/">홈</a>
     <a class="diary-link" href="${baseUrl}/src/template/diaryList.html">다이어리</a>
     <a class="write-link" href="${baseUrl}/src/template/write.html">글작성</a>
     <a class="game-link" href="${baseUrl}/src/template/miniGame.html">미니게임</a>

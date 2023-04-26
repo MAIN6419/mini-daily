@@ -21,11 +21,12 @@ const data = JSON.parse(localStorage.getItem("diary")) ||[];
   renderdiary();
 
 function renderdiary() {
-  if (!data.length) {
+  const filterData = data.find((el) => el.id === id);
+  if (!filterData) {
     $diaryTitle.textContent = '존재하지 않는 게시물';
     return;
   }
-  const filterData = data.find((el) => el.id === id);
+  
   $diaryTitle.textContent = filterData.title;
   $diaryCreatedAt.textContent = getCreatedAt(filterData.createdAt);
   $diaryCreatedAt.setAttribute(

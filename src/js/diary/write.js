@@ -1,4 +1,5 @@
 'use strict';
+
 const data = JSON.parse(localStorage.getItem('diary')) || [];
 
 const $inputTitle = document.querySelector(".input-title");

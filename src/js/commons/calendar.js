@@ -1,4 +1,5 @@
 "use strict";
+
 export function calendar() {
   let newYear = new Date().getFullYear();
   let newMonth = new Date().getMonth() + 1;

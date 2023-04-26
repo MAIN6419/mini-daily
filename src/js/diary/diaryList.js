@@ -1,5 +1,7 @@
 'use strict';
+
 import { getCreatedAt } from "../commons/libray.js";
+
 const $sectionContents = document.querySelector(".section-contents");
 const $diaryList = $sectionContents .querySelector('.diary-lists');
 const data = JSON.parse(localStorage.getItem('diary')) || [];
