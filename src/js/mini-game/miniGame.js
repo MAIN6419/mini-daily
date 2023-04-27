@@ -1,10 +1,9 @@
 "use strict";
 import {
-  soundSetting,
   playSound,
+  resetSound,
   soundArray,
   soundArray2,
-  soundArray3,
 } from "./audio.js";
 import { cardSetting, shuffle } from "./card.js";
 
@@ -32,7 +31,7 @@ const variables = {
   totalPauseTime: 0,
   startFlipTime: 0,
   stopFlipTime:0,
-  timerId: null
+  cardFliptimer: null
 }
 
 
@@ -50,10 +49,7 @@ $startBtn.addEventListener("click", startGame);
 async function startGame() {
   $modal.classList.toggle("active");
   shuffle();
-  soundSetting(soundArray, "../audio/card_effect.mp3");
-  soundSetting(soundArray2, "../audio/card_effect2.mp3");
-  soundSetting(soundArray3, "../audio/card_effect3.wav");
-  await cardSetting();
+  await cardSetting(); 
   $gameWrapper.style.pointerEvents = "none";
   $pauseBtn.style.pointerEvents = "none";
   $resetBtn.style.pointerEvents = "none";
@@ -87,7 +83,7 @@ async function startGame() {
 }
 
 $loadBtn.addEventListener("click", () => {
-  variables.timerId = setTimeout(() => {  
+  variables.cardFliptimer = setTimeout(() => {  
     if (variables.totalTime !== 0 && variables.checked) {
       playSound(soundArray2);
       cardArray.forEach((card) => card.classList.toggle("flipped"));
@@ -113,8 +109,8 @@ $loadBtn.addEventListener("click", () => {
 
 $pauseBtn.addEventListener("click", () => {
   variables.stopFlipTime = Date.now();
-  clearTimeout(variables.timerId); // 이전에 설정된 타이머 취소
-  variables.timerId = null; // 클릭한 시점 초기화
+  clearTimeout(variables.cardFliptimer); // 이전에 설정된 타이머 취소
+  variables.cardFliptimer = null; // 클릭한 시점 초기화
   clearInterval(variables.timeInterval);
   $modal.classList.add("active");
   variables.startPauseTime = new Date().getTime();
@@ -126,9 +122,7 @@ $pauseBtn.addEventListener("click", () => {
 
 $resetBtn.addEventListener("click", resetGame);
 function resetGame() {
-  soundArray.splice(0);
-  soundArray2.splice(0);
-  soundArray3.splice(0);
+  resetSound();
   cardArray.splice(0);
   completedCardArray.splice(0);
   randomCardArray.splice(0);

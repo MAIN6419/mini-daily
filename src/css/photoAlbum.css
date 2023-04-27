@@ -26,10 +26,10 @@
   width: 250px;
   height: 160px;
   position: absolute;
-  perspective: 1200px;
-  top: 50%;
+  perspective: 1000px;
+  top: 44%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -46%);
   perspective-origin: center -60% ;
 }
 .carousel {
@@ -48,11 +48,18 @@
   left: 10px;
   top: 10px;
   box-shadow: 0px 0px 0px 8px rgba(255, 255, 255, 1);
+  cursor: pointer;
+ 
+}
+.carousel:nth-child(1) .card,
+.carousel:nth-child(2) .card,
+.carousel:nth-child(3) .card{
+  pointer-events: auto;
 }
 .btn-prev, .btn-next{
   position: absolute;
-  top: 53%;
-  transform: translateY(-47%);
+  top: 50%;
+  transform: translateY(-50%);
   border: none;
   cursor: pointer;
   pointer-events: none;
@@ -67,10 +74,10 @@
   opacity: 1;
 }
 .btn-prev{
-  left: 10px;
+  left: 5px;
 }
 .btn-next{
-  right: 10px;
+  right: 5px;
 }
 .btn-prev::after,
 .btn-next::after{
@@ -129,13 +136,64 @@
   border-left: none;
   z-index: 10;
 }
+.modal-wrapper{
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: none;
+}
+.modal-wrapper.active{
+  display: block;
+  animation: fadeIn 1s;
+}
+.photo{
+  position: absolute;
+  top:50%;
+  left: 50%;
+  width: 70%;
+  height: 70%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 5px;
+}
+
+.btn-close{
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: gold;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 3px 3px 0px 1px #333;
+  padding: 10px 30px;
+  font-size: 20px;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+.btn-close:hover{
+  box-shadow: 1px 1px 0px 1px #333;
+  transform: translateX(-50%) translateY(5px);
+}
+@keyframes fadeIn {
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+}
+
 
 @keyframes downUp{
   from{
     transform: translateX(-50%) translateY(100%);
   }
   to{
-    transform: translateX(-50%) translateY(0%);
+    transform: translateX(-50%);
   }
 }
 

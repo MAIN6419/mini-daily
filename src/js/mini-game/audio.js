@@ -4,7 +4,7 @@ const soundArray = [];
 const soundArray2 = [];
 const soundArray3 = [];
 function soundSetting(soundArray, soundSrc) {
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 9; i++) {
     const sound = new Audio();
     sound.src = soundSrc;
     sound.volume = 0.5;

@@ -5,7 +5,7 @@ import {
   cardArray,
   variables
 } from "./miniGame.js";
-import { playSound, soundArray, soundArray2, soundArray3 } from "./audio.js";
+import { playSound, soundArray, soundArray2, soundArray3, soundSetting } from "./audio.js";
 const $sectionContents = document.querySelector(".section-contents");
 const $gameWrapper = $sectionContents.querySelector(".game-wrapper");
 const $bestRecord = $sectionContents.querySelector(".best-record");
@@ -18,6 +18,11 @@ function fetchSpritePos() {
 
 async function cardSetting() {
   try {
+    // 카드에 적용할 효과음을 불러옴
+    soundSetting(soundArray, "../audio/card_effect.mp3");
+    soundSetting(soundArray2, "../audio/card_effect2.mp3");
+    soundSetting(soundArray3, "../audio/card_effect3.wav");
+
     const spritePos = await fetchSpritePos();
     const $frag = document.createDocumentFragment();
     for (let i = 0; i < variables.totalCard; i++) {
@@ -44,7 +49,7 @@ async function cardSetting() {
       }px ${spritePos[randomCardArray[i]].y}px`;
       $cardImg.style.width = `${spritePos[randomCardArray[i]].width}px`;
       $cardImg.style.height = `${spritePos[randomCardArray[i]].height}px`;
-      $card.setAttribute("name", randomCardArray[i]);
+      $card.setAttribute("data-id", randomCardArray[i]);
     }
     $gameWrapper.appendChild($frag);
   } catch (error) {
@@ -85,7 +90,7 @@ function flipCard() {
 
     // 카드 일치시
     if (
-      cardArray[0].getAttribute("name") === cardArray[1].getAttribute("name")
+      cardArray[0].dataset.id === cardArray[1].dataset.id 
     ) {
       setTimeout(() => {
         if (variables.totalTime !== 0) {
@@ -98,7 +103,7 @@ function flipCard() {
 
     // 카드가 일치하지 않을 시 카드를 다시 뒤집음
     variables.startFlipTime = Date.now(); // 클릭한 시점을 저장
-    variables.timerId = setTimeout(() => {
+    variables.cardFliptimer = setTimeout(() => {
       if (variables.totalTime !== 0) {
         playSound(soundArray2);
         cardArray.forEach((card) => card.classList.toggle("flipped"));

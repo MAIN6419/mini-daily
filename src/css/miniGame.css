@@ -185,7 +185,14 @@
   font-weight: bold;
   background-color: gold;
   border: none;
+  box-shadow: 3px 3px 0px 1px #333;
+  transition: all 0.5s;
   cursor: pointer;
+}
+.btn-start:hover,
+.btn-load:hover{
+  box-shadow: 1px 1px 0px 1px #333;
+  transform: translateY(5px);
 }
 .btn-load {
   display: none;

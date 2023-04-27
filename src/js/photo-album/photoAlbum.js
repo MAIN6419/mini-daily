@@ -23,13 +23,17 @@ async function initPhoto() {
     const $dirBtn = $carouselControler.querySelector(".dir-btn");
     const $slider = $carouselControler.querySelector(".slider");
     const $playSpeed = $carouselControler.querySelector(".playSpeed span");
-
+    const $modalWrapper = $sectionContents.querySelector(".modal-wrapper")
+    const $modalPhoto = $modalWrapper.querySelector(".photo");
+    const $modalCloseBtn = $modalWrapper.querySelector(".btn-close")
     let angle = 0;
     let isAutoplay = false;
     let isChangePlayDir = false;
     let autoPlaySpeed = 1;
     let interval;
-
+    let index = 0;
+    let lastIndex = 0;
+    let nextIndex = 0;
     const data = await fetchPhotoData();
     const photoData = data;
 
@@ -45,6 +49,14 @@ async function initPhoto() {
     //원의 중심점에서 떨어진 거리 구하기 (밑변의 길이 / tan(각도에 해당하는 라디안))
     const colTz = Math.round(250 / 2 / Math.tan(radian));
     const rowTz = Math.round(160 / 2 / Math.tan(radian));
+    $carouselCard.forEach((el, idx)=>el.addEventListener('click', ()=> {
+      $modalWrapper.classList.toggle('active');
+      $modalPhoto.style.backgroundImage = `url(${photoData[idx]})`;
+      stopAutoPlay();
+    }))
+    $modalCloseBtn.addEventListener('click', ()=>{
+      $modalWrapper.classList.toggle('active');
+    })
 
     // 초기 셀 각도 및 중심점에서 떨어진 거리 세팅
     function cardAngle() {
@@ -66,6 +78,21 @@ async function initPhoto() {
 
     // 클릭 시 회전 시키기
     function rotateCard(e) {
+      e.target === $prevBtn ? index-- : index++;
+      // 인덱스가 범위 지정
+      if (index > data.length - 1) {
+        index = 0;
+      }
+      if (index < 0) {
+        index = totalCard - 1;
+      }
+      lastIndex = index === 0 ? data.length - 1 : index - 1;
+      nextIndex = index === data.length - 1 ? 0 : index + 1;
+      // 3장의 카드(이전, 현재, 다음)외 클릭이 되지 않도록 막음
+      $carouselCard.forEach((el) => (el.style.pointerEvents = "none"));
+      $carouselCard[lastIndex].style.pointerEvents = "auto";
+      $carouselCard[index].style.pointerEvents = "auto";
+      $carouselCard[nextIndex].style.pointerEvents = "auto";
       e.target === $prevBtn ? (angle += rotateAngle) : (angle -= rotateAngle);
       stopAutoPlay();
       $carousel.style.transform = $carousel.classList.contains("row")
