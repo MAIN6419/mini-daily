@@ -54,7 +54,7 @@ async function startGame() {
   $pauseBtn.style.pointerEvents = "none";
   $resetBtn.style.pointerEvents = "none";
   const $card = document.querySelectorAll(".card");
-  playSound(soundArray);
+  
   for (let i = 0; i < $card.length; i++) {
     // 카드를 하나씩 뒤집히는 효과를 주기 위해 지연
     setTimeout(() => {

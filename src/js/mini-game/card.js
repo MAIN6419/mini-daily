@@ -52,6 +52,7 @@ async function cardSetting() {
       $card.setAttribute("data-id", randomCardArray[i]);
     }
     $gameWrapper.appendChild($frag);
+    playSound(soundArray);
   } catch (error) {
     console.log(new Error(error));
   }
