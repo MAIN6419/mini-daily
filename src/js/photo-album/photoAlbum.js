@@ -14,6 +14,7 @@ async function initPhoto() {
     const $prevBtn = $sectionContents.querySelector(".btn-prev");
     const $nextBtn = $sectionContents.querySelector(".btn-next");
     const $axisBtn = $sectionContents.querySelector(".axis-btn");
+
     const $carouselWrapper = $sectionContents.querySelector(".carousel-wrapper");
     const $carousel = $carouselWrapper.querySelector(".carousel");
     const $carouselControler = $sectionContents.querySelector(
@@ -84,7 +85,7 @@ async function initPhoto() {
         index = 0;
       }
       if (index < 0) {
-        index = totalCard - 1;
+        index = data.length - 1;
       }
       lastIndex = index === 0 ? data.length - 1 : index - 1;
       nextIndex = index === data.length - 1 ? 0 : index + 1;
@@ -142,12 +143,29 @@ async function initPhoto() {
       isAutoplay = !isAutoplay;
       if (isAutoplay) {
         interval = setInterval(autoPlay, autoPlaySpeed * 1000);
+        $autoplayBtn.textContent = '재생정지';
       } else {
+        $autoplayBtn.textContent = '자동재생';
         stopAutoPlay();
       }
     });
     function autoPlay() {
       isChangePlayDir ? (angle += rotateAngle) : (angle -= rotateAngle);
+      isChangePlayDir ? index-- : index++;
+      // 인덱스가 범위 지정
+      if (index > data.length - 1) {
+        index = 0;
+      }
+      if (index < 0) {
+        index = data.length - 1;
+      }
+      lastIndex = index === 0 ? data.length - 1 : index - 1;
+      nextIndex = index === data.length - 1 ? 0 : index + 1;
+      // 3장의 카드(이전, 현재, 다음)외 클릭이 되지 않도록 막음
+      $carouselCard.forEach((el) => (el.style.pointerEvents = "none"));
+      $carouselCard[lastIndex].style.pointerEvents = "auto";
+      $carouselCard[index].style.pointerEvents = "auto";
+      $carouselCard[nextIndex].style.pointerEvents = "auto";
       $carousel.style.transform = $carousel.classList.contains("row")
         ? `rotateX(${angle}deg)`
         : `rotateY(${angle}deg)`;
