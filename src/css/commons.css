@@ -5,16 +5,11 @@
   font-weight: normal;
   font-style: normal;
 }
+/* rest-css */
 * {
   margin: 0;
   padding: 0;
   font-family: "NeoDunggeunmo", "sans-serif";
-}
-body {
-  width: 100vw;
-  height: 100vh;
-  /* 배경이미지 최적화하여 용량을 90% 줄임 */
-  background-image: url(../img/bg.png);
 }
 ul{
   list-style-type: none;
@@ -33,202 +28,22 @@ a {
   padding: 0;
   position: absolute;
 }
-.wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 1200px;
-  height: 660px;
-  padding: 20px 10px 10px 10px;
-  background-color: #eee;
-  border-radius: 10px;
-}
-.wrapper::before {
-  position: absolute;
-  display: block;
-  content: "";
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 1200px;
-  height: 660px;
-  padding: 40px;
-  border-radius: 10px;
-  background-color: #b4d1da;
-  z-index: -1;
-}
-.wrapper::after {
-  position: absolute;
-  display: block;
-  content: "";
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 1200px;
-  height: 660px;
-  padding: 25px 20px;
-  border-radius: 10px;
-  border: 2px dashed white;
-}
-.inner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  gap: 10px;
-  position: relative;
-  background-color: #cdcdcd;
-  padding: 10px;
-  border-radius: 10px;
-  z-index: 10;
-}
-.section-profile {
-  border: 1px solid #333;
-  background-color: #fff;
-  padding: 20px;
-  flex-basis: 30%;
-  box-sizing: border-box;
-  border-radius: 10px;
-  height: 660px;
-  display: flex;
-  align-items: center;
+
+/* loading-css */
+.loading-modal{
+  display: none;
   flex-direction: column;
-  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.5);
 }
-.clock {
-  border: 5px double #999;
-  padding: 5px 10px;
+.loading-modal {
   font-size: 30px;
   font-weight: bold;
-  color: cornflowerblue;
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
 }
-.hour::after {
-  content: ":";
-  margin: 0 10px;
-  animation: blink 1.5s linear infinite;
-  position: relative;
-  bottom: 5px;
-}
-.profile {
-  text-align: center;
-}
-.profile-img {
-  width: 180px;
-  margin-bottom: 10px;
-  border: 1px solid #999;
-  box-sizing: border-box;
-  background-color: #eee;
-}
-.profile-name {
-  display: block;
-  font-size: 20px;
-  padding: 3px 0px;
-  margin: 0 auto;
-  border: 1px solid #999;
-  border-radius: 5px;
-  width: 100px;
-  margin-bottom: 10px;
-}
-.introduce-box {
-  box-sizing: border-box;
-  padding: 15px;
-  border-top: 2px dashed #999;
-  border-bottom: 2px dashed #999;
-  width: 90%;
-  margin: 0 auto;
-}
-.profile-introduce {
-  text-align: center;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-.calendar {
-  display: inline-block;
-  padding: 10px 20px;
-  background: #f9f9f9;
-  text-align: center;
-  border-radius: 5px;
-  position: relative;
-}
-.calendar table {
-  border-collapse: collapse;
-}
-caption {
-  font-size: 14px;
-  color: orange;
-  margin-bottom: 10px;
-}
-.calendar th,
-.calendar td {
-  font-size: 12px;
-  padding: 8px;
-  border: 1px solid #666;
-}
-.calendar th:first-child,
-.calendar td:first-child {
-  color: red;
-}
-.calendar th:last-child,
-.calendar td:last-child {
-  color: blue;
-}
-.calendar td.today {
-  background-color: gold;
-}
-.prev,
-.next {
-  color: inherit;
-  border: none;
-  padding: 5px;
-  margin-top: 10px;
-  position: absolute;
-  top: -7px;
-  cursor: pointer;
-  background: none;
-  font-size: 20px;
-  color: #999;
-}
-.prev {
-  left: 4rem;
-}
-.next {
-  right: 4rem;
-}
-.section-contents {
-  border: 1px solid #cdcdcd;
-  background-color: #fff;
-  padding: 20px;
-  flex-basis: 70%;
-  box-sizing: border-box;
-  border-radius: 10px;
-  height: 660px;
-  z-index: 10;
-  border: 1px solid #333;
-}
-.links {
-  position: absolute;
-  top: 20px;
-  right: -71px;
+.loading-modal.active{
   display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
-.links a {
-  background-color: #b4d1da;
-  text-align: center;
-  padding: 5px 8px;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  border-left: none;
-  border: 1px solid royalblue;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-}
-

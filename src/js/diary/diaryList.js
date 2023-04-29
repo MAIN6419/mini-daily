@@ -1,11 +1,23 @@
 "use strict";
 
 import { getCreatedAt } from "../commons/libray.js";
-
+import { userData } from "../commons/commons.js";
+import { FetchDiarys, nextDiaryList } from "../commons/firebase.js";
 const $sectionContents = document.querySelector(".section-contents");
-const $diaryList = $sectionContents.querySelector(".diary-lists");
-const data = JSON.parse(localStorage.getItem("diary")) || [];
-const $inputSearch = document.querySelector(".input-search");
+const $diaryList = $sectionContents.querySelector(".diary-lists"); 
+
+
+const $inputSearch = $sectionContents.querySelector(".input-search");
+const $loadingModal = $sectionContents.querySelector(".loading-modal");
+const fetch = async ()=>{
+  $loadingModal.classList.add("active");
+  return await FetchDiarys(userData.nickname).then((res)=>{
+    $loadingModal.classList.remove("active");
+    return res;
+  })
+};
+const data = await fetch();
+console.log(data)
 
 function renderDiaryList(data) {
   if (data.length === 0) {
@@ -21,6 +33,7 @@ function renderDiaryList(data) {
   for (const item of data) {
     const $diaryItem = document.createElement("li");
     $diaryItem.setAttribute("class", "diary-item");
+    $diaryItem.setAttribute("data-id", item.id);
 
     const $diaryLink = document.createElement("a");
     $diaryLink.setAttribute("href", `diary.html?id=${item.id}`);
@@ -56,12 +69,13 @@ function renderDiaryList(data) {
 const itemsPerPage = 4;
 let startIndex = 0;
 let endIndex = itemsPerPage;
-let slicedData = data.slice(startIndex, endIndex);
+// 파이어베이스에서 데이터를 요청하는 로직 4개
+let slicedData = await nextDiaryList(userData.nickname, startIndex);
 
-function addItems() {
+async function addItems() {
   startIndex += itemsPerPage;
   endIndex += itemsPerPage;
-  const slicedDataForSearch = $inputSearch.value.trim() ? data.filter((el) => el.title.includes($inputSearch.value)) : data;
+  const slicedDataForSearch = $inputSearch.value.trim() ? data.filter((el) => el.title.includes($inputSearch.value)) : await nextDiaryList(userData.nickname, startIndex);
   const slicedData = slicedDataForSearch.slice(startIndex, endIndex);
   if (slicedData.length === 0) return;
   renderDiaryList(slicedData);

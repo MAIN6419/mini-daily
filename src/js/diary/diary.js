@@ -1,6 +1,7 @@
 'use strict';
 import { getCreatedAt } from "../commons/libray.js";
-
+import { FetchDiary } from "../commons/firebase.js";
+import { userData } from "../commons/commons.js";
 const $sectionContents = document.querySelector(".section-contents");
 const $diaryWrapper = $sectionContents.querySelector(".diary-wrapper");
 const $diaryTitle = $diaryWrapper .querySelector(".diary-title");
@@ -14,34 +15,40 @@ const $candelBtn = $editForm.querySelector(".btn-cancel");
 const $editCompletedBtn = $editForm.querySelector(".btn-editCompleted");
 const $inputTitle = $editForm.querySelector(".input-title");
 const $inputContents = $editForm.querySelector(".input-contents");
+const $loadingModal = $sectionContents.querySelector(".loading-modal");
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
-const data = JSON.parse(localStorage.getItem("diary")) ||[];
-
+const fetch = async ()=> {
+  $loadingModal.classList.add("active");
+   return await FetchDiary(userData.nickname, id).then((res)=>{
+    $loadingModal.classList.remove("active");
+    return res;
+  })
+}
+const data =  await fetch() || [];
   renderdiary();
 
 function renderdiary() {
-  const filterData = data.find((el) => el.id === id);
-  if (!filterData) {
+
+  if (!data) {
     $diaryTitle.textContent = '존재하지 않는 게시물';
     return;
   }
   
-  $diaryTitle.textContent = filterData.title;
-  $diaryCreatedAt.textContent = getCreatedAt(filterData.createdAt);
+  $diaryTitle.textContent = data.title;
+  $diaryCreatedAt.textContent = getCreatedAt(data.createdAt);
   $diaryCreatedAt.setAttribute(
     "datetime",
-    new Date(filterData.createdAt).toISOString()
+    new Date(data.createdAt).toISOString()
   );
-  $diaryContents.textContent = filterData.contents;
+  $diaryContents.textContent = data.contents;
 }
 
 $editBtn.addEventListener("click", () => {
-  const filterData = data.find((el) => el.id === id);
   $editForm.classList.toggle("active");
   $diaryWrapper.classList.toggle("inactive");
-  $inputTitle.value = filterData.title;
-  $inputContents.value = filterData.contents;
+  $inputTitle.value = data.title;
+  $inputContents.value = data.contents;
 });
 $deleteBtn.addEventListener("click", () => {
   if (confirm("정말 삭제하시겠습니까?")) {

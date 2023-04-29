@@ -4,8 +4,9 @@ import { getCreatedAt } from "../commons/libray.js";
 
 const $sectionContents = document.querySelector(".section-contents")
 const $recentDiaryLists = $sectionContents.querySelector(".recent-diaryLists");
-const $fortuneContents = $sectionContents.querySelector(".fortune-cotents")
-const data = JSON.parse(localStorage.getItem('diary')) || [];
+const $fortuneContents = $sectionContents.querySelector(".fortune-cotents");
+const userData = JSON.parse(sessionStorage.getItem('userData')) || null;
+const data = userData.diary || [];
 
 rederRecentDiary();
 renderFortune();
@@ -39,7 +40,7 @@ renderFortune();
 
   function renderFortune(){
     if(localStorage.getItem('fortune')){
-      $fortuneContents.textContent = JSON.parse(localStorage.getItem('fortune')).result;
+      $fortuneContents.textContent = userData.fortune;
     }
     else{
       $fortuneContents.textContent = '아직 운세를 보지 않았네요.'

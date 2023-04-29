@@ -2,6 +2,15 @@
 
 import { updateTime } from "./clock.js";
 import { calendar } from "./calendar.js";
+export let userData;
+if(!sessionStorage.getItem("userData")) {
+  location.replace("/");
+  alert("로그인 후 이용가능합니다!");
+}
+else{
+  userData = JSON.parse(sessionStorage.getItem("userData"));
+}
+
 
 const host = window.location.host;
 
@@ -38,22 +47,19 @@ async function loadTemplate() {
   sectionProfile.innerHTML = `
           <article class="clock">
             <h2 class="a11y-hidden">clock</h2>
-            <span class="time"> </span>
+            <span class="time"></span>
           </article>
           <article class="profile">
             <h2 class="a11y-hidden">유저 프로필</h2>
             <img
               class="profile-img"
-              src="${baseUrl}/src/img/profile.png"
+              src=" ${userData.profileImg || baseUrl+'/src/img/profile.png'}"
               alt="유저 프로필 이미지"
             />
-            <span class="profile-name">User</span>
+            <span class="profile-name">${userData.nickname}</span>
             <div class="introduce-box">
               <p class="profile-introduce">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eius
-                voluptatem incidunt voluptate cum aperiam, dolorum atque minima
-                at dignissimos saepe, cupiditate et asperiores dicta cumque ex
-                vitae provident, officia dolor.
+                ${userData.introduce}
               </p>
             </div>
           </article>
@@ -142,7 +148,7 @@ async function loadTemplate() {
   `;
   const links = document.querySelector(".links");
   links.innerHTML = `
-    <a class="home-link"href="${baseUrl}/">홈</a>
+    <a class="home-link"href="${baseUrl}/src/template/home.html">홈</a>
     <a class="diary-link" href="${baseUrl}/src/template/diaryList.html">다이어리</a>
     <a class="write-link" href="${baseUrl}/src/template/write.html">글작성</a>
     <a class="game-link" href="${baseUrl}/src/template/miniGame.html">미니게임</a>
