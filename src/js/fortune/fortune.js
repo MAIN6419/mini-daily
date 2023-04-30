@@ -1,5 +1,6 @@
 "use strict";
-
+import { userData } from "../commons/commons.js";
+import { setFortune } from "../commons/firebase.js";
 initFortune();
 
 function fetchFortuneData() {
@@ -82,7 +83,7 @@ async function initFortune() {
             result: fortuneData[randomData[idx]],
             createdAt: new Date().getTime(),
           };
-          localStorage.setItem("fortune", JSON.stringify(newFortuneData));
+          setFortune(userData.nickname, newFortuneData);
         }
       })
     );
@@ -221,7 +222,7 @@ async function initFortune() {
               result: fortuneData[randomData[idx]],
               createdAt: new Date().getTime(),
             };
-            localStorage.setItem("fortune", JSON.stringify(newFortuneData));
+            setFortune(userData.nickname, newFortuneData);
           }
         });
       });

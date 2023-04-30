@@ -1,0 +1,77 @@
+.findAccount-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.findAccount-wrapper h1{
+  margin-bottom: 30px;
+}
+.findAccount-form{
+  display: flex;
+  flex-direction: column;
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  padding: 50px 20px;
+  box-sizing: border-box;
+  width: calc(100% - 60px);
+  max-width: 400px;
+  gap: 20px;
+  box-shadow: 0 8px 20px rgba(35, 0, 77, 0.2);
+}
+.form-menu{
+  width: calc(100% - 60px);
+  max-width: 400px;
+  display: flex;
+  height: 50px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  background-color: #eee;
+  overflow: hidden;
+}
+.btn-findEmail.active,
+.btn-findPw.active{
+  width: 100%;
+  background-color: #1eda85;
+  color: #fff;
+}
+.findEmail, 
+.findPw{
+  flex-basis: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btn-findEmail,
+.btn-findPw{
+  width: 100%;
+  height: 100%;
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.findAccount-form input{
+  width: 100%;
+  border: 2px solid #bdbdbd;
+  box-sizing: border-box;
+  padding: 20px;
+  font-size: 16px;
+}
+.btn-findAccount{
+  padding: 20px 0px;
+  background-color: #1eda85;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  cursor: pointer;
+}

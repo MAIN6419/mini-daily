@@ -47,15 +47,18 @@
   margin-bottom: 20px;
 }
 .item-title {
+  pointer-events: none;
   margin-bottom: 5px;
 }
 .item-createdAt {
+  pointer-events: none;
   display: block;
   margin-bottom: 10px;
   font-size: 14px;
   color: #bdbdbd;
 }
 .item-contents {
+  pointer-events: none;
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;

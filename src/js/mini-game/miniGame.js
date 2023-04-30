@@ -6,7 +6,9 @@ import {
   soundArray2,
 } from "./audio.js";
 import { cardSetting, shuffle } from "./card.js";
-
+import { userData } from "../commons/commons.js";
+import { FetchUserData } from "../commons/firebase.js";
+const recordData = (await FetchUserData(userData.nickname)).gameRecord;
 const $sectionContents = document.querySelector(".section-contents");
 const $gameWrapper = $sectionContents.querySelector(".game-wrapper");
 const $timer = $sectionContents.querySelector(".timer-box span");
@@ -35,10 +37,8 @@ const variables = {
 }
 
 
-if (localStorage.getItem("gameRecord")) {
-  $bestRecord.textContent = `최고기록 : ${localStorage.getItem(
-    "gameRecord"
-  )}초`;
+if (recordData) {
+  $bestRecord.textContent = `최고기록 : ${recordData}초`;
 } else {
   $bestRecord.textContent =
     "현재 게임 기록이 없습니다. 최고 기록에 도전해보세요!";

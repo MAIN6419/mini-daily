@@ -2,7 +2,9 @@
 
 import { updateTime } from "./clock.js";
 import { calendar } from "./calendar.js";
+import { getSessionUser, logout } from "./firebase.js";
 export let userData;
+
 if(!sessionStorage.getItem("userData")) {
   location.replace("/");
   alert("로그인 후 이용가능합니다!");
@@ -10,7 +12,7 @@ if(!sessionStorage.getItem("userData")) {
 else{
   userData = JSON.parse(sessionStorage.getItem("userData"));
 }
-
+console.log(userData)
 
 const host = window.location.host;
 
@@ -21,7 +23,10 @@ if (host.includes("github.io")) {
 
 (async function () {
   await loadTemplate();
-
+  const $logoutBtn = document.querySelector(".btn-logout");
+  $logoutBtn.addEventListener("click", ()=>{
+    logout();
+  })
   // clock
   updateTime();
   setInterval(updateTime, 1000);
@@ -53,7 +58,7 @@ async function loadTemplate() {
             <h2 class="a11y-hidden">유저 프로필</h2>
             <img
               class="profile-img"
-              src=" ${userData.profileImg || baseUrl+'/src/img/profile.png'}"
+              src=" ${userData.profileImgURL || baseUrl+'/src/img/profile.png'}"
               alt="유저 프로필 이미지"
             />
             <span class="profile-name">${userData.nickname}</span>
@@ -145,6 +150,7 @@ async function loadTemplate() {
               <span class="a11y-hidden">다음달</span>&#62;
             </button>
           </article>
+          <button class="btn-logout" type="button">logout</button>
   `;
   const links = document.querySelector(".links");
   links.innerHTML = `

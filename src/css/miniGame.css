@@ -107,6 +107,7 @@
   margin-bottom: 10px;
   font-size: 18px;
   color: red;
+  min-height: 19px;
 }
 .game-btns {
   width: 100%;

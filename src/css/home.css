@@ -39,6 +39,7 @@
   font-size: 14px;
 }
 .recent-diaryLists{
+  position:relative;
   min-height: 78px;
 }
 .fortune-cotents{
@@ -46,9 +47,8 @@
   justify-content: center;
   align-items: center;
   padding: 10px;
-  word-break: keep-all;
   font-size: 14px;
-  min-height: 78px;
+  min-height: 104px;
   box-sizing: border-box;
   border-bottom: 1px solid #bdbdbd;
 }
@@ -62,4 +62,11 @@
   font-weight: bold;
   border-left: none;
   z-index: 10;
+}
+.loading-text{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
 }

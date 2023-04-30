@@ -3,12 +3,15 @@ import {
   randomCardArray,
   completedCardArray,
   cardArray,
-  variables
+  variables,
 } from "./miniGame.js";
 import { playSound, soundArray, soundArray2, soundArray3, soundSetting } from "./audio.js";
+import { FetchUserData, setGameRecord } from "../commons/firebase.js";
+import { userData } from "../commons/commons.js";
 const $sectionContents = document.querySelector(".section-contents");
 const $gameWrapper = $sectionContents.querySelector(".game-wrapper");
 const $bestRecord = $sectionContents.querySelector(".best-record");
+let recordData;
 function fetchSpritePos() {
   return fetch("../db/db.json")
     .then((res) => res.json())
@@ -19,6 +22,7 @@ function fetchSpritePos() {
 async function cardSetting() {
   try {
     // 카드에 적용할 효과음을 불러옴
+    recordData = (await FetchUserData(userData.nickname)).gameRecord;
     soundSetting(soundArray, "../audio/card_effect.mp3");
     soundSetting(soundArray2, "../audio/card_effect2.mp3");
     soundSetting(soundArray3, "../audio/card_effect3.wav");
@@ -129,23 +133,23 @@ function checkCompletedCards() {
 }
 
 function gameClear() {
+  console.log(recordData)
   clearInterval(variables.timeInterval);
-  const prevRecord = parseFloat(localStorage.getItem("gameRecord"));
-  const newRecord = prevRecord > parseFloat(variables.totalTime) ? true : false;
+  const newRecord = parseFloat(recordData) > parseFloat(variables.totalTime) ? true : false;
   setTimeout(() => {
     alert(
       newRecord
         ? `축하합니다. 신 기록 달성~\n총 클리어 시간은 ${variables.totalTime}초로 이전 기록 보다 ${(
-            prevRecord - parseFloat(variables.totalTime)
+          parseFloat(recordData) - parseFloat(variables.totalTime)
           ).toFixed(2)}초 빠릅니다.`
         : `총 클리어 시간은 ${variables.totalTime}초 입니다.`
     );
-    if (!localStorage.getItem("gameRecord")) {
-      localStorage.setItem("gameRecord", variables.totalTime);
+    if (!recordData) {
+      setGameRecord(userData.nickname, parseFloat(variables.totalTime));
       $bestRecord.textContent = `최고기록 : ${variables.totalTime}초`;
     }
     if (newRecord) {
-      localStorage.setItem("gameRecord", variables.totalTime);
+      setGameRecord(userData.nickname, parseFloat(variables.totalTime))
       $bestRecord.textContent = `최고기록 : ${variables.totalTime}초`;
     }
   }, 500);

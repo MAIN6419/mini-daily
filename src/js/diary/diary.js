@@ -18,14 +18,23 @@ const $inputContents = $editForm.querySelector(".input-contents");
 const $loadingModal = $sectionContents.querySelector(".loading-modal");
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
-const fetch = async ()=> {
+
+// preload된 데이터 가져오기
+const diaryData = JSON.parse(sessionStorage.getItem("diaryData"));
+
+const fetchData = async ()=> {
+  // 만약 preload된 데이터가 있고, 데이터의 id가 urlParamsId값과 일치한다면 현재 preload된 데이터를 사용
+  if(diaryData&&diaryData.id===id){
+    return JSON.parse(sessionStorage.getItem("diaryData"));
+  }
+  // preload된 데이터가 없거나, preload된 데이터가 현재 다이어리 데이터와 일치하지 않는다면 서버에서 새로 데이터를 받음
   $loadingModal.classList.add("active");
    return await FetchDiary(userData.nickname, id).then((res)=>{
     $loadingModal.classList.remove("active");
     return res;
   })
 }
-const data =  await fetch() || [];
+const data =  await fetchData() || [];
   renderdiary();
 
 function renderdiary() {

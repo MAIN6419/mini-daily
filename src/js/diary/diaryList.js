@@ -1,30 +1,99 @@
 "use strict";
-
+import _ from 'https://cdn.skypack.dev/lodash-es';
 import { getCreatedAt } from "../commons/libray.js";
 import { userData } from "../commons/commons.js";
-import { FetchDiarys, nextDiaryList } from "../commons/firebase.js";
+import { FetchDiary, db } from "../commons/firebase.js";
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  where,
+  startAfter,
+  startAt,
+  endAt,
+  limit,
+} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
 const $sectionContents = document.querySelector(".section-contents");
 const $diaryList = $sectionContents.querySelector(".diary-lists"); 
 
 
 const $inputSearch = $sectionContents.querySelector(".input-search");
 const $loadingModal = $sectionContents.querySelector(".loading-modal");
+let lastpage;
+let hasNextpage = false;
+let keyword = '';
 const fetch = async ()=>{
   $loadingModal.classList.add("active");
-  return await FetchDiarys(userData.nickname).then((res)=>{
+  return await FetchDiarys().then((res)=>{
     $loadingModal.classList.remove("active");
     return res;
   })
 };
 const data = await fetch();
-console.log(data)
+renderDiaryList(data);
+
+async function FetchDiarys() {
+  if (keyword.trim()) {
+    const dirayList = collection(db, "diaryList")
+    const q = query(
+      dirayList,
+      orderBy("title"),    
+      startAt(keyword),
+      endAt(keyword + "\uf8ff"),
+      limit(4)
+    );
+    const res = await getDocs(q);
+    const datas = res.docs.map((el) => el.data());
+    lastpage = res.docs[res.docs.length - 1];
+    hasNextpage = (res.docs.length === 4);
+    $diaryList.innerHTML = '';
+    return datas;
+  } 
+  else{
+    const diaryList = collection(db, "diaryList");
+    const q =  query(diaryList, where("auth","==", userData.nickname), orderBy("createdAt", "desc"), limit(4));
+    const res = await getDocs(q);
+    lastpage = res.docs[res.docs.length - 1];
+    hasNextpage = res.docs.length === 4;
+    const datas =  res.docs.map((el) => el.data());
+    return datas;
+  }
+  
+}
+
+async function nextDiaryList() {
+  if (keyword.trim()) {
+    const dirayList = collection(db, "diaryList")
+    const q = query(
+      dirayList,
+      orderBy("title"), 
+      startAt(keyword),
+      endAt("title" + "\uf8ff"),
+      limit(4)
+    );
+    const res = await getDocs(q);
+    const datas = res.docs.map((el) => el.data());
+    lastpage = res.docs[res.docs.length - 1];
+    hasNextpage = (res.docs.length === 4);
+    return datas;
+  } 
+  else{
+    const diaryList = collection(db, "diaryList");
+    const q = query(diaryList, where("auth","==", userData.nickname), orderBy("createdAt", "desc"),startAfter(lastpage), limit(4));
+    const res = await getDocs(q);
+    lastpage = res.docs[res.docs.length - 1];
+    const datas = res.docs.map((el) => el.data());
+    hasNextpage = res.docs.length === 4;
+    return datas;
+  }
+}
 
 function renderDiaryList(data) {
   if (data.length === 0) {
     $diaryList.innerHTML += `
     <li class="none-item">
-         현재 게시글이 없어요.
-         게시글을 한 번 작성해보세요~
+      현재 게시글이 없어요.
     </li>
     `;
     return;
@@ -34,6 +103,7 @@ function renderDiaryList(data) {
     const $diaryItem = document.createElement("li");
     $diaryItem.setAttribute("class", "diary-item");
     $diaryItem.setAttribute("data-id", item.id);
+    $diaryItem.addEventListener("mouseover", ()=> getThorttle(item.id))
 
     const $diaryLink = document.createElement("a");
     $diaryLink.setAttribute("href", `diary.html?id=${item.id}`);
@@ -62,24 +132,23 @@ function renderDiaryList(data) {
     $frag.appendChild($diaryItem);
   }
   $diaryList.appendChild($frag);
-  slicedData = slicedData.concat(data); // 이전 데이터와 합쳐줍니다.
 }
 
+// 게시글 preload 과부하 방지
+const getThorttle = _.throttle( async (id)=>{
+  const diaryData = await FetchDiary(userData.nickname, id)
+  sessionStorage.setItem("diaryData", JSON.stringify(diaryData))
+}, 500);
+
 // 무한스크롤 구현
-const itemsPerPage = 4;
-let startIndex = 0;
-let endIndex = itemsPerPage;
-// 파이어베이스에서 데이터를 요청하는 로직 4개
-let slicedData = await nextDiaryList(userData.nickname, startIndex);
+let slicedData;
 
 async function addItems() {
-  startIndex += itemsPerPage;
-  endIndex += itemsPerPage;
-  const slicedDataForSearch = $inputSearch.value.trim() ? data.filter((el) => el.title.includes($inputSearch.value)) : await nextDiaryList(userData.nickname, startIndex);
-  const slicedData = slicedDataForSearch.slice(startIndex, endIndex);
+  console.log(hasNextpage)
+  slicedData = await nextDiaryList(userData.nickname);
   if (slicedData.length === 0) return;
   renderDiaryList(slicedData);
-  if (endIndex >= slicedDataForSearch.length) {
+  if (!hasNextpage) {
     $sectionContents.removeEventListener("scroll", handleScroll);
   }
 }
@@ -90,49 +159,34 @@ function handleScroll() {
   // scrollHeight 스크롤 가능한 전체 영역의 높이
   if (
     $sectionContents.scrollTop + $sectionContents.clientHeight >=
-    $sectionContents.scrollHeight - 20
+    $sectionContents.scrollHeight
   ) {
     addItems();
   }
 }
 
-// 초기에는 배열의 첫 번째 요소부터 세 개를 출력
-renderDiaryList(slicedData);
-
 // 스크롤이 끝까지 내려가면 다음 4개 요소를 출력
 $sectionContents.addEventListener("scroll", handleScroll);
 
-$inputSearch.addEventListener("input", (e) => debounceSearch(e));
+$inputSearch.addEventListener("input", (e) => {
+  // 첫 글자 스페이스 방지 => 검색 최적화 스페이스가 된다면 검색이 이루어져서 불필요한 데이터 요청 발생
+  if (e.target.value.length === 1 && e.target.value[0] === ' ') {
+    e.target.value = ''; // 입력한 값을 빈 문자열로 대체하여 막음
+    return;
+  }
+  debounceSearch(e)
+});
 
 // 검색 기능
-function search(keyword) {
-  if (keyword.trim()) {
-    startIndex = 0;
-    endIndex = itemsPerPage;
-    slicedData = data.filter((el) => el.title.includes(keyword)).slice(startIndex, endIndex);
-    if(slicedData.length===0) {
-      $diaryList.innerHTML = `   
-      <li class="none-item">
-        현재 검색한 다이어리가 존재하지 않습니다.
-      </li>`
-      return;
-    }
-    $diaryList.innerHTML = "";
-    renderDiaryList(slicedData);
-    if (endIndex >= data.length) {
-      $sectionContents.removeEventListener("scroll", handleScroll);
-    } else {
-      $sectionContents.addEventListener("scroll", handleScroll);
-    }
-  } else {
-    startIndex = 0;
-    endIndex = itemsPerPage;
-    slicedData = data.slice(startIndex, endIndex);
-    $diaryList.innerHTML = "";
-    renderDiaryList(slicedData);
-    $sectionContents.addEventListener("scroll", handleScroll);
+const debounceSearch = _.debounce(async (e) => {
+  keyword = e.target.value;
+  if(!e.target.value){
+    $diaryList.innerHTML = '';
+    const data =  await FetchDiarys()
+    renderDiaryList(data);
+    return;
   }
-}
-const debounceSearch = _.debounce((e) => {
-  search(e.target.value);
+  $diaryList.innerHTML = '';
+  const data = await FetchDiarys();
+  renderDiaryList(data.sort((a,b)=> b.createdAt - a.createdAt));
 }, 500);

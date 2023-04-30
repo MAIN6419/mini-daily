@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko-KR">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:title" content="미니 다이어리">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://main6419.github.io/mini-diary/">
@@ -14,9 +14,10 @@
     <title>mini-diary</title>
   </head>
   <body>
-    <section class="signup-wrapper">   
+    <section class="signup-wrapper"> 
+      <h1 class="a11y-hidden">회원가입</h1>  
       <form class="signup-form">
-        <h2>회원가입</h2>
+        <h2>회원가입</h2>  
         <div>
           <label for="input-nickname">닉네임</label>
           <input id="input-nickname" type="text" placeholder="닉네임">
@@ -25,6 +26,11 @@
         <div>
           <label for="input-email">이메일</label>
           <input id="input-email" type="email" placeholder="이메일">
+          <p class="input-msg"></p>
+        </div>
+        <div>
+          <label for="input-phone">휴대폰</label>
+          <input id="input-phone" type="text" placeholder="휴대폰( - 제외)" maxlength="13">
           <p class="input-msg"></p>
         </div>
         <div>
