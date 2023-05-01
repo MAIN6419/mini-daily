@@ -24,9 +24,7 @@ let lastpage;
 let hasNextpage = false;
 let keyword = '';
 const fetch = async ()=>{
-  $loadingModal.classList.add("active");
   return await FetchDiarys().then((res)=>{
-    $loadingModal.classList.remove("active");
     return res;
   })
 };
@@ -38,15 +36,15 @@ async function FetchDiarys() {
     const dirayList = collection(db, "diaryList")
     const q = query(
       dirayList,
-      orderBy("title"),    
-      startAt(keyword),
-      endAt(keyword + "\uf8ff"),
+      where("title", ">=", keyword),
+      where("title", "<=", keyword + "\uf8ff"),
+      startAfter(lastpage),
       limit(4)
     );
     const res = await getDocs(q);
     const datas = res.docs.map((el) => el.data());
     lastpage = res.docs[res.docs.length - 1];
-    hasNextpage = (res.docs.length === 4);
+    hasNextpage = res.docs.length === 4;
     $diaryList.innerHTML = '';
     return datas;
   } 
@@ -63,24 +61,29 @@ async function FetchDiarys() {
 }
 
 async function nextDiaryList() {
+  console.log(keyword)
   if (keyword.trim()) {
     const dirayList = collection(db, "diaryList")
     const q = query(
       dirayList,
-      orderBy("title"), 
-      startAt(keyword),
-      endAt("title" + "\uf8ff"),
+      where("title", ">=", keyword),
+      where("title", "<=", keyword + "\uf8ff"),
+      startAfter(lastpage),
       limit(4)
     );
     const res = await getDocs(q);
     const datas = res.docs.map((el) => el.data());
     lastpage = res.docs[res.docs.length - 1];
-    hasNextpage = (res.docs.length === 4);
+    hasNextpage = res.docs.length === 4;
+    console.log(hasNextpage)
     return datas;
   } 
   else{
     const diaryList = collection(db, "diaryList");
-    const q = query(diaryList, where("auth","==", userData.nickname), orderBy("createdAt", "desc"),startAfter(lastpage), limit(4));
+    const q = query(diaryList, 
+      where("auth","==", userData.nickname), 
+      orderBy("createdAt", "desc"),
+      startAfter(lastpage), limit(4));
     const res = await getDocs(q);
     lastpage = res.docs[res.docs.length - 1];
     const datas = res.docs.map((el) => el.data());
@@ -136,7 +139,7 @@ function renderDiaryList(data) {
 
 // 게시글 preload 과부하 방지
 const getThorttle = _.throttle( async (id)=>{
-  const diaryData = await FetchDiary(userData.nickname, id)
+  const diaryData = await FetchDiary(id)
   sessionStorage.setItem("diaryData", JSON.stringify(diaryData))
 }, 500);
 
@@ -144,7 +147,6 @@ const getThorttle = _.throttle( async (id)=>{
 let slicedData;
 
 async function addItems() {
-  console.log(hasNextpage)
   slicedData = await nextDiaryList(userData.nickname);
   if (slicedData.length === 0) return;
   renderDiaryList(slicedData);
@@ -186,7 +188,6 @@ const debounceSearch = _.debounce(async (e) => {
     renderDiaryList(data);
     return;
   }
-  $diaryList.innerHTML = '';
   const data = await FetchDiarys();
   renderDiaryList(data.sort((a,b)=> b.createdAt - a.createdAt));
 }, 500);

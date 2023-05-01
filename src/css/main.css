@@ -195,11 +195,8 @@ caption {
   background: url(../img/logout-icon.png) no-repeat left 3px center/ 18px;
   font-size: 14px;
   cursor: pointer;
-  border: 1px solid black;
-  border-radius: 5px;
 }
 .btn-logout:hover {
-  background-color: #eee;
   color: dodgerblue;
 }
 .links {

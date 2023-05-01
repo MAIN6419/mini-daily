@@ -28,8 +28,6 @@ $submitBtn.addEventListener('click', async ()=>{
     }
     // 데이터 추가 로직 => 데이터 넘겨줌 => 변경된 데이터 받아옴 => 렌더링(user에 정보를 넣는다)
     await writeDiary(newDiary);
-    data.unshift(newDiary);
-    localStorage.setItem('diary',JSON.stringify(data));
     $inputTitle.value = '';
     $inputcontents.value= '';
     location.href = `diary.html?id=${id}`;

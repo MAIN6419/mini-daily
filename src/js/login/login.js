@@ -16,7 +16,8 @@ $inputPw.addEventListener("input", (e) => {
   e.target.value = e.target.value.trim();
 });
 
-$loginBtn.addEventListener("click", async () => {
+$loginBtn.addEventListener("click", async (e) => {
+  e.preventDefault();
   if (!$inputEmail.value) {
     alert("이메일을 입력해주세요!");
     return;

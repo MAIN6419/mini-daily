@@ -6,7 +6,6 @@ import { setFortune } from "./firebase.js";
 export function updateTime() {
   // dom에서 시간을 표시하는 요소를 가져옵니다.
   const $time = document.querySelector(".time");
-  const fortuneData = localStorage.getItem("fortune");
   // 현재 날짜 정보를 가져온다.
   const now = new Date();
   // 현재 hour을 가져온다.
@@ -29,17 +28,5 @@ export function updateTime() {
     let year = new Date().getFullYear();
     let month = new Date().getMonth() + 1;
     calendar(year, month);
-  }
-  // 하루가 지나면 운세보기 초기화
-  if (fortuneData) {
-    const fortuneCreatedAt = new Date(JSON.parse(fortuneData).createdAt);
-    const currentDate = new Date();
-    // 운세 데이터가 만들어진 날짜와 현재 날짜를 비교
-    // 날짜 차이가 난다면 하루가 지난것 이므로 운세 데이터를 삭제
-    if (currentDate.getDate() !== fortuneCreatedAt.getDate()) {
-      const $fortuneCotents = document.querySelector('.fortune-cotents');
-      $fortuneCotents.textContent = '아직 운세를 보지 않았네요.';
-      setFortune(userData.nickname, "");
-    }
   }
 }

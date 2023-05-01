@@ -17,16 +17,40 @@
   <section class="findAccount-wrapper">
     <h1>이메일 비밀번호 찾기</h1>
     <ul class="form-menu">
-      <li class="findEmail"><button class="btn-findEmail  active">이메일</button></li>
-      <li class="findPw"><button class="btn-findPw">비밀번호</button></li>
+      <li class="findEmail"><button class="btn-emailForm active">이메일</button></li>
+      <li class="findPw"><button class="btn-pwForm">비밀번호</button></li>
     </ul>
-    <form class="findAccount-form">
+    <form class="findEmail-form active">
+      <div class="input-nicknameBox active">
         <label class="a11y-hidden" for="input-nickname">닉네임</label>
         <input id="input-nickname" type="text" placeholder="닉네임" maxlength="12">
+        <p class="input-msg"></p>
+      </div>
+      <div class="input-phoneBox active">
         <label class="a11y-hidden" for="input-password">휴대전화 번호</label>
         <input id="input-phone" type="text" placeholder="휴대전화 ( - 제외)" maxlength="13">
-      <button class="btn-findAccount" type="button">이메일 찾기</button>
+        <p class="input-msg"></p>
+      </div>
+        <p class="find-result"></p>
+      <button class="btn-findEmail" type="button">이메일 찾기</button>
     </form>
+    
+    <form class="changePw-form">
+      <div class="input-emailBox active">
+        <label class="a11y-hidden" for="input-email">이메일</label>
+        <input id="input-email" type="text" placeholder="이메일">
+        <p class="input-msg"></p>
+      </div>
+      <div class="input-phoneBox active" >
+        <label class="a11y-hidden" for="input-phone">휴대전화 번호</label>
+        <input id="input-phone" type="text" placeholder="휴대전화 ( - 제외)" maxlength="13">
+        <p class="input-msg"></p>
+      </div>
+      <p class="change-result">
+       
+      </p>
+    <button class="btn-changePw" type="button">비밀번호 변경</button>
+  </form>
   </section>
   <script src="../js/findAccount/findAccount.js" type="module"></script>
 </body>

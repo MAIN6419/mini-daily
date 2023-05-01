@@ -3,13 +3,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100vw;
   height: 100vh;
 }
 .findAccount-wrapper h1{
   margin-bottom: 30px;
 }
-.findAccount-form{
-  display: flex;
+.findEmail-form, 
+.changePw-form{
+  display: none;
   flex-direction: column;
   background-color: #f2f2f2;
   border-radius: 10px;
@@ -21,6 +23,10 @@
   max-width: 400px;
   gap: 20px;
   box-shadow: 0 8px 20px rgba(35, 0, 77, 0.2);
+}
+.findEmail-form.active,
+.changePw-form.active{
+  display: flex;
 }
 .form-menu{
   width: calc(100% - 60px);
@@ -34,12 +40,7 @@
   background-color: #eee;
   overflow: hidden;
 }
-.btn-findEmail.active,
-.btn-findPw.active{
-  width: 100%;
-  background-color: #1eda85;
-  color: #fff;
-}
+
 .findEmail, 
 .findPw{
   flex-basis: 50%;
@@ -47,8 +48,8 @@
   justify-content: center;
   align-items: center;
 }
-.btn-findEmail,
-.btn-findPw{
+.btn-emailForm,
+.btn-pwForm{
   width: 100%;
   height: 100%;
   font-size: 20px;
@@ -57,15 +58,59 @@
   background: none;
   cursor: pointer;
 }
-
-.findAccount-form input{
+.btn-emailForm.active,
+.btn-pwForm.active{
+  width: 100%;
+  background-color: #1eda85;
+  color: #fff;
+}
+.input-nicknameBox,
+.input-emailBox,
+.input-phoneBox {
+  display: none;
+}
+#input-nickname,
+#input-email,
+#input-phone{
   width: 100%;
   border: 2px solid #bdbdbd;
   box-sizing: border-box;
   padding: 20px;
   font-size: 16px;
 }
-.btn-findAccount{
+.input-nicknameBox.active,
+.input-emailBox.active,
+.input-phoneBox.active{
+  display: block;
+}
+.input-msg{
+  text-indent: 15px;
+  font-size: 14px;
+  color: indianred;
+  margin-top: 5px;
+  display: none;
+}
+.input-msg.active{
+  display: block;
+}
+.find-result,
+.change-result{
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #bdbdbd;
+  padding: 20px 0px;
+  display: none;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.find-result.active,
+.change-result.active{
+  display: flex;
+}
+.btn-findEmail,
+.btn-changePw{
   padding: 20px 0px;
   background-color: #1eda85;
   border: none;

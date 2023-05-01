@@ -17,10 +17,12 @@ import {
   doc,
   setDoc,
   updateDoc,
+  deleteDoc,
   startAfter,
   endAt,
   limit,
   getDoc,
+  onSnapshot,
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
 import {
   uploadBytes,
@@ -42,6 +44,13 @@ import {
   RecaptchaVerifier,
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
+import { getCreatedAt } from "./libray.js";
+const userData = JSON.parse(sessionStorage.getItem("userData"));
+let baseUrl = "";
+const host = window.location.host;
+if (host.includes("github.io")) {
+  baseUrl = "/mini-diary";
+}
 let lastpage;
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -68,60 +77,81 @@ const analytics = getAnalytics(app);
 
 // 다이어리 목록을 불러오는 함수
 async function FetchDiarys(nickname) {
-  const diaryList = collection(db, "diaryList");
-  const q = query(
-    diaryList,
-    where("auth", "==", nickname),
-    orderBy("createdAt", "desc"),
-    limit(4)
-  );
-  const res = await getDocs(q);
-  const datas = res.docs.map((el) => el.data());
-  return datas;
+  try {
+    const diaryList = collection(db, "diaryList");
+    const q = query(
+      diaryList,
+      where("auth", "==", nickname),
+      orderBy("createdAt", "desc"),
+      limit(4)
+    );
+    const res = await getDocs(q);
+    const datas = res.docs.map((el) => el.data());
+    return datas;
+  } catch (error) {
+    throw error;
+  }
 }
 
-async function nextDiaryList(nickname) {
-  console.log(lastpage);
-  const diaryList = collection(db, "diaryList");
-  const q = query(
-    diaryList,
-    where("auth", "==", nickname),
-    orderBy("createdAt", "desc"),
-    startAfter(lastpage),
-    limit(4)
-  );
-  const res = await getDocs(q);
-  lastpage = res.docs[res.docs.length - 1];
-  const datas = res.docs.map((el) => el.data());
-  console.log(datas);
-  return datas;
-}
 // 현재 페이지의 다이어리를 불러오는 함수
-async function FetchDiary(nickname, id) {
-  const diaryList = collection(db, "diaryList");
-  const q = query(
-    diaryList,
-    where("auth", "==", nickname),
-    where("id", "==", id)
-  );
-  const res = await getDocs(q);
-  const datas = res.docs.map((el) => el.data());
-  return datas[0];
+async function FetchDiary(id) {
+  try {
+    const diaryList = collection(db, "diaryList");
+    const q = query(diaryList, where("id", "==", id));
+    const res = await getDocs(q);
+    const datas = res.docs.map((el) => el.data());
+    return datas[0];
+  } catch (error) {
+    throw error;
+  }
 }
 
+async function editDiary(id, title, contents) {
+  try {
+    const updateDiary = doc(db, `diaryList/${id}`);
+    await updateDoc(updateDiary, { title, contents });
+    const newDiary = JSON.parse(sessionStorage.getItem("diaryData"));
+    // preload 데이터 변경
+    newDiary.title = title;
+    newDiary.contents = contents;
+    sessionStorage.setItem("diaryData", JSON.stringify(newDiary));
+    alert("수정이 완료되었습니다.");
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function deleteDiary(id) {
+  try {
+    await deleteDoc(doc(db, `diaryList/${id}`));
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function deleteChat(id) {
+  try {
+    await updateDoc(doc(db, `chat/${id}`),{message:"삭제된 메세지 입니다.", type:"delete"});
+  } catch (error) {
+    throw error;
+  }
+}
 // 다이어리 추가 함수
 async function writeDiary(newDiary) {
-  const diaryList = collection(db, "diaryList");
-  await addDoc(diaryList, {
-    ...newDiary,
-  });
-  alert("등록이 완료도었습니다.");
+  try {
+    const diaryList = collection(db, "diaryList");
+    await setDoc(doc(diaryList, newDiary.id), {
+      ...newDiary,
+    });
+    alert("등록이 완료되었습니다.");
+  } catch (error) {
+    throw error;
+  }
 }
 
 // 이미지 업로드 함수
 async function uploadFile(files) {
   const fileUrls = [];
-
   for (const file of files) {
     if (file) {
       const fileName = uuidv4() + "_" + file.name;
@@ -136,12 +166,15 @@ async function uploadFile(files) {
 const auth = getAuth();
 
 const FetchUserData = async (nickname) => {
-  const userRef = collection(db, "user");
-  const q = query(userRef, where("nickname", "==", nickname));
-  const res = await getDocs(q);
-  const datas = res.docs.map((el) => el.data());
-  console.log(datas);
-  return datas[0];
+  try {
+    const userRef = collection(db, "user");
+    const q = query(userRef, where("nickname", "==", nickname));
+    const res = await getDocs(q);
+    const datas = res.docs.map((el) => el.data());
+    return datas[0];
+  } catch (error) {
+    throw error;
+  }
 };
 
 // 유저 프로필 이미지 변경 함수
@@ -168,13 +201,15 @@ const login = async (email, password) => {
         nickname: datas[0].nickname,
         introduce: datas[0].introduce,
         profileImgURL: datas[0].profileImgUrl,
+        fortune: datas[0].fortune,
       })
     );
-    location.replace("/src/template/home.html");
+    location.replace(`${baseUrl}/src/template/home.html`);
   } catch (error) {
     if (error.message.includes("auth/invalid-email")) {
+      alert("유효하지 않은 이메일 형식 입니다!");
+    } else if (error.message.includes("auth/user-not-found).")) {
       alert("일치 하는 로그인 정보가 없습니다!");
-      throw error;
     } else {
       alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해 주세요.");
       throw error;
@@ -188,7 +223,7 @@ const logout = async () => {
       .then(() => {
         sessionStorage.removeItem("userData");
         sessionStorage.removeItem("diaryData");
-        location.replace("/");
+        location.replace(`${baseUrl}/`);
       })
       .catch((error) => {
         alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해 주세요.");
@@ -273,42 +308,41 @@ const getSessionUser = () => {
 //   });
 // })
 
-
 // 회원가입을 위한 함수
 // 인자로 닉네임 이메일 비밀번호를 받는다.
 // createUserWithEmailAndPassword 아이디를 생성하는 api 함수
 // updateProfile 해당 유저의 프로필 정보를 업데이트해주는 함수 => 생성된 유저 정보를 반환해줌
 // 여기서 사용된 이유는 현재 유저의 닉네임을 넣어주기 위해서 displayNmae이 설정할 닉네임이 된다.
 const signup = async (nickname, email, phone, password) => {
-  await createUserWithEmailAndPassword(auth, email, password)
-    .then(async (res) => {
-      await updateProfile(res.user, {
-        displayName: nickname,
-      });
-      // 계정이 생성된 후 계정정보를 DB에 기록해줌
-      const user = await collection(getFirestore(app), "user");
-      await setDoc(doc(user, `${res.user.displayName ?? ""}`), {
-        email: res.user.email,
-        nickname: res.user.displayName,
-        phone: phone,
-        profileImgFileName: "",
-        profileImgUrl: "",
-        diary: [],
-        fortune: "",
-        gameRecord: null,
-        introduce: "소개글을 작성하지 않았습니다.",
-      });
-      alert("회원가입이 완료되었습니다.");
-      location.replace("/");
-    })
-    .catch((error) => {
-      if (error.message.includes("email-already-in-use")) {
-        alert("이미 사용중인 이메일 입니다!");
-      } else {
-        console.log(error);
-        alert("알 수 없는 에러가 발생하였습니다. 잠시후 다시 시도해 주세요.");
-      }
+  try {
+    const res = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(res.user, {
+      displayName: nickname,
     });
+
+    const user = collection(db, "user");
+    await setDoc(doc(user, `${res.user.displayName ?? ""}`), {
+      email: res.user.email,
+      nickname: res.user.displayName,
+      phone: phone,
+      profileImgFileName: "",
+      profileImgUrl: "",
+      diary: [],
+      fortune: "",
+      gameRecord: null,
+      introduce: "소개글을 작성하지 않았습니다.",
+    });
+
+    alert("회원가입이 완료되었습니다.");
+    location.replace(`${baseUrl}/`);
+  } catch (error) {
+    if (error.message.includes("email-already-in-use")) {
+      alert("이미 사용중인 이메일 입니다!");
+    } else {
+      alert("알 수 없는 에러가 발생하였습니다. 잠시후 다시 시도해 주세요.");
+    }
+    throw error;
+  }
 };
 
 const setGameRecord = async (nickname, newRecord) => {
@@ -336,7 +370,7 @@ const findEmail = async (nickname, phone) => {
   }
 };
 
-const findPassword = async (email, phone) => {
+const changePassword = async (email, phone) => {
   const userRef = collection(db, "user");
   const q = query(
     userRef,
@@ -358,6 +392,85 @@ const findPassword = async (email, phone) => {
   }
 };
 
+const chatRef = collection(db, "chat");
+const q = query(chatRef, orderBy("createdAt", "asc"));
+// // 채팅방에 새로운 메시지가 추가될 때마다 처리할 로직
+const fetchChatting = ($chattingBox) => {
+  onSnapshot(q, (querySnapshot) => {
+    $chattingBox.innerHTML = ""; // 채팅 리스트 초기화
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      // 채팅 리스트에 새로운 메시지 추가
+      const messageBox = document.createElement("div");
+      messageBox.classList.add("message-box");
+
+      const messageImg = document.createElement("img");
+      messageImg.classList.add("message-img");
+      messageImg.src = "../img/profile.png";
+      messageImg.alt = "유저 프로필";
+
+      const userName = document.createElement("span");
+      userName.classList.add("user-name");
+      userName.innerText = data.user;
+
+      const message = document.createElement("p");
+      message.classList.add("message");
+      message.innerText = data.message;
+
+      const createdAt = document.createElement("time");
+      createdAt.classList.add("createdAt");
+      createdAt.innerText = getCreatedAt(data.createdAt);
+
+      const delBtn = document.createElement("button");
+      delBtn.classList.add("btn-del");
+      delBtn.innerText = 'X'
+      delBtn.addEventListener("click", async()=>{
+        if(confirm("정말 삭제하시겠습니까?")){
+          deleteChat(data.id)
+        }
+      })
+      // 작성자가 나인 경우
+      if (data.user === userData.nickname) {
+        messageBox.classList.add("sent");
+      } else {
+        // 작성자가 다른 경우
+        messageBox.classList.add("received");
+      }
+
+      // 메시지 박스에 새로운 요소들 추가
+      messageBox.appendChild(messageImg);
+      messageBox.appendChild(userName);
+      messageBox.appendChild(message);
+      messageBox.appendChild(createdAt);
+      if(data.user===userData.nickname&&data.type!=="delete"){
+        messageBox.appendChild(delBtn);
+      }
+      
+      // 채팅 리스트에 메시지 박스 추가
+      $chattingBox.appendChild(messageBox);
+    });
+    $chattingBox.scrollTop = $chattingBox.scrollHeight;
+  });
+};
+
+// $chatForm.addEventListener("submit", async (e) => {
+//   e.preventDefault();
+//   const message = $chatInput.value.trim();
+//   const sender = "Guest";
+//   const createdAt = new Date();
+//   try {
+//     // Firestore에 새로운 메시지 추가
+//     await addDoc(chatRef, {
+//       message,
+//       sender,
+//       createdAt,
+//     });
+//     $chatInput.value = "";
+//   } catch (error) {
+//     console.error(error);
+//   }
+// });
+
 export {
   FetchDiarys,
   FetchDiary,
@@ -369,10 +482,15 @@ export {
   getSessionUser,
   duplication,
   writeDiary,
-  nextDiaryList,
   setGameRecord,
   setFortune,
   findEmail,
-  findPassword,
+  changePassword,
+  editDiary,
+  deleteDiary,
+  fetchChatting,
+  setDoc,
+  doc,
+  chatRef,
   db,
 };

@@ -1,7 +1,6 @@
 'use strict';
 import { getCreatedAt } from "../commons/libray.js";
-import { FetchDiary } from "../commons/firebase.js";
-import { userData } from "../commons/commons.js";
+import { FetchDiary, deleteDiary, editDiary } from "../commons/firebase.js";
 const $sectionContents = document.querySelector(".section-contents");
 const $diaryWrapper = $sectionContents.querySelector(".diary-wrapper");
 const $diaryTitle = $diaryWrapper .querySelector(".diary-title");
@@ -28,15 +27,12 @@ const fetchData = async ()=> {
     return JSON.parse(sessionStorage.getItem("diaryData"));
   }
   // preload된 데이터가 없거나, preload된 데이터가 현재 다이어리 데이터와 일치하지 않는다면 서버에서 새로 데이터를 받음
-  $loadingModal.classList.add("active");
-   return await FetchDiary(userData.nickname, id).then((res)=>{
-    $loadingModal.classList.remove("active");
+   return await FetchDiary(id).then((res)=>{
     return res;
   })
 }
 const data =  await fetchData() || [];
   renderdiary();
-
 function renderdiary() {
 
   if (!data) {
@@ -59,12 +55,9 @@ $editBtn.addEventListener("click", () => {
   $inputTitle.value = data.title;
   $inputContents.value = data.contents;
 });
-$deleteBtn.addEventListener("click", () => {
+$deleteBtn.addEventListener("click", async() => {
   if (confirm("정말 삭제하시겠습니까?")) {
-    const filterData = data.filter((el) => el.id !== id);
-    data.splice(0);
-    data.push(...filterData);
-    localStorage.setItem("diary", JSON.stringify(data));
+    await deleteDiary(id);
     location.href = "diaryList.html";
     alert("삭제가 완료되었습니다.")
   }
@@ -73,8 +66,7 @@ $candelBtn.addEventListener("click", () => {
   $editForm.classList.toggle("active");
   $diaryWrapper.classList.toggle("inactive");
 });
-$editCompletedBtn.addEventListener("click", () => {
-  const filterData = data.find((el) => el.id === id);
+$editCompletedBtn.addEventListener("click", async () => {
   if(!$inputTitle.value.trim()){
     alert('제목을 입력해주세요!');
     return;
@@ -83,7 +75,7 @@ $editCompletedBtn.addEventListener("click", () => {
     alert('내용을 입력해주세요!');
     return;
   }
-  if(filterData.title===$inputTitle.value&&filterData.contents===$inputContents.value){
+  if(data.title===$inputTitle.value&&data.contents===$inputContents.value){
     alert("수정한 내용이 없습니다!");
     return;
   }
@@ -92,13 +84,6 @@ $editCompletedBtn.addEventListener("click", () => {
     $diaryWrapper.classList.toggle("inactive");
     $diaryTitle.textContent = $inputTitle.value;
     $diaryContents.textContent = $inputContents.value;
-    data.find((el, idx) => {
-      if (el.id === id) {
-        data[idx].title = $inputTitle.value;
-        data[idx].contents = $inputContents.value;
-        localStorage.setItem("diary", JSON.stringify(data));
-        alert("수정이 완료되었습니다.")
-      }
-    });
+    await editDiary(id,$inputTitle.value,$inputContents.value);
   }
 });
