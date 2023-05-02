@@ -110,11 +110,6 @@ async function editDiary(id, title, contents) {
   try {
     const updateDiary = doc(db, `diaryList/${id}`);
     await updateDoc(updateDiary, { title, contents });
-    const newDiary = JSON.parse(sessionStorage.getItem("diaryData"));
-    // preload 데이터 변경
-    newDiary.title = title;
-    newDiary.contents = contents;
-    sessionStorage.setItem("diaryData", JSON.stringify(newDiary));
     alert("수정이 완료되었습니다.");
   } catch (error) {
     throw error;
@@ -131,7 +126,10 @@ async function deleteDiary(id) {
 
 async function deleteChat(id) {
   try {
-    await updateDoc(doc(db, `chat/${id}`),{message:"삭제된 메세지 입니다.", type:"delete"});
+    await updateDoc(doc(db, `chat/${id}`), {
+      message: "삭제된 메세지 입니다.",
+      type: "delete",
+    });
   } catch (error) {
     throw error;
   }
@@ -143,6 +141,7 @@ async function writeDiary(newDiary) {
     await setDoc(doc(diaryList, newDiary.id), {
       ...newDiary,
     });
+
     alert("등록이 완료되었습니다.");
   } catch (error) {
     throw error;
@@ -394,12 +393,94 @@ const changePassword = async (email, phone) => {
 
 const chatRef = collection(db, "chat");
 const q = query(chatRef, orderBy("createdAt", "asc"));
-// // 채팅방에 새로운 메시지가 추가될 때마다 처리할 로직
-const fetchChatting = ($chattingBox) => {
+
+const setChattingMsg = (data, lastDate, $chattingBox) => {
+  const currentDate = new Date();
+  if (currentDate.getDate() === lastDate.getDate()) {
+    const today = document.createElement("time");
+    today.classList.add("createdAt");
+    today.innerText = getCreatedAt(currentDate.getTime());
+    today.setAttribute(
+      "datetime",
+      new Date(currentDate.getTime()).toISOString()
+    );
+    $chattingBox.append(today);
+  }
+
+  const messageBox = document.createElement("div");
+  messageBox.classList.add("message-box");
+
+  const messageImg = document.createElement("img");
+  messageImg.classList.add("message-img");
+  messageImg.src = "../img/profile.png";
+  messageImg.alt = "유저 프로필";
+
+  const userName = document.createElement("span");
+  userName.classList.add("user-name");
+  userName.innerText = data.user;
+
+  const message = document.createElement("p");
+  message.classList.add("message");
+  message.innerText = data.message;
+
+  const createdAt = document.createElement("time");
+  createdAt.classList.add("createdAt");
+  createdAt.innerText = getCreatedAt(data.createdAt).slice(11);
+  createdAt.setAttribute("datetime", new Date(data.createdAt).toISOString());
+  const delBtn = document.createElement("button");
+  delBtn.classList.add("btn-del");
+  delBtn.innerText = "X";
+  delBtn.addEventListener("click", async () => {
+    if (confirm("정말 삭제하시겠습니까?")) {
+      deleteChat(data.id);
+    }
+  });
+  // 작성자가 나인 경우
+  if (data.user === userData.nickname) {
+    messageBox.classList.add("sent");
+  } else {
+    // 작성자가 다른 경우
+    messageBox.classList.add("received");
+  }
+
+  // 메시지 박스에 새로운 요소들 추가
+  messageBox.appendChild(messageImg);
+  messageBox.appendChild(userName);
+  messageBox.appendChild(message);
+  messageBox.appendChild(createdAt);
+  if (data.user === userData.nickname && data.type !== "delete") {
+    messageBox.appendChild(delBtn);
+  }
+
+  // 채팅 리스트에 메시지 박스 추가
+  $chattingBox.appendChild(messageBox);
+};
+
+const fetchChatting = ($chattingBox, $loadingModal) => {
+  let prevDate = null; // 이전 메시지의 작성 날짜를 저장할 변수
+  $loadingModal.classList.add("active");
   onSnapshot(q, (querySnapshot) => {
     $chattingBox.innerHTML = ""; // 채팅 리스트 초기화
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach((doc, index) => {
       const data = doc.data();
+      // 작성 날짜를 Date 객체로 변환
+      const currentDate = new Date(data.createdAt);
+
+      // 날짜가 달라졌을 때 새로운 날짜를 삽입
+      if (!prevDate || prevDate.getDate() !== currentDate.getDate()) {
+        const dateBox = document.createElement("div");
+        dateBox.classList.add("date-box");
+
+        const dateText = document.createElement("span");
+        dateText.classList.add("date-text");
+        dateText.innerText = `${currentDate.getFullYear()}년 ${
+          currentDate.getMonth() + 1
+        }월 ${currentDate.getDate()}일 ${['일','월','화','수','목','금','토'][currentDate.getDay()]+'요일'}`;
+        dateBox.appendChild(dateText);
+
+        $chattingBox.appendChild(dateBox);
+        prevDate = currentDate;
+      }
       // 채팅 리스트에 새로운 메시지 추가
       const messageBox = document.createElement("div");
       messageBox.classList.add("message-box");
@@ -419,16 +500,19 @@ const fetchChatting = ($chattingBox) => {
 
       const createdAt = document.createElement("time");
       createdAt.classList.add("createdAt");
-      createdAt.innerText = getCreatedAt(data.createdAt);
-
+      createdAt.innerText = getCreatedAt(data.createdAt).slice(11);
+      createdAt.setAttribute(
+        "datetime",
+        new Date(data.createdAt).toISOString()
+      );
       const delBtn = document.createElement("button");
       delBtn.classList.add("btn-del");
-      delBtn.innerText = 'X'
-      delBtn.addEventListener("click", async()=>{
-        if(confirm("정말 삭제하시겠습니까?")){
-          deleteChat(data.id)
+      delBtn.innerText = "X";
+      delBtn.addEventListener("click", async () => {
+        if (confirm("정말 삭제하시겠습니까?")) {
+          deleteChat(data.id);
         }
-      })
+      });
       // 작성자가 나인 경우
       if (data.user === userData.nickname) {
         messageBox.classList.add("sent");
@@ -442,34 +526,18 @@ const fetchChatting = ($chattingBox) => {
       messageBox.appendChild(userName);
       messageBox.appendChild(message);
       messageBox.appendChild(createdAt);
-      if(data.user===userData.nickname&&data.type!=="delete"){
+      if (data.user === userData.nickname && data.type !== "delete") {
         messageBox.appendChild(delBtn);
       }
-      
+
       // 채팅 리스트에 메시지 박스 추가
       $chattingBox.appendChild(messageBox);
+      prevDate = currentDate; // 이전 메시지의 작성 날짜 갱신
     });
+    $loadingModal.classList.remove("active");
     $chattingBox.scrollTop = $chattingBox.scrollHeight;
   });
 };
-
-// $chatForm.addEventListener("submit", async (e) => {
-//   e.preventDefault();
-//   const message = $chatInput.value.trim();
-//   const sender = "Guest";
-//   const createdAt = new Date();
-//   try {
-//     // Firestore에 새로운 메시지 추가
-//     await addDoc(chatRef, {
-//       message,
-//       sender,
-//       createdAt,
-//     });
-//     $chatInput.value = "";
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
 
 export {
   FetchDiarys,

@@ -24,7 +24,9 @@ let lastpage;
 let hasNextpage = false;
 let keyword = '';
 const fetch = async ()=>{
+  $loadingModal.classList.add("active");
   return await FetchDiarys().then((res)=>{
+    $loadingModal.classList.remove("active");
     return res;
   })
 };
@@ -33,9 +35,11 @@ renderDiaryList(data);
 
 async function FetchDiarys() {
   if (keyword.trim()) {
+    console.log(keyword)
     const dirayList = collection(db, "diaryList")
     const q = query(
       dirayList,
+      orderBy("title"),
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
       startAfter(lastpage),
@@ -61,11 +65,11 @@ async function FetchDiarys() {
 }
 
 async function nextDiaryList() {
-  console.log(keyword)
   if (keyword.trim()) {
     const dirayList = collection(db, "diaryList")
     const q = query(
       dirayList,
+      orderBy("title"),
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
       startAfter(lastpage),
@@ -182,6 +186,7 @@ $inputSearch.addEventListener("input", (e) => {
 // 검색 기능
 const debounceSearch = _.debounce(async (e) => {
   keyword = e.target.value;
+  lastpage = null; // 검색시 lastpage를 지워줘야 검색했을때 페이지를 정상적으로 불러옴
   if(!e.target.value){
     $diaryList.innerHTML = '';
     const data =  await FetchDiarys()
@@ -189,5 +194,6 @@ const debounceSearch = _.debounce(async (e) => {
     return;
   }
   const data = await FetchDiarys();
-  renderDiaryList(data.sort((a,b)=> b.createdAt - a.createdAt));
+  $diaryList.innerHTML = '';
+  renderDiaryList(data);
 }, 500);

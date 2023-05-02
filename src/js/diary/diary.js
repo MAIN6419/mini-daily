@@ -27,12 +27,14 @@ const fetchData = async ()=> {
     return JSON.parse(sessionStorage.getItem("diaryData"));
   }
   // preload된 데이터가 없거나, preload된 데이터가 현재 다이어리 데이터와 일치하지 않는다면 서버에서 새로 데이터를 받음
+  $loadingModal.classList.add("active");
    return await FetchDiary(id).then((res)=>{
+    $loadingModal.classList.remove("active");
     return res;
   })
 }
 const data =  await fetchData() || [];
-  renderdiary();
+renderdiary();
 function renderdiary() {
 
   if (!data) {
@@ -85,5 +87,12 @@ $editCompletedBtn.addEventListener("click", async () => {
     $diaryTitle.textContent = $inputTitle.value;
     $diaryContents.textContent = $inputContents.value;
     await editDiary(id,$inputTitle.value,$inputContents.value);
+    renderdiary();
+    const newDiary = JSON.parse(sessionStorage.getItem("diaryData"));
+    // preload 데이터 변경
+    newDiary.title = $inputTitle.value;
+    newDiary.contents = $inputContents.value;
+    sessionStorage.setItem("diaryData", JSON.stringify(newDiary));
+    
   }
 });

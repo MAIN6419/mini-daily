@@ -6,8 +6,10 @@ const $chattingBox = document.querySelector(".chatting-box");
 const $chattingForm = document.querySelector(".chatting-form");
 const $chattingInput = $chattingForm .querySelector("#input-chatting");
 const $sendBtn = $chattingForm.querySelector(".btn-send");
+const $loadingModal = document.querySelector(".loading-modal");
 
-fetchChatting($chattingBox);
+
+fetchChatting($chattingBox, $loadingModal);
 
 $chattingForm.addEventListener("submit", async (e) => {
   e.preventDefault();

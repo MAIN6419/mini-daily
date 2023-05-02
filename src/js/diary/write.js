@@ -26,8 +26,9 @@ $submitBtn.addEventListener('click', async ()=>{
       contents: $inputcontents.value,
       createdAt : new Date().getTime(),
     }
-    // 데이터 추가 로직 => 데이터 넘겨줌 => 변경된 데이터 받아옴 => 렌더링(user에 정보를 넣는다)
+  
     await writeDiary(newDiary);
+    sessionStorage.setItem('diaryData',JSON.stringify(newDiary))
     $inputTitle.value = '';
     $inputcontents.value= '';
     location.href = `diary.html?id=${id}`;
