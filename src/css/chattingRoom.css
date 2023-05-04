@@ -1,0 +1,135 @@
+.section-contents{
+  position: relative;
+  background-color: antiquewhite;
+  height: 660px;
+  overflow-y: scroll;
+}
+.btn-openModal{
+  border: none;
+  background-color: #bdbdbd;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+.room-list{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  place-content: center;
+  margin: 0 auto;
+}
+.room{
+  height: 120px;
+  border: 2px solid #bdbdbd;
+  border-radius: 10px;
+  box-sizing: border-box;
+  background-color: lightblue;
+}
+.room a{
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+}
+.createRoom-modal{
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.createRoom-modal.active{
+  display: block;
+}
+.modal-content{
+  position: absolute;
+  top:50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  padding: 20px;
+  background-color:#fff;
+  border-radius: 10px;
+  border: 1px solid #bdbdbd;
+}
+.input-box{
+  margin-bottom: 10px;
+  width: 100%;
+}
+#input-title{
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  margin-top: 8px;
+}
+#input-limit{
+  width: 40px;
+  height: 20px;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+#input-password {
+  display: none;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  width: 200px;
+}
+#checkbox-private{
+  vertical-align: middle;
+}
+#input-password.active{
+  display: inline-block;
+}
+.btn-createRoom{
+  width: 200px;
+  margin: 0 auto;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 10px;
+  padding: 10px 0px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.btn-close{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 1px solid #bdbdbd;
+  cursor: pointer;
+}
+.modal-title{
+  text-align: center;
+  margin-bottom: 20px;
+}
+.links .chattingRoom-link{
+  background-color: antiquewhite;
+  font-weight: bold;
+  border-left: none;
+  z-index: 10;
+}

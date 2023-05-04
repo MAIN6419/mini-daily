@@ -1,29 +1,70 @@
 .section-contents{
+  display: flex;
+  gap: 50px;
   position: relative;
   background-color: antiquewhite;
+}
+.joinUsers-wrapper{
+  flex-basis: 300px;
+  height: 500px;
+  padding: 20px;
+  box-sizing: border-box;
+  border: 1px solid #bdbdbd;
+  border-radius: 10px;
+  background-color: #fff;
+  overflow: hidden;
+}
+.join-count{
+  display: block;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.title{
+  margin: -20px -20px 10px -20px;
+  background-color: aliceblue;
+  border-bottom: 1px solid #bdbdbd;
+  padding: 15px 0px;
+  text-align: center;
+}
+.join-lists{
+  overflow-y: scroll;
+}
+.join-user{
+  display: flex;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+.join-user .profile-img{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }
 .loading-modal span{
   font-size: 20px;
 }
+.chatting{
+  flex-basis: 400px;
+  border: 1px solid #bdbdbd;
+  border-radius: 10px;
+  overflow: hidden;
+}
 .chatting-box{
-  width: 500px;
-  height: 500px;
+  width: 100%;
+  height: calc(100% - 50px);
   border-bottom: none;
   margin: 0 auto;
-  border-radius: 10px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 10px;
   background-color: lightblue;
   overflow: scroll;
-  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.3);
+  
 }
 .message-box{
   display: flex;
   align-self: center;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 .btn-del{
   background: none;
@@ -40,11 +81,12 @@
   border-radius: 20px;
   font-size: 12px;
   width: 150px;
-  margin: 0 auto;
+  margin: auto auto 20px auto;
 }
 .message-box.sent{
   flex-direction: row-reverse;
   justify-content: right;
+  margin-right: 5px;
 }
 
 .message-box.sent .message-img{
@@ -82,12 +124,14 @@
   display: flex;
   align-items: center;
   align-self: center;
-  font-size: 14px;
+  font-size: 12px;
   background-color: #fff;
   padding: 10px 10px;
   border-radius: .4em;
   max-width: 200px;
-  margin-left: 5px;
+}
+.message-box.received .message{
+  margin-left: 8px;
 }
 .message-box.received .message::after{
 	content: '';
@@ -113,29 +157,25 @@
   bottom: 5px;
 }
 .message-img{
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   border-radius: 15px;
   vertical-align: middle;
   border: 2px solid #bdbdbd;
 }
 .chatting-form{
-  width: 500px;
+  width: 100%;
   border-top: none;
-  border-radius: 10px;
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
   overflow: hidden;
   margin: 0 auto;
   box-sizing: border-box;
-  box-shadow: 0px 5px 5px 1px rgba(0, 0, 0, 0.3);
 }
 .input-box {
   display: flex;
 }
 #input-chatting{
   flex-basis: 85%;
-  height: 60px;
+  height: 50px;
   resize: none;
   border: none;
   box-sizing: border-box;
@@ -147,8 +187,14 @@
   background-color: gold;
   cursor: pointer;
 }
+.exit-btn{
+  position: absolute;
+  bottom: 80px;
+  left: 24px;
+  color: crimson;
+}
 
-.links .chatting-link{
+.links .chattingRoom-link{
   background-color: antiquewhite;
   font-weight: bold;
   border-left: none;

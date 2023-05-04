@@ -39,12 +39,14 @@ import {
   signOut,
   updateProfile,
   sendPasswordResetEmail,
+  onAuthStateChanged,
   updatePassword,
   signInWithPhoneNumber,
   RecaptchaVerifier,
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 import { getCreatedAt } from "./libray.js";
+
 const userData = JSON.parse(sessionStorage.getItem("userData"));
 let baseUrl = "";
 const host = window.location.host;
@@ -124,9 +126,9 @@ async function deleteDiary(id) {
   }
 }
 
-async function deleteChat(id) {
+async function deleteChat(chatRoomId, id) {
   try {
-    await updateDoc(doc(db, `chat/${id}`), {
+    await updateDoc(doc(db, `chat${chatRoomId}/${id}`), {
       message: "삭제된 메세지 입니다.",
       type: "delete",
     });
@@ -186,14 +188,46 @@ const UpdateProfileImg = async (url, userData) => {
   await updateDoc(updateUser, { profileImgUrl: url });
 };
 
+export function checkLogin(nickname) {
+  const userDocRef = doc(db, "user", nickname);
+  // islogin이 바뀔때 마다 감지를 위해 실시간 데이터베이스 사용
+  onSnapshot(userDocRef, async (doc) => {
+    const data = doc.data();
+    if (!data.islogin) {
+      await signOut(auth);
+      sessionStorage.removeItem("userData");
+      sessionStorage.removeItem("diaryData");
+      location.replace(`${baseUrl}/`);
+    }
+  });
+}
+
 const login = async (email, password) => {
   try {
     await setPersistence(auth, browserSessionPersistence);
     await signInWithEmailAndPassword(auth, email, password);
+    // 로그인 유저 데이터를 불러와 세션스토리지에 저장하기 위해
     const userRef = collection(db, "user");
     const q = query(userRef, where("email", "==", email));
     const res = await getDocs(q);
     const datas = res.docs.map((el) => el.data());
+    const userDocRef = doc(db, "user", datas[0].nickname);
+
+    if (datas[0].islogin) {
+      const login = confirm(
+        "이미 로그인된 계정 입니다! 기존 계정을 로그아웃 하시겠습니까?"
+      );
+      if (login) {
+        // 기존 로그인된 계정을 로그아웃 시킨다.
+        await updateDoc(userDocRef, { islogin: false });
+      } else {
+        return;
+      }
+    }
+    // 로그인이 확인 처리
+    await updateDoc(userDocRef, { islogin: true });
+
+    //불러온 데이터 세션 스토리지에 저장
     sessionStorage.setItem(
       "userData",
       JSON.stringify({
@@ -218,16 +252,39 @@ const login = async (email, password) => {
 
 const logout = async () => {
   if (confirm("정말 로그아웃 하시겠습니까?")) {
-    signOut(auth)
-      .then(() => {
-        sessionStorage.removeItem("userData");
-        sessionStorage.removeItem("diaryData");
-        location.replace(`${baseUrl}/`);
-      })
-      .catch((error) => {
-        alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해 주세요.");
-        throw error;
-      });
+    try {
+      // 채팅방에 입장했다는 알기 위해 url를 구해줌
+      const url = window.location.href;
+      const urlParams = new URLSearchParams(window.location.search);
+      // 현재 채팅창의 querystring Id값을 가져옴
+      const chatRoomId = urlParams.get("id");
+      const userDocRef = doc(db, "user", userData.nickname);
+      // 로그아웃
+      await signOut(auth);
+      // 채팅방 퇴장 처리
+      // 로그아웃시 만약 현재 url이 채팅방페이지 url에 있었다면 db에 채팅창에 유저 데이터를 지우고 퇴장처리한다.
+      // 만약 이 분기점이 없다면 로그아웃마다 db에 유저데이터를 지우려고 하려는데 유저가 채팅방에 입장하지 않았기 때문에 채팅방 db에 해당유저 데이터가 없는데 지우려고 하기 때문에 오류가 발생한다.
+      
+      if (chatRoomId&&url.includes("chatting")) {
+        // 현재 채팅방 번호를 구해줌
+        // 채팅방 데이터를 구해줌
+        const chatRoomRef = doc(db, `chatRoom/${chatRoomId}`);
+        await updateDoc(chatRoomRef, {
+          users: arrayRemove(userData.nickname), // users 배열에서 userNickname 제거
+        });
+      }
+
+      // 유저 DB 로그아웃 변경
+      // 위에 한번 다른 값으로 바꿔주지 않으면 이거 그냥 안바뀌고 그냥 넘어감
+      await updateDoc(userDocRef, { islogin: true });
+      await updateDoc(userDocRef, { islogin: false });
+      sessionStorage.removeItem("userData");
+      sessionStorage.removeItem("diaryData");
+      location.replace("/");
+    } catch (error) {
+      alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해 주세요.");
+      throw error;
+    }
   }
 };
 
@@ -323,10 +380,9 @@ const signup = async (nickname, email, phone, password) => {
     await setDoc(doc(user, `${res.user.displayName ?? ""}`), {
       email: res.user.email,
       nickname: res.user.displayName,
-      phone: phone,
+      phone,
       profileImgFileName: "",
       profileImgUrl: "",
-      diary: [],
       fortune: "",
       gameRecord: null,
       introduce: "소개글을 작성하지 않았습니다.",
@@ -336,7 +392,7 @@ const signup = async (nickname, email, phone, password) => {
     location.replace(`${baseUrl}/`);
   } catch (error) {
     if (error.message.includes("email-already-in-use")) {
-      alert("이미 사용중인 이메일 입니다!");
+      prompt("이미 사용중인 이메일 입니다!");
     } else {
       alert("알 수 없는 에러가 발생하였습니다. 잠시후 다시 시도해 주세요.");
     }
@@ -391,153 +447,137 @@ const changePassword = async (email, phone) => {
   }
 };
 
-const chatRef = collection(db, "chat");
-const q = query(chatRef, orderBy("createdAt", "asc"));
+const joinChatRoom = async (chatRoomId, userNickname, rednerJoinUsers) => {
+  const chatRoomRef = doc(db, "chatRoom", chatRoomId);
 
-const setChattingMsg = (data, lastDate, $chattingBox) => {
-  const currentDate = new Date();
-  if (currentDate.getDate() === lastDate.getDate()) {
-    const today = document.createElement("time");
-    today.classList.add("createdAt");
-    today.innerText = getCreatedAt(currentDate.getTime());
-    today.setAttribute(
-      "datetime",
-      new Date(currentDate.getTime()).toISOString()
-    );
-    $chattingBox.append(today);
-  }
+  // chatRoomRef의 users 필드 업데이트
+  await updateDoc(chatRoomRef, {
+    users: arrayUnion(userNickname), // users 배열에 userNickname 추가
+  });
 
-  const messageBox = document.createElement("div");
-  messageBox.classList.add("message-box");
+  // Firestore 실시간 업데이트를 위한 onSnapshot 등록
+  onSnapshot(chatRoomRef, (doc) => {
+    const data = doc.data();
+    rednerJoinUsers(data);
+  });
 
-  const messageImg = document.createElement("img");
-  messageImg.classList.add("message-img");
-  messageImg.src = "../img/profile.png";
-  messageImg.alt = "유저 프로필";
-
-  const userName = document.createElement("span");
-  userName.classList.add("user-name");
-  userName.innerText = data.user;
-
-  const message = document.createElement("p");
-  message.classList.add("message");
-  message.innerText = data.message;
-
-  const createdAt = document.createElement("time");
-  createdAt.classList.add("createdAt");
-  createdAt.innerText = getCreatedAt(data.createdAt).slice(11);
-  createdAt.setAttribute("datetime", new Date(data.createdAt).toISOString());
-  const delBtn = document.createElement("button");
-  delBtn.classList.add("btn-del");
-  delBtn.innerText = "X";
-  delBtn.addEventListener("click", async () => {
-    if (confirm("정말 삭제하시겠습니까?")) {
-      deleteChat(data.id);
+  // 채팅방에서 나갈 때
+  window.addEventListener("beforeunload", async () => {
+    try {
+      await updateDoc(chatRoomRef, {
+        users: arrayRemove(userNickname), // users 배열에서 userNickname 제거
+      });
+    } catch (error) {
+      console.log("Error occurred while updating users:", error);
     }
   });
-  // 작성자가 나인 경우
-  if (data.user === userData.nickname) {
-    messageBox.classList.add("sent");
-  } else {
-    // 작성자가 다른 경우
-    messageBox.classList.add("received");
-  }
-
-  // 메시지 박스에 새로운 요소들 추가
-  messageBox.appendChild(messageImg);
-  messageBox.appendChild(userName);
-  messageBox.appendChild(message);
-  messageBox.appendChild(createdAt);
-  if (data.user === userData.nickname && data.type !== "delete") {
-    messageBox.appendChild(delBtn);
-  }
-
-  // 채팅 리스트에 메시지 박스 추가
-  $chattingBox.appendChild(messageBox);
 };
 
-const fetchChatting = ($chattingBox, $loadingModal) => {
+function fetchChatting (
+  $chattingBox,
+  $loadingModal,
+  chatRoomId,
+  renderChattingMsg
+) {
+  const chatRef = collection(db, `chat${chatRoomId}`);
+  const q = query(chatRef, orderBy("createdAt", "asc"));
   let prevDate = null; // 이전 메시지의 작성 날짜를 저장할 변수
   $loadingModal.classList.add("active");
   onSnapshot(q, (querySnapshot) => {
     $chattingBox.innerHTML = ""; // 채팅 리스트 초기화
-    querySnapshot.forEach((doc, index) => {
+    querySnapshot.forEach((doc) => {
       const data = doc.data();
-      // 작성 날짜를 Date 객체로 변환
       const currentDate = new Date(data.createdAt);
-
-      // 날짜가 달라졌을 때 새로운 날짜를 삽입
-      if (!prevDate || prevDate.getDate() !== currentDate.getDate()) {
-        const dateBox = document.createElement("div");
-        dateBox.classList.add("date-box");
-
-        const dateText = document.createElement("span");
-        dateText.classList.add("date-text");
-        dateText.innerText = `${currentDate.getFullYear()}년 ${
-          currentDate.getMonth() + 1
-        }월 ${currentDate.getDate()}일 ${['일','월','화','수','목','금','토'][currentDate.getDay()]+'요일'}`;
-        dateBox.appendChild(dateText);
-
-        $chattingBox.appendChild(dateBox);
-        prevDate = currentDate;
-      }
-      // 채팅 리스트에 새로운 메시지 추가
-      const messageBox = document.createElement("div");
-      messageBox.classList.add("message-box");
-
-      const messageImg = document.createElement("img");
-      messageImg.classList.add("message-img");
-      messageImg.src = "../img/profile.png";
-      messageImg.alt = "유저 프로필";
-
-      const userName = document.createElement("span");
-      userName.classList.add("user-name");
-      userName.innerText = data.user;
-
-      const message = document.createElement("p");
-      message.classList.add("message");
-      message.innerText = data.message;
-
-      const createdAt = document.createElement("time");
-      createdAt.classList.add("createdAt");
-      createdAt.innerText = getCreatedAt(data.createdAt).slice(11);
-      createdAt.setAttribute(
-        "datetime",
-        new Date(data.createdAt).toISOString()
-      );
-      const delBtn = document.createElement("button");
-      delBtn.classList.add("btn-del");
-      delBtn.innerText = "X";
-      delBtn.addEventListener("click", async () => {
-        if (confirm("정말 삭제하시겠습니까?")) {
-          deleteChat(data.id);
-        }
-      });
-      // 작성자가 나인 경우
-      if (data.user === userData.nickname) {
-        messageBox.classList.add("sent");
-      } else {
-        // 작성자가 다른 경우
-        messageBox.classList.add("received");
-      }
-
-      // 메시지 박스에 새로운 요소들 추가
-      messageBox.appendChild(messageImg);
-      messageBox.appendChild(userName);
-      messageBox.appendChild(message);
-      messageBox.appendChild(createdAt);
-      if (data.user === userData.nickname && data.type !== "delete") {
-        messageBox.appendChild(delBtn);
-      }
-
-      // 채팅 리스트에 메시지 박스 추가
-      $chattingBox.appendChild(messageBox);
-      prevDate = currentDate; // 이전 메시지의 작성 날짜 갱신
+      renderChattingMsg(data, prevDate, currentDate);
     });
     $loadingModal.classList.remove("active");
     $chattingBox.scrollTop = $chattingBox.scrollHeight;
   });
 };
+
+
+async function createChattingRoom({ id, title, limit, isprivate, password, createdAt }) {
+  const chatRoomRef = collection(db, "chatRoom");
+  await setDoc(doc(chatRoomRef, id), {
+    id,
+    title,
+    limit,
+    users: [],
+    isprivate,
+    password,
+    createdAt,
+  });
+}
+
+async function renderChattingRoom($roomLists, $loadingModal){
+  const chatRoomRef = collection(db, "chatRoom");
+  const q = query(chatRoomRef,orderBy("createdAt","desc"))
+  $loadingModal.classList.add("active")
+   onSnapshot(q, (snapshot) => {
+    while ($roomLists.firstChild) { // 리스트 초기화
+      $roomLists.removeChild($roomLists.firstChild);
+    }
+    snapshot.docs.forEach((doc) => {
+      const item = doc.data();
+
+      const roomLi = document.createElement("li");
+      roomLi.className = "room";
+
+      const roomLink = document.createElement("a");
+      roomLink.href = `/src/template/chatting.html?id=${doc.id}`;
+    
+
+      const roomTitle = document.createElement("h3");
+      roomTitle.textContent = item.title;
+
+      const userCount = document.createElement("span");
+      userCount.className = "user-count";
+      userCount.textContent = `현재참여인원 ${item.users.length}/${item.limit}`;
+
+      roomLink.appendChild(roomTitle);
+      roomLink.appendChild(userCount);
+      roomLi.appendChild(roomLink);
+      $roomLists.appendChild(roomLi);
+
+      roomLink.addEventListener("click",(e)=>{
+        if(item.isprivate){
+          const password = prompt('비밀번호를 입력해주세요.');
+          if(password===item.password){
+            location.href = `/src/template/chatting.html?id=${doc.id}`
+          }
+          else{
+            e.preventDefault();
+            alert("비밀번호가 일치하지 않습니다.");
+            return;
+          }
+        }
+        else{
+          location.href =`/src/template/chatting.html?id=${doc.id}`
+        }
+      })
+    });
+
+    $loadingModal.classList.remove("active");
+  });
+}
+
+async function addChatting(chatRoomId, newChat) {
+  const chatRef = collection(db, "chat"+chatRoomId);
+  try {
+    // Firestore에 새로운 메시지 추가
+    await setDoc(doc(chatRef, newChat.id), {
+      id: newChat.id,
+      message: newChat.message,
+      user: newChat.user,
+      createdAt: newChat.createdAt,
+      type: "added",
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
 
 export {
   FetchDiarys,
@@ -557,8 +597,18 @@ export {
   editDiary,
   deleteDiary,
   fetchChatting,
+  addChatting,
+  joinChatRoom,
+  deleteChat,
+  createChattingRoom,
+  renderChattingRoom,
   setDoc,
+  getDoc,
   doc,
-  chatRef,
+  collection,
   db,
+  app,
+  query,
+  orderBy,
+  onSnapshot,
 };
