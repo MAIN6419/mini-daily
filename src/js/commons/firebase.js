@@ -456,9 +456,18 @@ const joinChatRoom = async (chatRoomId, userNickname, rednerJoinUsers) => {
   });
 
   // Firestore 실시간 업데이트를 위한 onSnapshot 등록
-  onSnapshot(chatRoomRef, (doc) => {
-    const data = doc.data();
-    rednerJoinUsers(data);
+  onSnapshot(chatRoomRef, async (doc) => {
+    if (doc.exists()) {
+      const data = doc.data();
+      // if (data.users.length <= 0) {
+      //   console.log("인원수 없음");
+      //   await deleteDoc(doc(db,"chatRoom","a11d2366-b828-44b1-aa26-776f1e3e25f8"));
+      // }
+      rednerJoinUsers(data);
+    
+    } else {
+      console.log("문서가 존재하지 않습니다.");
+    }
   });
 
   // 채팅방에서 나갈 때
@@ -467,6 +476,7 @@ const joinChatRoom = async (chatRoomId, userNickname, rednerJoinUsers) => {
       await updateDoc(chatRoomRef, {
         users: arrayRemove(userNickname), // users 배열에서 userNickname 제거
       });
+
     } catch (error) {
       console.log("Error occurred while updating users:", error);
     }
@@ -507,6 +517,7 @@ async function createChattingRoom({ id, title, limit, isprivate, password, creat
     password,
     createdAt,
   });
+  location.href = `${baseUrl}/src/template/chatting.html?id=${id}`;
 }
 
 async function renderChattingRoom($roomLists, $loadingModal){
@@ -524,7 +535,7 @@ async function renderChattingRoom($roomLists, $loadingModal){
       roomLi.className = "room";
 
       const roomLink = document.createElement("a");
-      roomLink.href = `/src/template/chatting.html?id=${doc.id}`;
+      roomLink.href = `${baseUrl}/src/template/chatting.html?id=${doc.id}`;
     
 
       const roomTitle = document.createElement("h3");
@@ -539,11 +550,18 @@ async function renderChattingRoom($roomLists, $loadingModal){
       roomLi.appendChild(roomLink);
       $roomLists.appendChild(roomLi);
 
-      roomLink.addEventListener("click",(e)=>{
+
+
+      roomLink.addEventListener("click", async (e)=>{
+        if(item.users.length >= item.limit){
+          e.preventDefault();
+          alert("입장가능한 인원수가 모두 찼습니다!");
+          return;
+        }
         if(item.isprivate){
           const password = prompt('비밀번호를 입력해주세요.');
           if(password===item.password){
-            location.href = `/src/template/chatting.html?id=${doc.id}`
+            location.href = `${baseUrl}/src/template/chatting.html?id=${doc.id}`
           }
           else{
             e.preventDefault();
@@ -552,7 +570,7 @@ async function renderChattingRoom($roomLists, $loadingModal){
           }
         }
         else{
-          location.href =`/src/template/chatting.html?id=${doc.id}`
+          location.href =`${baseUrl}/src/template/chatting.html?id=${doc.id}`
         }
       })
     });
