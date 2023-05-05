@@ -166,6 +166,13 @@ async function uploadFile(files) {
 
 const auth = getAuth();
 
+onAuthStateChanged(auth, async (user)=>{
+  const userDocRef = doc(db, "user", "test");
+  if(!user){
+    console.log('유저상태 변경')
+    await updateDoc(userDocRef, {islogin: false});
+  }
+})
 const FetchUserData = async (nickname) => {
   try {
     const userRef = collection(db, "user");
@@ -188,7 +195,7 @@ const UpdateProfileImg = async (url, userData) => {
   await updateDoc(updateUser, { profileImgUrl: url });
 };
 
-export function checkLogin(nickname) {
+export async function checkLogin(nickname) {
   const userDocRef = doc(db, "user", nickname);
   // islogin이 바뀔때 마다 감지를 위해 실시간 데이터베이스 사용
   onSnapshot(userDocRef, async (doc) => {
@@ -446,37 +453,43 @@ const changePassword = async (email, phone) => {
     return false;
   }
 };
-
-const joinChatRoom = async (chatRoomId, userNickname, rednerJoinUsers) => {
+async function checkRoom(chatRoomId) {
   const chatRoomRef = doc(db, "chatRoom", chatRoomId);
-
+  const docSnap = await getDoc(chatRoomRef);
+  const res = docSnap.data();
+  console.log('a',res.users)
+  if(res.users.length===0){
+    await deleteDoc(doc(db,`chatRoom/${chatRoomId}`));
+  }
+}
+const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
+  const chatRoomRef = doc(db, "chatRoom", chatRoomId);
+ 
   // chatRoomRef의 users 필드 업데이트
   await updateDoc(chatRoomRef, {
     users: arrayUnion(userNickname), // users 배열에 userNickname 추가
   });
 
   // Firestore 실시간 업데이트를 위한 onSnapshot 등록
-  onSnapshot(chatRoomRef, async (doc) => {
-    if (doc.exists()) {
-      const data = doc.data();
-      // if (data.users.length <= 0) {
-      //   console.log("인원수 없음");
-      //   await deleteDoc(doc(db,"chatRoom","a11d2366-b828-44b1-aa26-776f1e3e25f8"));
-      // }
-      rednerJoinUsers(data);
-    
-    } else {
-      console.log("문서가 존재하지 않습니다.");
+  onSnapshot(chatRoomRef, async (docs) => {
+    try{
+      const data = docs.data();
+      renderJoinUser(data);
+
+    } catch(error){
+      console.log(error)
     }
+    
   });
 
+  
   // 채팅방에서 나갈 때
-  window.addEventListener("beforeunload", async () => {
+  window.addEventListener("beforeunload", () => {
     try {
-      await updateDoc(chatRoomRef, {
+       updateDoc(chatRoomRef, {
         users: arrayRemove(userNickname), // users 배열에서 userNickname 제거
       });
-
+       checkRoom(chatRoomId);
     } catch (error) {
       console.log("Error occurred while updating users:", error);
     }
@@ -595,6 +608,10 @@ async function addChatting(chatRoomId, newChat) {
   }
 }
 
+async function editIntroduce(introduce) {
+  const userRef = doc(db,`user/${userData.nickname}`);
+  await updateDoc(userRef,{ introduce });
+}
 
 
 export {
@@ -620,6 +637,8 @@ export {
   deleteChat,
   createChattingRoom,
   renderChattingRoom,
+  checkRoom,
+  editIntroduce,
   setDoc,
   getDoc,
   doc,

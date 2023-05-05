@@ -5,20 +5,23 @@ import { calendar } from "./calendar.js";
 import { checkLogin, logout } from "./firebase.js";
 export let userData;
 
-if(!sessionStorage.getItem("userData")) {
-  location.replace("/");
-  alert("로그인 후 이용가능합니다!");
-}
-else{
-  userData = JSON.parse(sessionStorage.getItem("userData"));
-}
-checkLogin(userData.nickname)
 const host = window.location.host;
 
 let baseUrl = "";
 if (host.includes("github.io")) {
   baseUrl = "/mini-diary";
 }
+
+if(!sessionStorage.getItem("userData")) {
+  location.replace(`${baseUrl}/`);
+  alert("로그인 후 이용가능합니다!");
+}
+else{
+  userData = JSON.parse(sessionStorage.getItem("userData"));
+}
+  await checkLogin(userData.nickname);
+
+
 
 (async function () {
   await loadTemplate();
@@ -160,5 +163,6 @@ async function loadTemplate() {
     <a class="game-link" href="${baseUrl}/src/template/miniGame.html">미니게임</a>
     <a class="photoAlbum-link" href="${baseUrl}/src/template/photoAlbum.html">사진첩</a>
     <a class="fortune-link" href="${baseUrl}/src/template/fortune.html">운세보기</a>
+    <a class="mypage-link" href="${baseUrl}/src/template/mypage.html">내 정보</a>
   `;
 }

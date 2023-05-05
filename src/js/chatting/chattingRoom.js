@@ -57,18 +57,30 @@ renderChattingRoom($roomList, $loadingModal);
 
 $openModalBtn.addEventListener("click",()=>{
   $createRoomModl.classList.add("active");
+  $inputTitle.focus();
+  
 })
 
 $createRoomModl.addEventListener("click",(e)=>{
   if(e.target===$closeBtn||e.target===$createRoomModl){
     $createRoomModl.classList.remove("active");
   }
-  
 })
 $inputTitle.addEventListener("keydown",(e)=>{
+  if(e.keyCode===9&&e.shiftKey){
+    e.preventDefault();
+    $closeBtn.focus();
+  }  
   if(e.keyCode===32&&!e.target.value.trim()){
     e.preventDefault();
     e.target.value = "";
+  }
+ 
+})
+$closeBtn.addEventListener("keydown",(e)=>{
+  if(e.keyCode===9&&!e.shiftKey){
+    e.preventDefault();
+    $inputTitle.focus();
   }
 })
 

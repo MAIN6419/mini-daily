@@ -1,7 +1,7 @@
 'use strict';
 import { v4 as uuidv4 } from 'https://cdn.skypack.dev/uuid@8.3.2?dts';
 import { userData } from "../commons/commons.js";
-import { joinChatRoom, fetchChatting, addChatting, doc, deleteChat } from "../commons/firebase.js";
+import { joinChatRoom, fetchChatting, addChatting, doc, deleteChat, checkRoom } from "../commons/firebase.js";
 import { getCreatedAt } from '../commons/libray.js';
 
 // 인원수 확인 로직 추가
@@ -23,8 +23,7 @@ const chatRoomId = urlParams.get("id");
 //   alert("존재하지않는 채팅방입니다.")
 //   location.replace("?id=chat")
 // }
-joinChatRoom(chatRoomId, userData.nickname, rednerJoinUsers);
-
+await joinChatRoom(chatRoomId, userData.nickname, rednerJoinUsers);
 fetchChatting($chattingBox, $loadingModal, chatRoomId, renderChattingMsg);
 
 $chattingForm.addEventListener("submit", async (e) => {

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="미니 다이어리" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://main6419.github.io/mini-diary/" />
+    <meta
+      property="og:image"
+      content="https://firebasestorage.googleapis.com/v0/b/free-board-dd96c.appspot.com/o/images%2Fog.png?alt=media&token=59d9191f-6cd6-4818-b1ee-cc450c0c968e"
+    />
+    <meta name="description" content="미니 다이어리 사이트" />
+    <title>Mini Diary</title>
+    <link rel="icon" type="image/png" sizes="48x48" href="../img/favicon.png" />
+    <link rel="stylesheet" href="../css/commons.css" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/mypage.css" />
+    <script src="../js/commons/commons.js" type="module"></script>
+  </head>
+  <body>
+    <h1 class="a11y-hidden">Mini diary</h1>
+    <div class="wrapper">
+      <div class="inner">
+        <section class="section-profile">
+          <h2 class="a11y-hidden">프로필 영역</h2>
+          <!-- section-profile -->
+        </section>
+        <section class="section-contents">
+          <h2 class="title">마이 페이지</h2>
+          <section class="profile-box">
+            <h3 class="a11y-hidden">유저 정보창</h3>
+            <div class="profileImg-box">
+              <img src="../img/profile.png" alt="유저 프로필 이미지" />
+              <button class="btn-profileImg" type="button">이미지 변경</button>
+            </div>
+            <div class="profile-info">
+              <span>이메일 : test@naver.com</span>
+              <span>닉네임 : test</span>
+              <span>등급 : 일반</span>
+              <span class="mydiary">다이어리 : <a href="#"> &nbsp;10개</a></span>
+              <span class="myComment">댓글 : <a href="#"> &nbsp;10개</a></span>
+              <div class="info-btns">
+                <button class="btn-changePw" type="button">
+                  비밀번호 변경
+                </button>
+                <button class="btn-changeIntroduce" type="button">
+                  소개글 변경
+                </button>
+              </div>
+            </div>
+
+          
+          </section>
+          <article class="introduce-modal">
+            <h2 class="a11y-hidden">소개글 변경창</h2>
+            <form class="modal-form">
+              <h3 class="form-header">소개글 수정</h3>
+              <textarea class="input-introduce" maxlength="100" placeholder="내용"></textarea>
+              <div class="form-bottom">
+                <span class="text-counter">0/100</span>
+                <div class="form-btns">
+                  <button class="btn-submit" type="submit">수정하기</button>
+                  <button class="btn-cancle" type="button">취소하기</button>
+                </div>
+              </div>
+
+            </form>
+          </article>
+        </section>
+        <div class="links">
+          <!-- links -->
+        </div>
+      </div>
+    </div>
+    <script src="../js/mypage/mypage.js" type="module"></script>
+  </body>
+</html>

@@ -127,6 +127,9 @@
   text-align: center;
   margin-bottom: 20px;
 }
+.loading-modal span{
+  font-size: 20px;
+}
 .links .chattingRoom-link{
   background-color: antiquewhite;
   font-weight: bold;
