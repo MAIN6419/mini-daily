@@ -23,12 +23,15 @@ import {
   limit,
   getDoc,
   onSnapshot,
+  increment,
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
 import {
   uploadBytes,
   ref,
   getDownloadURL,
   getStorage,
+  ref as storageRef,
+  deleteObject
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-storage.js";
 import {
   getAuth,
@@ -121,6 +124,7 @@ async function editDiary(id, title, contents) {
 async function deleteDiary(id) {
   try {
     await deleteDoc(doc(db, `diaryList/${id}`));
+    await updateDoc(doc(db, 'user', userData.nickname), {diaryCount: increment(-1)})
   } catch (error) {
     throw error;
   }
@@ -143,6 +147,7 @@ async function writeDiary(newDiary) {
     await setDoc(doc(diaryList, newDiary.id), {
       ...newDiary,
     });
+    await updateDoc(doc(db, 'user', userData.nickname), {diaryCount: increment(1)})
 
     alert("등록이 완료되었습니다.");
   } catch (error) {
@@ -186,12 +191,12 @@ const FetchUserData = async (nickname) => {
 };
 
 // 유저 프로필 이미지 변경 함수
-const UpdateProfileImg = async (url, userData) => {
+const updateProfileImg = async (url) => {
   if (!auth.currentUser) return;
   await updateProfile(auth.currentUser, {
     photoURL: url,
   });
-  const updateUser = doc(getFirestore(app), `user/${userData}`);
+  const updateUser = doc(getFirestore(app), `user/${userData.nickname}`);
   await updateDoc(updateUser, { profileImgUrl: url });
 };
 
@@ -248,9 +253,13 @@ const login = async (email, password) => {
   } catch (error) {
     if (error.message.includes("auth/invalid-email")) {
       alert("유효하지 않은 이메일 형식 입니다!");
-    } else if (error.message.includes("auth/user-not-found).")) {
+    } else if (error.message.includes("auth/user-not-found")) {
       alert("일치 하는 로그인 정보가 없습니다!");
-    } else {
+      return;
+    } else if (error.message.includes("auth/wrong-password")) {
+      alert("비밀번호가 일치하지 않습니다!");
+      return;
+    }else {
       alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해 주세요.");
       throw error;
     }
@@ -312,6 +321,17 @@ const duplication = async (duplicationValue, duplicationTarget) => {
     return false;
   }
 };
+
+async function changeUserPassword(newPassword) {
+  try{
+    console.log()
+    await updatePassword(auth.currentUser, newPassword);
+    alert("비밀번호가 변경되었습니다.");
+  } catch(error) {
+    console.log(error)
+  }
+ 
+}
 
 // sessionStorage에 저장된 user의 닉네임을 가져오기 위한 함수
 const getSessionUser = () => {
@@ -613,6 +633,37 @@ async function editIntroduce(introduce) {
   await updateDoc(userRef,{ introduce });
 }
 
+const applyProfileImg = async (file) => {
+  const storage = getStorage(app);
+  if (file) {
+    try {
+      const fileName = `${uuidv4()}_${file.name}`;
+      const res = await uploadBytes(
+        storageRef(storage, `images/profile/${fileName}`),
+        file
+      );
+      const uploadfileUrl = await getDownloadURL(res.ref);
+      await updateProfileImg(uploadfileUrl);
+      const user = await FetchUserData(userData.nickname);
+      if(user.profileImgFileName){
+        await deleteObject(storageRef(storage, `images/profile/${String(user.profileImgFileName)}`));
+      }
+      
+      const updateUser = doc(
+        getFirestore(app),
+        `user/${userData.nickname}`
+      );
+      await updateDoc(updateUser, {profileImgFileName: fileName});
+      userData.profileImgURL = uploadfileUrl;
+      sessionStorage.setItem("userData", JSON.stringify(userData));
+      location.reload();
+      alert("프로필 이미지가 변경되었습니다.");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
+
 
 export {
   FetchDiarys,
@@ -622,13 +673,14 @@ export {
   signup,
   login,
   logout,
+  changePassword,
+  changeUserPassword,
   getSessionUser,
   duplication,
   writeDiary,
   setGameRecord,
   setFortune,
   findEmail,
-  changePassword,
   editDiary,
   deleteDiary,
   fetchChatting,
@@ -639,6 +691,7 @@ export {
   renderChattingRoom,
   checkRoom,
   editIntroduce,
+  applyProfileImg,
   setDoc,
   getDoc,
   doc,

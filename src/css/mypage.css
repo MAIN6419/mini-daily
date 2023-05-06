@@ -1,11 +1,11 @@
-.section-contents{
+.section-contents {
   position: relative;
 }
 .title {
   text-align: center;
   margin: 20px 0 30px 0;
 }
-.profile-box{
+.profile-box {
   display: flex;
   align-items: center;
   width: calc(100% - 60px);
@@ -18,38 +18,41 @@
   overflow: hidden;
   padding: 20px 0px;
 }
-.profile-box button{
+.profile-box button {
   background-color: #fff;
   border: none;
   padding: 8px;
   border-radius: 5px;
   cursor: pointer;
 }
-.profile-box button:hover{
+.profile-box button:hover {
   background-color: #eee;
 }
-.btn-profileImg{
+.btn-profileImg {
   display: block;
   margin: 0 auto;
   margin-top: 5px;
 }
-.profileImg-box{
+.profileImg-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   align-items: center;
   flex-basis: 40%;
   text-align: center;
 }
-.profileImg-box img{
+.profileImg-box img {
   width: 120px;
   height: 120px;
   border-radius: 50%;
   border: 1px solid #bdbdbd;
 }
-.profile-info{
+.profile-info {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
-.profile-info span{
+.profile-info span {
   display: flex;
   align-items: center;
   margin-left: 10px;
@@ -57,22 +60,22 @@
   font-weight: bold;
   margin-bottom: 10px;
 }
-.my-activity{
+.my-activity {
   flex-grow: 1;
 }
-.my-activity a{
+.my-activity a {
   display: block;
   margin-bottom: 10px;
   width: 160px;
   border: 2px solid #bdbdbd;
   background-color: #fff;
-  padding: 8px ;
+  padding: 8px;
   cursor: pointer;
 }
-.my-activity a:hover{
+.my-activity a:hover {
   background-color: #f2f2f2;
 }
-.info-btns{
+.info-btns {
   display: flex;
   gap: 10px;
   padding: 5px 0px;
@@ -80,39 +83,50 @@
   margin-left: 10px;
   flex-grow: 1;
 }
-.introduce-modal{
+
+/* 모달창 레이아웃 설정*/
+.introduce-modal,
+.profileImg-modal,
+.password-modal {
   display: none;
   position: absolute;
-  top:0;
-  left:0;
+  top: 0;
+  left: 0;
   bottom: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.5);
 }
-.introduce-modal.active{
+.introduce-modal.active,
+.profileImg-modal.active,
+.password-modal.active {
   display: block;
 }
-.introduce-modal .modal-form{
+.introduce-form,
+.profileImg-form,
+.password-form {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 400px;
   transform: translate(-50%, -50%);
-  border: 1px solid black;
   border-radius: 5px;
-  background-color: #fff;
   overflow: hidden;
 }
-.modal-form .form-header{
+/* 소개글 변경 모달 창*/
+.introduce-form {
+  width: 400px;
+  border: 1px solid black;
+  background-color: #fff;
+}
+.introduce-form .form-header {
   text-align: center;
   background-color: lightblue;
   border-bottom: 1px solid black;
   padding: 8px 0px;
 }
-.modal-form .input-introduce{
+.introduce-form .input-introduce {
   display: block;
   width: 100%;
-  height: 100px;
+  height: 200px;
   resize: none;
   padding: 10px;
   border: none;
@@ -120,36 +134,38 @@
   box-sizing: border-box;
   font-size: 14px;
 }
-.form-bottom{
+.form-bottom {
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: space-between;
   background-color: #f8f8f8;
 }
-.text-counter{
+.text-counter {
   text-indent: 10px;
   color: #999;
 }
-.form-btns{
+.form-btns {
   display: flex;
 }
-.btn-submit{
-  padding: 10px;
+.introduce-form .btn-submit {
+  padding: 10px 20px;
+  font-size: 16px;
   border: none;
   background-color: gold;
   cursor: pointer;
 }
-.btn-cancle{
-  padding: 10px;
+.introduce-form .btn-cancle {
+  padding: 10px 20px;
+  font-size: 16px;
   border: none;
   background-color: #eee;
   cursor: pointer;
 }
-.btn-close{
+.btn-close {
   position: absolute;
   top: 5px;
-  right:10px;
+  right: 10px;
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -159,7 +175,102 @@
   justify-content: center;
   border: 1px solid #bdbdbd;
 }
-.links .mypage-link{
+
+/* 프로필 이미지 변경창 */
+.input-profileImg {
+  display: none;
+}
+.custom-input {
+  width: 100%;
+  height: 300px;
+  background: url(../img/imgUpload.png) no-repeat center / 120px;
+  border: none;
+  cursor: pointer;
+}
+.profileImg-form {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  border: 1px solid black;
+  background-color: rgba(254, 252, 255);
+}
+.profileImg-form .form-header {
+  text-align: center;
+  padding: 10px 0px;
+  border-bottom: 1px solid black;
+  background-color: #eecff5;
+}
+.profileImg-form .form-btns {
+  width: 100%;
+  gap: 20px;
+  border-top: 1px solid black;
+  padding: 10px 0px;
+  justify-content: center;
+}
+.profileImg-form .btn-submit,
+.profileImg-form .btn-cancle {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  background-color: rgba(221, 158, 211);
+  color: #fff;
+  border-radius: 5px;
+}
+.profileImg-form .btn-cancle {
+  color: black;
+  background-color: #eee;
+}
+/* 비밀번호 변경 모달 창*/
+.password-form {
+  background-color: #fff;
+}
+.password-form .form-header{
+  text-align: center;
+  padding: 10px 0px;
+  border-bottom: 1px solid black;
+  margin-bottom: 20px;
+  background-color: #bdbdbd;
+}
+.password-form {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  border: 1px solid black;
+}
+.password-form input{
+  width: 200px;
+  margin: 0 auto;
+  border: 2px solid #bdbdbd;
+  padding: 16px 10px;
+  margin-bottom: 10px;
+}
+.password-form .form-btns{
+  flex-direction: column;
+  width: 100%;
+  gap: 5px;
+  padding: 10px 0px;
+  justify-content: center;
+}
+.password-form .btn-submit,
+.password-form .btn-cancle{
+  width: 220px;
+  padding: 16px 0px;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.password-form .btn-submit{
+  background-color: gold;
+  color: #fff;
+}
+
+.links .mypage-link {
   background-color: #fff;
   font-weight: bold;
   border-left: none;

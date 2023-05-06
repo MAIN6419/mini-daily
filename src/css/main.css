@@ -90,6 +90,9 @@ body {
 }
 .profile-img {
   width: 180px;
+  height: 180px;
+  object-fit: cover;
+  object-position: center;
   margin-bottom: 10px;
   border: 1px solid #999;
   box-sizing: border-box;
@@ -201,7 +204,7 @@ caption {
 .links {
   position: absolute;
   top: 20px;
-  right: -71px;
+  right: -86px;
   display: flex;
   flex-direction: column;
   gap: 10px;

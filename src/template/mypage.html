@@ -32,17 +32,19 @@
           <section class="profile-box">
             <h3 class="a11y-hidden">유저 정보창</h3>
             <div class="profileImg-box">
-              <img src="../img/profile.png" alt="유저 프로필 이미지" />
-              <button class="btn-profileImg" type="button">이미지 변경</button>
+              <img class="profile-img" src="" alt="" />
+              <button class="btn-changeProfileImg" type="button">이미지 변경</button>
             </div>
             <div class="profile-info">
-              <span>이메일 : test@naver.com</span>
-              <span>닉네임 : test</span>
-              <span>등급 : 일반</span>
-              <span class="mydiary">다이어리 : <a href="#"> &nbsp;10개</a></span>
-              <span class="myComment">댓글 : <a href="#"> &nbsp;10개</a></span>
+              <span class="user-email">이메일 : </span>
+              <span class="user-nickname">닉네임 : </span>
+              <span class="user-grade">등급 : </span>
+              <span class="user-diary"
+                >다이어리 : <a href="#" class="diary-count"></a></span
+              >
+              <span class="user-Comment">댓글 : <a href="#" class="comment-count"></a></span>
               <div class="info-btns">
-                <button class="btn-changePw" type="button">
+                <button class="btn-changePassword" type="button">
                   비밀번호 변경
                 </button>
                 <button class="btn-changeIntroduce" type="button">
@@ -50,23 +52,61 @@
                 </button>
               </div>
             </div>
-
-          
           </section>
           <article class="introduce-modal">
             <h2 class="a11y-hidden">소개글 변경창</h2>
-            <form class="modal-form">
+            <form class="introduce-form">
               <h3 class="form-header">소개글 수정</h3>
-              <textarea class="input-introduce" maxlength="100" placeholder="내용"></textarea>
+              <textarea
+                class="input-introduce"
+                maxlength="300"
+                placeholder="내용"
+              ></textarea>
               <div class="form-bottom">
-                <span class="text-counter">0/100</span>
+                <span class="text-counter">0/300</span>
                 <div class="form-btns">
                   <button class="btn-submit" type="submit">수정하기</button>
                   <button class="btn-cancle" type="button">취소하기</button>
                 </div>
               </div>
-
             </form>
+          </article>
+          <article class="profileImg-modal">
+            <h2 class="a11y-hidden">프로필 이미지 변경창</h2>
+            <form class="profileImg-form">
+              <h3 class="form-header">프로필 이미지 변경</h3>
+              <button class="custom-input" type="button">
+                <span class="a11y-hidden">프로필 이미지 수정 아이콘</span>
+              </button>
+              <input type="file" class="input-profileImg" />
+              <div class="form-btns">
+                <button type="button" class="btn-submit" type="submit">변경하기</button>
+                <button type="button" class="btn-cancle" type="button">취소하기</button>
+              </div>
+            </form>
+          </article>
+
+          <article class="password-modal">
+            <h2 class="a11y-hidden">비밀번호 변경창</h2>
+            <form class="password-form">
+              <h3 class="form-header">비밀번호 변경</h3>
+              <label for="input-currentPw"></label>
+              <input id="input-currentPw" type="password" maxlength="16" placeholder="현재 비밀번호">
+              <label for="input-newPW"></label>
+              <input id="input-newPW" type="password" maxlength="16" placeholder="새 비밀번호">
+              <label for="input-chkNewPW"></label>
+              <input id="input-chkNewPW" type="password" maxlength="16" placeholder="새 비밀번호 확인">
+              <div class="form-btns">
+                <button type="button" class="btn-submit" type="submit">변경하기</button>
+                <button type="button" class="btn-cancle" type="button">취소하기</button>
+              </div>
+            </form>
+          </article>
+
+          <article class="loading-modal">
+            <h2 class="a11y-hidden">로딩화면</h2>
+            <img src="../img/loading.gif" alt="로딩중 이미지">
+            <span>Loading...</span>
           </article>
         </section>
         <div class="links">
