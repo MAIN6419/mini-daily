@@ -97,7 +97,13 @@ $signupBtn.addEventListener("click", () => {
   if (nicknameReg.test(nickname)&&emailReg.test(email)&&passwordReg.test(password)&&phoneReg.test(phone)&&
   password===passwordChk&&!duplicated.nickname&&!duplicated.email&&!duplicated.phone) {
     $loadingModal.classList.add("active");
-    signup($inputNickname.value, $inputEmail.value,  $inputPhone.value.replace(/-/g,""), $inputPw.value).then(()=>{
+    const newUser = {
+      nickname : $inputNickname.value,
+      email : $inputEmail.value,
+      phone: $inputPhone.value.replace(/-/g,""),
+      password: $inputPw.value
+    }
+    signup(newUser).then(()=>{
       $loadingModal.classList.remove("active");
     })
   }
@@ -141,6 +147,25 @@ $inputPhone.addEventListener("blur", async (e)=>{
     $phoneMsg.classList.add("vaild");
     $phoneMsg.textContent = '사용 가능한 휴대폰 번호  입니다.';
   }
+})
+
+// 키보드 접근성 고려
+$inputNickname.addEventListener("keydown", (e)=>{
+  if(e.keyCode===9&&e.shiftKey){
+    e.preventDefault();
+    $signupBtn.focus();
+  }
+})
+$signupBtn.addEventListener("keydown",(e)=>{
+  if(e.keyCode===9&&e.shiftKey){
+    e.preventDefault();
+    $inputPwChk.focus();
+  }
+  else if(e.keyCode===9){
+    e.preventDefault();
+    $inputNickname.focus();
+  }
+
 })
 
 

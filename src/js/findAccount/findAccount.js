@@ -179,3 +179,21 @@ const findPwEvent = () => {
   }
 };
 $changePwBtn.addEventListener("click", findPwEvent);
+
+// 키보드 접근성 고려
+$emailFormBtn.addEventListener("keydown",(e)=>{
+  if(e.keyCode===9&&e.shiftKey){
+    e.preventDefault();
+    $findEmailBtn.focus();
+  }
+})
+$findEmailBtn.addEventListener("keydown", (e)=>{
+  if(e.keyCode===9&&e.shiftKey){
+    e.preventDefault();
+    $inputPhone.focus();
+  }
+  else if(e.keyCode===9){
+    e.preventDefault();
+    $emailFormBtn.focus();
+  }
+})

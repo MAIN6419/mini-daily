@@ -27,11 +27,10 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
 import {
   uploadBytes,
-  ref,
   getDownloadURL,
   getStorage,
   ref as storageRef,
-  deleteObject
+  deleteObject,
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-storage.js";
 import {
   getAuth,
@@ -43,6 +42,8 @@ import {
   updateProfile,
   sendPasswordResetEmail,
   onAuthStateChanged,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
   updatePassword,
   signInWithPhoneNumber,
   RecaptchaVerifier,
@@ -74,11 +75,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const firestoreDb = initializeFirestore(app, {
-  cacheSizeBytes: CACHE_SIZE_UNLIMITED,
-});
 const db = getFirestore(app);
-const analytics = getAnalytics(app);
+const storage = getStorage(app);
+// const analytics = getAnalytics(app);
 
 // 다이어리 목록을 불러오는 함수
 async function FetchDiarys(nickname) {
@@ -98,6 +97,18 @@ async function FetchDiarys(nickname) {
   }
 }
 
+async function fetchAllDiarys() {
+  try {
+    const diaryList = collection(db, "diaryList");
+    const res = await getDocs(diaryList);
+    const datas = res.docs.map((el) => el.data());
+    return datas;
+    
+  } catch (error) {
+    throw error;
+  }
+}
+
 // 현재 페이지의 다이어리를 불러오는 함수
 async function FetchDiary(id) {
   try {
@@ -111,11 +122,11 @@ async function FetchDiary(id) {
   }
 }
 
-async function editDiary(id, title, contents) {
+async function editDiary(id, { title, contents, imgURL, imgFileName }) {
   try {
     const updateDiary = doc(db, `diaryList/${id}`);
-    await updateDoc(updateDiary, { title, contents });
-    alert("수정이 완료되었습니다.");
+    await updateDoc(updateDiary, { title, contents, imgURL, imgFileName });
+    alert("수정이 완료되었습니다.")
   } catch (error) {
     throw error;
   }
@@ -123,8 +134,19 @@ async function editDiary(id, title, contents) {
 
 async function deleteDiary(id) {
   try {
+    const diary = await FetchDiary(id);
+    if (diary.imgFileName.length) {
+      for(let i=0; i<diary.imgFileName.length; i++){
+        await deleteObject(
+          storageRef(storage, `images/diary/${String(diary.imgFileName[i])}`)
+        );
+      }
+
+    }
     await deleteDoc(doc(db, `diaryList/${id}`));
-    await updateDoc(doc(db, 'user', userData.nickname), {diaryCount: increment(-1)})
+    await updateDoc(doc(db, "user", userData.nickname), {
+      diaryCount: increment(-1),
+    });
   } catch (error) {
     throw error;
   }
@@ -147,8 +169,10 @@ async function writeDiary(newDiary) {
     await setDoc(doc(diaryList, newDiary.id), {
       ...newDiary,
     });
-    await updateDoc(doc(db, 'user', userData.nickname), {diaryCount: increment(1)})
-
+    await updateDoc(doc(db, "user", userData.nickname), {
+      diaryCount: increment(1),
+      point: increment(1),
+    });
     alert("등록이 완료되었습니다.");
   } catch (error) {
     throw error;
@@ -157,27 +181,43 @@ async function writeDiary(newDiary) {
 
 // 이미지 업로드 함수
 async function uploadFile(files) {
-  const fileUrls = [];
+  const fileInfo = { url: [], fileName: [] };
   for (const file of files) {
     if (file) {
       const fileName = uuidv4() + "_" + file.name;
-      const res = await uploadBytes(ref(stroage, `images/${fileName}`), file);
+      const res = await uploadBytes(
+        storageRef(storage, `images/diary/${fileName}`),
+        file
+      );
       const uploadfileUrl = await getDownloadURL(res.ref);
-      fileUrls.push(uploadfileUrl);
+      fileInfo.url.push(uploadfileUrl);
+      fileInfo.fileName.push(fileName);
     }
   }
-  return fileUrls;
+  return fileInfo;
+}
+
+async function deleteEditDiaryImg(filename){
+  // 빈배열이 올 수 있기 때문에 filename이 있는 경우에만 이미지 삭제 처리
+  if(filename){
+    await deleteObject(
+      storageRef(
+        storage,
+        `images/diary/${String(filename)}`
+      )
+    );
+  }
 }
 
 const auth = getAuth();
 
-onAuthStateChanged(auth, async (user)=>{
+onAuthStateChanged(auth, async (user) => {
   const userDocRef = doc(db, "user", "test");
-  if(!user){
-    console.log('유저상태 변경')
-    await updateDoc(userDocRef, {islogin: false});
+  if (!user) {
+    console.log("유저상태 변경");
+    await updateDoc(userDocRef, { islogin: false });
   }
-})
+});
 const FetchUserData = async (nickname) => {
   try {
     const userRef = collection(db, "user");
@@ -259,7 +299,9 @@ const login = async (email, password) => {
     } else if (error.message.includes("auth/wrong-password")) {
       alert("비밀번호가 일치하지 않습니다!");
       return;
-    }else {
+    } else if (error.message.includes("auth/too-many-requests")) {
+      alert("많은 로그인 시도로 인해 로그인이 일시적으로 제한됩니다! ");
+    } else {
       alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해 주세요.");
       throw error;
     }
@@ -280,8 +322,8 @@ const logout = async () => {
       // 채팅방 퇴장 처리
       // 로그아웃시 만약 현재 url이 채팅방페이지 url에 있었다면 db에 채팅창에 유저 데이터를 지우고 퇴장처리한다.
       // 만약 이 분기점이 없다면 로그아웃마다 db에 유저데이터를 지우려고 하려는데 유저가 채팅방에 입장하지 않았기 때문에 채팅방 db에 해당유저 데이터가 없는데 지우려고 하기 때문에 오류가 발생한다.
-      
-      if (chatRoomId&&url.includes("chatting")) {
+
+      if (chatRoomId && url.includes("chatting")) {
         // 현재 채팅방 번호를 구해줌
         // 채팅방 데이터를 구해줌
         const chatRoomRef = doc(db, `chatRoom/${chatRoomId}`);
@@ -322,15 +364,32 @@ const duplication = async (duplicationValue, duplicationTarget) => {
   }
 };
 
-async function changeUserPassword(newPassword) {
-  try{
-    console.log()
+async function changeUserPassword(currentPassword, newPassword) {
+  try {
+    const user = auth.currentUser;
+    const credential = EmailAuthProvider.credential(
+      user.email,
+      currentPassword
+    );
+    // 현재 사용자의 정보를 확인하는 메서드
+    // => 이것을 이용하여 현재 로그인한 유저의 비밀번화 일치하는지 판변해서
+    // 일치하지 않는다면 오류가 발생하는데 이것을 예외처리해서
+    // 비밀번호가 일치하지 않는다는 것을 판별
+    await reauthenticateWithCredential(user, credential);
+    if (currentPassword === newPassword) {
+      alert("현재 비밀번호와 새 비밀번호가 같습니다!");
+      return false;
+    }
     await updatePassword(auth.currentUser, newPassword);
     alert("비밀번호가 변경되었습니다.");
-  } catch(error) {
-    console.log(error)
+  } catch (error) {
+    if (error.message.includes("auth/wrong-password")) {
+      alert("현재 비밀번호가 일치하지 않습니다!");
+      return;
+    } else {
+      throw error;
+    }
   }
- 
 }
 
 // sessionStorage에 저장된 user의 닉네임을 가져오기 위한 함수
@@ -396,7 +455,7 @@ const getSessionUser = () => {
 // createUserWithEmailAndPassword 아이디를 생성하는 api 함수
 // updateProfile 해당 유저의 프로필 정보를 업데이트해주는 함수 => 생성된 유저 정보를 반환해줌
 // 여기서 사용된 이유는 현재 유저의 닉네임을 넣어주기 위해서 displayNmae이 설정할 닉네임이 된다.
-const signup = async (nickname, email, phone, password) => {
+const signup = async ({nickname, email, phone, password}) => {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(res.user, {
@@ -413,6 +472,10 @@ const signup = async (nickname, email, phone, password) => {
       fortune: "",
       gameRecord: null,
       introduce: "소개글을 작성하지 않았습니다.",
+      point: 0,
+      commentCount: 0,
+      diaryCount: 0,
+      grade: "일반"
     });
 
     alert("회원가입이 완료되었습니다.");
@@ -477,14 +540,14 @@ async function checkRoom(chatRoomId) {
   const chatRoomRef = doc(db, "chatRoom", chatRoomId);
   const docSnap = await getDoc(chatRoomRef);
   const res = docSnap.data();
-  console.log('a',res.users)
-  if(res.users.length===0){
-    await deleteDoc(doc(db,`chatRoom/${chatRoomId}`));
+  console.log("a", res.users);
+  if (res.users.length === 0) {
+    await deleteDoc(doc(db, `chatRoom/${chatRoomId}`));
   }
 }
 const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
   const chatRoomRef = doc(db, "chatRoom", chatRoomId);
- 
+
   // chatRoomRef의 users 필드 업데이트
   await updateDoc(chatRoomRef, {
     users: arrayUnion(userNickname), // users 배열에 userNickname 추가
@@ -492,31 +555,28 @@ const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
 
   // Firestore 실시간 업데이트를 위한 onSnapshot 등록
   onSnapshot(chatRoomRef, async (docs) => {
-    try{
+    try {
       const data = docs.data();
       renderJoinUser(data);
-
-    } catch(error){
-      console.log(error)
+    } catch (error) {
+      console.log(error);
     }
-    
   });
 
-  
   // 채팅방에서 나갈 때
   window.addEventListener("beforeunload", () => {
     try {
-       updateDoc(chatRoomRef, {
+      updateDoc(chatRoomRef, {
         users: arrayRemove(userNickname), // users 배열에서 userNickname 제거
       });
-       checkRoom(chatRoomId);
+      checkRoom(chatRoomId);
     } catch (error) {
       console.log("Error occurred while updating users:", error);
     }
   });
 };
 
-function fetchChatting (
+function fetchChatting(
   $chattingBox,
   $loadingModal,
   chatRoomId,
@@ -536,10 +596,16 @@ function fetchChatting (
     $loadingModal.classList.remove("active");
     $chattingBox.scrollTop = $chattingBox.scrollHeight;
   });
-};
+}
 
-
-async function createChattingRoom({ id, title, limit, isprivate, password, createdAt }) {
+async function createChattingRoom({
+  id,
+  title,
+  limit,
+  isprivate,
+  password,
+  createdAt,
+}) {
   const chatRoomRef = collection(db, "chatRoom");
   await setDoc(doc(chatRoomRef, id), {
     id,
@@ -553,12 +619,13 @@ async function createChattingRoom({ id, title, limit, isprivate, password, creat
   location.href = `${baseUrl}/src/template/chatting.html?id=${id}`;
 }
 
-async function renderChattingRoom($roomLists, $loadingModal){
+async function renderChattingRoom($roomLists, $loadingModal) {
   const chatRoomRef = collection(db, "chatRoom");
-  const q = query(chatRoomRef,orderBy("createdAt","desc"))
-  $loadingModal.classList.add("active")
-   onSnapshot(q, (snapshot) => {
-    while ($roomLists.firstChild) { // 리스트 초기화
+  const q = query(chatRoomRef, orderBy("createdAt", "desc"));
+  $loadingModal.classList.add("active");
+  onSnapshot(q, (snapshot) => {
+    while ($roomLists.firstChild) {
+      // 리스트 초기화
       $roomLists.removeChild($roomLists.firstChild);
     }
     snapshot.docs.forEach((doc) => {
@@ -569,7 +636,6 @@ async function renderChattingRoom($roomLists, $loadingModal){
 
       const roomLink = document.createElement("a");
       roomLink.href = `${baseUrl}/src/template/chatting.html?id=${doc.id}`;
-    
 
       const roomTitle = document.createElement("h3");
       roomTitle.textContent = item.title;
@@ -583,29 +649,25 @@ async function renderChattingRoom($roomLists, $loadingModal){
       roomLi.appendChild(roomLink);
       $roomLists.appendChild(roomLi);
 
-
-
-      roomLink.addEventListener("click", async (e)=>{
-        if(item.users.length >= item.limit){
+      roomLink.addEventListener("click", async (e) => {
+        if (item.users.length >= item.limit) {
           e.preventDefault();
           alert("입장가능한 인원수가 모두 찼습니다!");
           return;
         }
-        if(item.isprivate){
-          const password = prompt('비밀번호를 입력해주세요.');
-          if(password===item.password){
-            location.href = `${baseUrl}/src/template/chatting.html?id=${doc.id}`
-          }
-          else{
+        if (item.isprivate) {
+          const password = prompt("비밀번호를 입력해주세요.");
+          if (password === item.password) {
+            location.href = `${baseUrl}/src/template/chatting.html?id=${doc.id}`;
+          } else {
             e.preventDefault();
             alert("비밀번호가 일치하지 않습니다.");
             return;
           }
+        } else {
+          location.href = `${baseUrl}/src/template/chatting.html?id=${doc.id}`;
         }
-        else{
-          location.href =`${baseUrl}/src/template/chatting.html?id=${doc.id}`
-        }
-      })
+      });
     });
 
     $loadingModal.classList.remove("active");
@@ -613,7 +675,7 @@ async function renderChattingRoom($roomLists, $loadingModal){
 }
 
 async function addChatting(chatRoomId, newChat) {
-  const chatRef = collection(db, "chat"+chatRoomId);
+  const chatRef = collection(db, "chat" + chatRoomId);
   try {
     // Firestore에 새로운 메시지 추가
     await setDoc(doc(chatRef, newChat.id), {
@@ -629,12 +691,11 @@ async function addChatting(chatRoomId, newChat) {
 }
 
 async function editIntroduce(introduce) {
-  const userRef = doc(db,`user/${userData.nickname}`);
-  await updateDoc(userRef,{ introduce });
+  const userRef = doc(db, `user/${userData.nickname}`);
+  await updateDoc(userRef, { introduce });
 }
 
 const applyProfileImg = async (file) => {
-  const storage = getStorage(app);
   if (file) {
     try {
       const fileName = `${uuidv4()}_${file.name}`;
@@ -645,15 +706,17 @@ const applyProfileImg = async (file) => {
       const uploadfileUrl = await getDownloadURL(res.ref);
       await updateProfileImg(uploadfileUrl);
       const user = await FetchUserData(userData.nickname);
-      if(user.profileImgFileName){
-        await deleteObject(storageRef(storage, `images/profile/${String(user.profileImgFileName)}`));
+      if (user.profileImgFileName) {
+        await deleteObject(
+          storageRef(
+            storage,
+            `images/profile/${String(user.profileImgFileName)}`
+          )
+        );
       }
-      
-      const updateUser = doc(
-        getFirestore(app),
-        `user/${userData.nickname}`
-      );
-      await updateDoc(updateUser, {profileImgFileName: fileName});
+
+      const updateUser = doc(getFirestore(app), `user/${userData.nickname}`);
+      await updateDoc(updateUser, { profileImgFileName: fileName });
       userData.profileImgURL = uploadfileUrl;
       sessionStorage.setItem("userData", JSON.stringify(userData));
       location.reload();
@@ -663,7 +726,6 @@ const applyProfileImg = async (file) => {
     }
   }
 };
-
 
 export {
   FetchDiarys,
@@ -692,6 +754,8 @@ export {
   checkRoom,
   editIntroduce,
   applyProfileImg,
+  deleteEditDiaryImg,
+  fetchAllDiarys,
   setDoc,
   getDoc,
   doc,

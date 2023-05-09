@@ -223,7 +223,7 @@
 }
 /* 비밀번호 변경 모달 창*/
 .password-form {
-  background-color: #fff;
+  background-color: #f2f2f2;
 }
 .password-form .form-header{
   text-align: center;
@@ -248,8 +248,8 @@
 .password-form .form-btns{
   flex-direction: column;
   width: 100%;
-  gap: 5px;
-  padding: 10px 0px;
+  gap: 10px;
+  padding: 10px 0px; 
   justify-content: center;
 }
 .password-form .btn-submit,
@@ -268,6 +268,9 @@
 .password-form .btn-submit{
   background-color: gold;
   color: #fff;
+}
+.password-form .btn-cancle{
+  background-color: #fff;
 }
 
 .links .mypage-link {

@@ -45,11 +45,56 @@
             </a>
           </div>
           <form class="edit-form">
-            <input class="input-title" type="text" placeholder="제목">
-            <textarea class="input-contents" placeholder="내용"></textarea>
+            <label for="input-title" class="a11y-hidden">제목</label>
+            <input id="input-title" type="text" placeholder="제목">
+            <label for="input-title" class="a11y-hidden">내용</label>
+            <textarea id="input-contents" placeholder="내용"></textarea>
+            <h2 class="upload-title">이미지 업로드</h2>
+            <label for="input-upload" class="a11y-hidden"
+            >이미지 업로드 버튼</label
+            >
+            <input type="file" multiple id="input-upload" />
+            <div class="upload-wrapper">
+              <div class="upload-imgBox">
+                <button class="btn-upload" type="button">
+                  <img
+                    class="preview-img"
+                    src="../img/imgUpload.png"
+                    alt="업로드 이미지"
+                  />
+                </button>
+                <button class="btn-reset" type="button">
+                  <span class="a11y-hidden">삭제 버튼</span>
+                </button>
+              </div>
+              <div class="upload-imgBox">
+                <button class="btn-upload" type="button">
+                  <img
+                    class="preview-img"
+                    src="../img/imgUpload.png"
+                    alt="업로드 이미지"
+                  />
+                </button>
+                <button class="btn-reset" type="button">
+                  <span class="a11y-hidden">삭제 버튼</span>
+                </button>
+              </div>
+              <div class="upload-imgBox">
+                <button class="btn-upload" type="button">
+                  <img
+                    class="preview-img"
+                    src="../img/imgUpload.png"
+                    alt="업로드 이미지"
+                  />
+                </button>
+                <button class="btn-reset" type="button">
+                  <span class="a11y-hidden">삭제 버튼</span>
+                </button>
+              </div>
+            </div>
             <div class="edit-btns">
-              <button type="button" class="btn-cancel">취소하기</button>
               <button type="button" class="btn-editCompleted">수정하기</button>
+              <button type="button" class="btn-cancel">취소하기</button>
             </div>
           </form>
           <article class="loading-modal">

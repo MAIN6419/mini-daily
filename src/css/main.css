@@ -204,7 +204,7 @@ caption {
 .links {
   position: absolute;
   top: 20px;
-  right: -86px;
+  right: -102px;
   display: flex;
   flex-direction: column;
   gap: 10px;

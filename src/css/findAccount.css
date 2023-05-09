@@ -38,7 +38,6 @@
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
   background-color: #eee;
-  overflow: hidden;
 }
 
 .findEmail, 
@@ -57,6 +56,12 @@
   border: none;
   background: none;
   cursor: pointer;
+}
+.btn-emailForm{
+  border-top-left-radius: 10px;
+}
+.btn-pwForm {
+  border-top-right-radius: 10px; 
 }
 .btn-emailForm.active,
 .btn-pwForm.active{

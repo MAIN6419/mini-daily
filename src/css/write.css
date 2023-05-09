@@ -1,27 +1,71 @@
-.post-form{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+.section-contents {
+  position: relative;
+  padding: 20px 40px;
 }
-.input-title{
-  width: 700px;
-  padding: 10px;
+#input-title {
+  width: 100%;
+  padding: 10px 15px;
   font-size: 16px;
   box-sizing: border-box;
   border: 2px solid #bdbdbd;
+  margin-bottom: 20px;
 }
-.input-contents{
-  width: 700px;
-  padding: 20px;
-  height: 500px;
+#input-contents {
+  width: 100%;
+  padding: 10px 15px;
+  height: 350px;
   box-sizing: border-box;
   resize: none;
   line-height: 1.5;
-  font-size: 14px;
+  font-size: 16px;
   border: 2px solid #bdbdbd;
+  margin-bottom: 20px;
 }
-.btn-submit{
+#input-upload {
+  display: none;
+}
+.upload-wrapper {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+.upload-imgBox{
+  position: relative;
+}
+.btn-reset{
+  position: absolute;
+  top:0;
+  right: -25px;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  background: url(../img/minus.png) no-repeat center / contain;
+}
+.upload-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.btn-upload {
+  display: inline-block;
+  width: 90px;
+  height: 90px;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  overflow: hidden;
+}
+.btn-upload img {
+  width: 70px;
+  height: 70px;
+}
+
+.btn-submit {
+  display: block;
+  margin: 0 auto;
   background-color: gold;
   border: none;
   border-radius: 5px;
@@ -31,15 +75,13 @@
   transition: all 0.5s;
   cursor: pointer;
 }
-.btn-submit:hover
-{
+.btn-submit:hover {
   box-shadow: 1px 1px 0px 1px #333;
   transform: translateY(5px);
 }
-.links .write-link{
+.links .write-link {
   background-color: #fff;
   font-weight: bold;
   border-left: none;
   z-index: 10;
 }
-

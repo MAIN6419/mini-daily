@@ -36,12 +36,17 @@ const $loadingModal = document.querySelector(".loading-modal");
 
 let tempUrl;
 let uploadFile;
+const host = window.location.host;
+let baseUrl = "";
+if (host.includes("github.io")) {
+  baseUrl = "/mini-diary";
+}
 
 const userInfo = await FetchUserData(userData.nickname);
 $userEmail.textContent = `이메일 : ${userInfo.email} `;
 $userNickname.textContent = `닉네임 : ${userInfo.nickname}`;
 $userGrade.textContent = `등급 : ${userInfo.grade}`;
-$profileImg.setAttribute("src", userData.profileImgURL);
+$profileImg.setAttribute("src", userData.profileImgURL||`${baseUrl}/src/img/profile.png`);
 $diaryCount.textContent = `${userInfo.diaryCount}개`;
 $commentCount.textContent = `${userInfo.commentCount}개`;
 
@@ -49,8 +54,12 @@ const $passwordModal = $sectionContents.querySelector(".password-modal");
 const $changePasswordBtn = $sectionContents.querySelector(
   ".btn-changePassword"
 );
+const $inputCurrentPw = $passwordModal.querySelector("#input-currentPw");
+const $inputNewPw = $passwordModal.querySelector("#input-newPw");
+const $inputChkNewPw = $passwordModal.querySelector("#input-chkNewPw");
 const $passwordSubmitBtn = $passwordModal.querySelector(".btn-submit");
 const $passwordCancleBtn = $passwordModal.querySelector(".btn-cancle");
+const passwordReg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
 
 // 프로필 이미지 변경 모달창 관련
 $changeProfileImgBtn.addEventListener("click", () => {
@@ -156,5 +165,41 @@ $changePasswordBtn.addEventListener("click", () => {
 $passwordModal.addEventListener("click", (e) => {
   if (e.target === $passwordModal || e.target === $passwordCancleBtn) {
     $passwordModal.classList.remove("active");
+    $inputCurrentPw.value = '';
+    $inputNewPw.value = '';
+    $inputChkNewPw.value = '';
+  }
+});
+
+$passwordSubmitBtn.addEventListener("click", async () => {
+  if (!$inputCurrentPw.value) {
+    alert("현재 비밀번호를 입력해주세요!");
+    return;
+  }
+  if (!$inputNewPw.value) {
+    alert("새 비밀번호를 입력해주세요!");
+    return;
+  }
+  if (!$inputChkNewPw.value) {
+    alert("새 비밀번호 확인을 입력해주세요!");
+    return;
+  }
+  if (!passwordReg.test($inputCurrentPw.value)&&!passwordReg.test($inputNewPw.value)) {
+    alert("비밀번호는 8~16자 영문, 숫자, 특수문자를 사용하세요.");
+    return;
+  }
+  if ($inputNewPw.value!==$inputChkNewPw.value) {
+    alert("비밀번호가 일치하지 않습니다!");
+    return;
+  }
+  // 비밀번호 변경로직
+  $loadingModal.classList.add("active");
+  const res =  await changeUserPassword($inputCurrentPw.value, $inputNewPw.value)
+  $loadingModal.classList.remove("active");
+  $passwordModal.classList.remove("active");
+  if(!res){
+    $inputCurrentPw.value= '';
+    $inputNewPw.value = '';
+    $inputChkNewPw.value = '';
   }
 });
