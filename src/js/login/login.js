@@ -1,4 +1,7 @@
 import { login } from "../commons/firebase.js";
+if (window.navigator.msSaveOrOpenBlob) {
+  alert("이 기능은 인터넷 익스플로러에서 지원되지 않습니다. 다른 브라우저를 사용해주세요.");
+}
 const $loginForm = document.querySelector(".login-form");
 const $inputEmail = $loginForm.querySelector("#input-email");
 const $inputPw = $loginForm.querySelector("#input-password");

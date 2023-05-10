@@ -157,6 +157,7 @@ async function loadTemplate() {
   const links = document.querySelector(".links");
   links.innerHTML = `
     <a class="home-link"href="${baseUrl}/src/template/home.html">홈</a>
+    <a class="allDiary-link"href="${baseUrl}/src/template/allDiary.html">전체글</a>
     <a class="diary-link" href="${baseUrl}/src/template/diaryList.html">마이다이어리</a>
     <a class="write-link" href="${baseUrl}/src/template/write.html">글작성</a>
     <a class="chattingRoom-link" href="${baseUrl}/src/template/chattingRoom.html">채팅방</a>

@@ -37,7 +37,7 @@ $submitBtn.addEventListener('click', async ()=>{
       imgURL: fileInfo.url || [],
       imgFileName: fileInfo.fileName || [],
       createdAt : new Date().getTime(),
-      like: 0,
+      empathy: 0,
       accuse: 0
     }
 

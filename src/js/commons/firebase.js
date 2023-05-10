@@ -1,4 +1,3 @@
-import KEY from "../../config/firebase.json" assert { type: "json" };
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-analytics.js";
@@ -64,7 +63,7 @@ let lastpage;
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: KEY.firebaseKey,
+  apiKey: "AIzaSyDnaqMLR9z8naAC0J06ptfd6HQb1jSnSbY",
   authDomain: "mini-diary-65ff3.firebaseapp.com",
   projectId: "mini-diary-65ff3",
   storageBucket: "mini-diary-65ff3.appspot.com",
@@ -101,6 +100,18 @@ async function fetchAllDiarys() {
   try {
     const diaryList = collection(db, "diaryList");
     const res = await getDocs(diaryList);
+    const datas = res.docs.map((el) => el.data());
+    return datas;
+    
+  } catch (error) {
+    throw error;
+  }
+}
+async function fetchBestDiarys(){
+  try {
+    const diaryList = collection(db, "diaryList");
+    const q = query(diaryList, orderBy("empathy","desc"), limit(3));
+    const res = await getDocs(q);
     const datas = res.docs.map((el) => el.data());
     return datas;
     
@@ -146,6 +157,7 @@ async function deleteDiary(id) {
     await deleteDoc(doc(db, `diaryList/${id}`));
     await updateDoc(doc(db, "user", userData.nickname), {
       diaryCount: increment(-1),
+      empathyList: arrayRemove(id),
     });
   } catch (error) {
     throw error;
@@ -209,13 +221,28 @@ async function deleteEditDiaryImg(filename){
   }
 }
 
-const auth = getAuth();
+async function updateEmpathy(id, count){
+  const diary = doc(db, `diaryList/${id}`);
+  const user = doc(db, `user/${currentUser}`);
+  await updateDoc(diary, {empathy : increment(count)});
+  if(count > 0){
+    await updateDoc(user, {empathyList : arrayUnion(id)});
+  } else {
+    await updateDoc(user, {empathyList : arrayRemove(id)});
+  }
 
+}
+
+const auth = getAuth();
+let currentUser;
 onAuthStateChanged(auth, async (user) => {
   const userDocRef = doc(db, "user", "test");
   if (!user) {
     console.log("유저상태 변경");
     await updateDoc(userDocRef, { islogin: false });
+  }
+  else{
+    currentUser = user.displayName
   }
 });
 const FetchUserData = async (nickname) => {
@@ -540,9 +567,10 @@ async function checkRoom(chatRoomId) {
   const chatRoomRef = doc(db, "chatRoom", chatRoomId);
   const docSnap = await getDoc(chatRoomRef);
   const res = docSnap.data();
-  console.log("a", res.users);
   if (res.users.length === 0) {
     await deleteDoc(doc(db, `chatRoom/${chatRoomId}`));
+    alert("채팅방이 닫혔습니다!");
+    location.replace = 'chatting.html'
   }
 }
 const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
@@ -727,6 +755,7 @@ const applyProfileImg = async (file) => {
   }
 };
 
+
 export {
   FetchDiarys,
   FetchDiary,
@@ -745,6 +774,7 @@ export {
   findEmail,
   editDiary,
   deleteDiary,
+  updateEmpathy,
   fetchChatting,
   addChatting,
   joinChatRoom,
@@ -756,6 +786,7 @@ export {
   applyProfileImg,
   deleteEditDiaryImg,
   fetchAllDiarys,
+  fetchBestDiarys,
   setDoc,
   getDoc,
   doc,
@@ -765,4 +796,5 @@ export {
   query,
   orderBy,
   onSnapshot,
+  currentUser,
 };

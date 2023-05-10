@@ -29,8 +29,17 @@
           <div class="diary-wrapper">
             <h3 class="diary-title"></h3>
             <div class="diary-info">
-              <time class="diary-createdAt" datetime="2023"></time>
+              <div class="auth-info">
+                <img class="diary-profileImg"src="" alt="유저 프로필 이미지">
+                <span class="diary-auth"></span>    
+                <time class="diary-createdAt" datetime="2023"></time>
+              </div>
+
               <p class="diary-contents"></p>
+              <div class="empathy-box">
+                <button class="btn-empathy">❤</button>
+                <span class="empathy-count">공감 : 0</span>
+              </div>
             </div>
             <div class="diary-btns">
               <button class="btn-edit" type="button">
@@ -39,10 +48,11 @@
               <button class="btn-del" type="button">
                 <span class="a11y-hidden">삭제</span>
               </button>
+              <button class="btn-accuse">신고</button>
             </div>
-            <a class="diaryList-link" href="diaryList.html">
-              <span class="a11y-hidden">다이어리 목록으로 돌아가기 링크</span>
-            </a>
+            <button class="btn-back" href="allDiary.html">
+              <span class="a11y-hidden">이전 페이지로 돌아가기 버튼</span>
+            </button>
           </div>
           <form class="edit-form">
             <label for="input-title" class="a11y-hidden">제목</label>

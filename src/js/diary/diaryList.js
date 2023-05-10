@@ -100,7 +100,7 @@ function renderDiaryList(data) {
   if (data.length === 0) {
     $diaryList.innerHTML += `
     <li class="none-item">
-      현재 게시글이 없어요.
+      다이어리가 없어요.
     </li>
     `;
     return;

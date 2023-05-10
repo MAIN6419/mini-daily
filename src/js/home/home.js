@@ -2,18 +2,18 @@
 import _ from 'https://cdn.skypack.dev/lodash-es';
 import { getCreatedAt } from "../commons/libray.js";
 import { userData } from "../commons/commons.js";
-import { FetchDiary, FetchDiarys, FetchUserData, fetchAllDiarys, setFortune } from "../commons/firebase.js";
+import { FetchDiary, FetchDiarys, FetchUserData, fetchBestDiarys, setFortune } from "../commons/firebase.js";
 
 const $sectionContents = document.querySelector(".section-contents");
 const $recentDiaryLists = $sectionContents.querySelector(".recent-diaryLists");
 const $fortuneContents = $sectionContents.querySelector(".fortune-cotents");
 const $diaryLists = $sectionContents.querySelector(".diary-lists")
-const data = await fetchAllDiarys() || [];
+const data = await fetchBestDiarys() || [];
 const fortune = await fetchFortuneData();
 
 rederRecentDiary();
 renderFortune();
-renderAllDiary();
+renderBestDiary();
 
 function rederRecentDiary() {
   $recentDiaryLists.innerHTML = "";
@@ -72,9 +72,9 @@ async function fetchFortuneData() {
   return fortune;
 }
 
-async function renderAllDiary() {
+async function renderBestDiary() {
   const frag = new DocumentFragment();
-  const data = await fetchAllDiarys();
+  const data = await fetchBestDiarys();
   for(const diary of data) {
     const listItem = document.createElement('li');
     listItem.classList.add('diary');
@@ -125,6 +125,11 @@ async function renderAllDiary() {
 
     contentsDiv.appendChild(bottomDiv);
     anchor.appendChild(contentsDiv);
+
+    const empathy = document.createElement("span");
+    empathy.setAttribute("class", "diary-empathy");
+    empathy.textContent = `❤ ${diary.empathy}`
+    contentsDiv.appendChild(empathy);
 
     $diaryLists.appendChild(listItem);
   }
