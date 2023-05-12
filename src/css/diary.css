@@ -3,8 +3,8 @@
   position: relative;
 }
 .diary-wrapper{
-  width: 80%;
-  margin: 0 auto;
+  width: 90%;
+  margin: 0 20px 20px auto;
   position: relative;
 }
 .diary-wrapper.inactive{
@@ -40,6 +40,9 @@
   font-size: 12px;
   color: #bdbdbd;
 }
+.diary-contents{
+  min-height: 460px;
+}
 .diary-img{
   display: block;
   margin: 0 auto;
@@ -47,9 +50,8 @@
   max-width: 100%;
   min-height: 380px;
   object-fit: cover;
-  
 }
-.diary-contents{
+.diary-text{
   font-size: 14px;
   white-space: pre-wrap;
   line-height: 1.2;
@@ -85,7 +87,9 @@
   top: 35px;
   right: 20px;
 }
-.btn-edit{
+.btn-edit, 
+.btn-del,
+.btn-accuse{
   border: none;
   width: 20px;
   height: 20px;
@@ -98,18 +102,15 @@
   width: 22px;
   height: 22px;
 }
-.btn-del{
-  border: none;
-  width: 20px;
-  height: 20px;
-  background: none;
-  cursor: pointer;
-  position: relative;
-}
+
 .btn-del::after{
   background: url(../img/sprite.png) no-repeat -542px -352px / 620px 416px;
   width: 20px;
   height: 20px;
+}
+.btn-accuse{
+  margin-left: 10px;
+  background: url(../img/accuse-icon.png) no-repeat center / contain;
 }
 .empathy-box{
   border-radius: 5px;
@@ -130,7 +131,8 @@
   margin: 0 auto;
   cursor: pointer;
   margin-bottom: 5px;
-  background: none;
+  background: url(../img/unheart.png) no-repeat center / contain;
+  border: none;
 }
 .empathy-count{
   display: block;
@@ -227,6 +229,43 @@
   box-shadow: 1px 1px 0px 1px #111;
   transform: translateY(5px);
 }
+.comment-title{
+  margin-left: 20px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+.comment-icon{
+  width: 24px;
+  vertical-align: middle;
+}
+.comment-form{
+  width: 90%;
+  margin: 0 auto;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+#comment-input{
+  box-sizing: border-box;
+  padding: 15px;
+  resize: none;
+  width: 100%;
+  max-width: 560px;
+  height: 50px;
+  vertical-align: middle;
+}
+.btn-submit{
+  padding: 18px;
+  box-shadow: inset 0px 0px 8px 1px rgba(0, 0, 0, 0.1);
+  background-color: #eee;
+  border: none;
+  border-radius: 5px;
+}
+.comment-couter{
+  display: block;
+}
+
 .links .allDiary-link.active{
   background-color: #fff;
   font-weight: bold;

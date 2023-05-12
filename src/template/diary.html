@@ -34,13 +34,16 @@
                 <span class="diary-auth"></span>    
                 <time class="diary-createdAt" datetime="2023"></time>
               </div>
-
-              <p class="diary-contents"></p>
+              <div class="diary-contents">
+                <p class="diary-text"></p>
+              </div>
+              
               <div class="empathy-box">
-                <button class="btn-empathy">❤</button>
-                <span class="empathy-count">공감 : 0</span>
+                <button class="btn-empathy"><span class="a11y-hidden">공감하트</span></button>
+                <span class="empathy-count">0</span>
               </div>
             </div>
+        
             <div class="diary-btns">
               <button class="btn-edit" type="button">
                 <span class="a11y-hidden">수정</span>
@@ -48,7 +51,6 @@
               <button class="btn-del" type="button">
                 <span class="a11y-hidden">삭제</span>
               </button>
-              <button class="btn-accuse">신고</button>
             </div>
             <button class="btn-back" href="allDiary.html">
               <span class="a11y-hidden">이전 페이지로 돌아가기 버튼</span>
@@ -106,6 +108,15 @@
               <button type="button" class="btn-editCompleted">수정하기</button>
               <button type="button" class="btn-cancel">취소하기</button>
             </div>
+          </form>
+          <h2 class="comment-title">
+            <img class="comment-icon" src="../img/comment-icon.png" alt="">
+            댓글
+          </h2>
+          <form class="comment-form">
+            <label for="comment-input">내용</label>
+            <textarea id="comment-input"></textarea>
+            <button class="btn-submit">댓글달기</button>
           </form>
           <article class="loading-modal">
             <h2 class="a11y-hidden">로딩화면</h2>

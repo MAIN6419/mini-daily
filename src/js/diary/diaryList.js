@@ -2,7 +2,7 @@
 import _ from 'https://cdn.skypack.dev/lodash-es';
 import { getCreatedAt } from "../commons/libray.js";
 import { userData } from "../commons/commons.js";
-import { FetchDiary, db } from "../commons/firebase.js";
+import { FetchDiary, currentUser, db } from "../commons/firebase.js";
 import {
   collection,
   getDocs,
@@ -10,8 +10,6 @@ import {
   orderBy,
   where,
   startAfter,
-  startAt,
-  endAt,
   limit,
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
 const $sectionContents = document.querySelector(".section-contents");
@@ -35,11 +33,11 @@ renderDiaryList(data);
 
 async function FetchDiarys() {
   if (keyword.trim()) {
-    console.log(keyword)
     const dirayList = collection(db, "diaryList")
     const q = query(
       dirayList,
       orderBy("title"),
+      where("auth","==",currentUser),
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
       startAfter(lastpage),

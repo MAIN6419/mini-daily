@@ -126,10 +126,18 @@ async function renderBestDiary() {
     contentsDiv.appendChild(bottomDiv);
     anchor.appendChild(contentsDiv);
 
+    
+
     const empathy = document.createElement("span");
     empathy.setAttribute("class", "diary-empathy");
-    empathy.textContent = `❤ ${diary.empathy}`
+    empathy.textContent = `${diary.empathy}`
     contentsDiv.appendChild(empathy);
+
+    const empathyImg = document.createElement("img");
+    empathyImg.setAttribute("class", "empathy-img");
+    empathyImg.setAttribute("src", "../img/heart.png");
+    empathyImg.setAttribute("alt", "공감 아이콘");
+    empathy.insertAdjacentElement("afterbegin",empathyImg);
 
     $diaryLists.appendChild(listItem);
   }

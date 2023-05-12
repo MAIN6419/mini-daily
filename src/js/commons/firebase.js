@@ -5,10 +5,7 @@ import {
   arrayRemove,
   arrayUnion,
   getFirestore,
-  initializeFirestore,
-  CACHE_SIZE_UNLIMITED,
   collection,
-  addDoc,
   getDocs,
   query,
   orderBy,
@@ -17,8 +14,6 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
-  startAfter,
-  endAt,
   limit,
   getDoc,
   onSnapshot,
@@ -44,11 +39,8 @@ import {
   EmailAuthProvider,
   reauthenticateWithCredential,
   updatePassword,
-  signInWithPhoneNumber,
-  RecaptchaVerifier,
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
-import { getCreatedAt } from "./libray.js";
 
 const userData = JSON.parse(sessionStorage.getItem("userData"));
 let baseUrl = "";
@@ -102,19 +94,17 @@ async function fetchAllDiarys() {
     const res = await getDocs(diaryList);
     const datas = res.docs.map((el) => el.data());
     return datas;
-    
   } catch (error) {
     throw error;
   }
 }
-async function fetchBestDiarys(){
+async function fetchBestDiarys() {
   try {
     const diaryList = collection(db, "diaryList");
-    const q = query(diaryList, orderBy("empathy","desc"), limit(3));
+    const q = query(diaryList, orderBy("empathy", "desc"), limit(3));
     const res = await getDocs(q);
     const datas = res.docs.map((el) => el.data());
     return datas;
-    
   } catch (error) {
     throw error;
   }
@@ -137,7 +127,7 @@ async function editDiary(id, { title, contents, imgURL, imgFileName }) {
   try {
     const updateDiary = doc(db, `diaryList/${id}`);
     await updateDoc(updateDiary, { title, contents, imgURL, imgFileName });
-    alert("수정이 완료되었습니다.")
+    alert("수정이 완료되었습니다.");
   } catch (error) {
     throw error;
   }
@@ -147,17 +137,25 @@ async function deleteDiary(id) {
   try {
     const diary = await FetchDiary(id);
     if (diary.imgFileName.length) {
-      for(let i=0; i<diary.imgFileName.length; i++){
+      for (let i = 0; i < diary.imgFileName.length; i++) {
         await deleteObject(
           storageRef(storage, `images/diary/${String(diary.imgFileName[i])}`)
         );
       }
-
     }
+    // 삭제되는 게시글의 공감 버튼을 누른 유저의 공감목록에서 삭제
+    const userCollection = collection(db, "user");
+    const querySnapshot = await getDocs(userCollection);
+    // 비동기 처리를 위해 for of문을 사용
+    for(const docs of querySnapshot.docs) {
+      await updateDoc(doc(db, "user", docs.id), {
+        empathyList: arrayRemove(id),
+      });
+    }
+
     await deleteDoc(doc(db, `diaryList/${id}`));
     await updateDoc(doc(db, "user", userData.nickname), {
       diaryCount: increment(-1),
-      empathyList: arrayRemove(id),
     });
   } catch (error) {
     throw error;
@@ -209,28 +207,23 @@ async function uploadFile(files) {
   return fileInfo;
 }
 
-async function deleteEditDiaryImg(filename){
+async function deleteEditDiaryImg(filename) {
   // 빈배열이 올 수 있기 때문에 filename이 있는 경우에만 이미지 삭제 처리
-  if(filename){
-    await deleteObject(
-      storageRef(
-        storage,
-        `images/diary/${String(filename)}`
-      )
-    );
+  if (filename) {
+    await deleteObject(storageRef(storage, `images/diary/${String(filename)}`));
   }
 }
 
-async function updateEmpathy(id, count){
+async function updateEmpathy(id, count) {
   const diary = doc(db, `diaryList/${id}`);
+  if (!diary) return;
   const user = doc(db, `user/${currentUser}`);
-  await updateDoc(diary, {empathy : increment(count)});
-  if(count > 0){
-    await updateDoc(user, {empathyList : arrayUnion(id)});
+  await updateDoc(diary, { empathy: increment(count) });
+  if (count > 0) {
+    await updateDoc(user, { empathyList: arrayUnion(id) });
   } else {
-    await updateDoc(user, {empathyList : arrayRemove(id)});
+    await updateDoc(user, { empathyList: arrayRemove(id) });
   }
-
 }
 
 const auth = getAuth();
@@ -239,10 +232,9 @@ onAuthStateChanged(auth, async (user) => {
   const userDocRef = doc(db, "user", "test");
   if (!user) {
     console.log("유저상태 변경");
-    await updateDoc(userDocRef, { islogin: false });
-  }
-  else{
-    currentUser = user.displayName
+    // await updateDoc(userDocRef, { islogin: false });
+  } else {
+    currentUser = user.displayName;
   }
 });
 const FetchUserData = async (nickname) => {
@@ -482,7 +474,7 @@ const getSessionUser = () => {
 // createUserWithEmailAndPassword 아이디를 생성하는 api 함수
 // updateProfile 해당 유저의 프로필 정보를 업데이트해주는 함수 => 생성된 유저 정보를 반환해줌
 // 여기서 사용된 이유는 현재 유저의 닉네임을 넣어주기 위해서 displayNmae이 설정할 닉네임이 된다.
-const signup = async ({nickname, email, phone, password}) => {
+const signup = async ({ nickname, email, phone, password }) => {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(res.user, {
@@ -502,7 +494,7 @@ const signup = async ({nickname, email, phone, password}) => {
       point: 0,
       commentCount: 0,
       diaryCount: 0,
-      grade: "일반"
+      grade: "일반",
     });
 
     alert("회원가입이 완료되었습니다.");
@@ -570,7 +562,7 @@ async function checkRoom(chatRoomId) {
   if (res.users.length === 0) {
     await deleteDoc(doc(db, `chatRoom/${chatRoomId}`));
     alert("채팅방이 닫혔습니다!");
-    location.replace = 'chatting.html'
+    location.replace = "chatting.html";
   }
 }
 const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
@@ -754,7 +746,6 @@ const applyProfileImg = async (file) => {
     }
   }
 };
-
 
 export {
   FetchDiarys,

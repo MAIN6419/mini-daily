@@ -25,9 +25,23 @@
           <!-- section-profile -->
         </section>
         <section class="section-contents">
-          <h2 class="title">전체 다이어리</h2>
+          <div class="title-box">
+            <h2 class="title">전체 다이어리</h2>
+            <article class="search-bar">
+              <h2 class="a11y-hidden">검색창</h2>
+                <label for="input-search" class="a11y-hidden">다이어리 제목 검색창</label>
+                <input type="text" id="input-search" class="input-search" placeholder="제목 검색">
+            </article>
+          </div>
+  
+          
           <ul class="allDiary-lists">
           </ul>
+          <article class="loading-modal">
+            <h2 class="a11y-hidden">로딩화면</h2>
+            <img src="../img/loading.gif" alt="로딩중 이미지">
+            <span>Loading...</span>
+          </article>
         </section>
         <div class="links">
           <!-- links -->
