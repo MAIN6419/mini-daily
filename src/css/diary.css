@@ -1,16 +1,16 @@
-.section-contents{
+.section-contents {
   overflow-y: scroll;
   position: relative;
 }
-.diary-wrapper{
+.diary-wrapper {
   width: 90%;
   margin: 0 20px 20px auto;
   position: relative;
 }
-.diary-wrapper.inactive{
+.diary-wrapper.inactive {
   display: none;
 }
-.diary-title{
+.diary-title {
   font-size: 14px;
   background-color: #eee;
   border-top: 1px solid black;
@@ -18,32 +18,33 @@
   padding: 8px 20px;
   min-height: 14px;
 }
-.auth-info{
+.auth-info {
   display: none;
 }
-.auth-info.active{
+.auth-info.active {
   display: block;
 }
-.diary-profileImg{
+.diary-profileImg {
   width: 20px;
   height: 20px;
   vertical-align: middle;
   border-radius: 50%;
 }
-.diary-auth{
+.diary-auth {
   font-size: 14px;
 }
-.diary-info{
+.diary-info {
   padding: 5px 20px 20px 20px;
 }
-.diary-createdAt{
+.diary-createdAt {
   font-size: 12px;
   color: #bdbdbd;
 }
-.diary-contents{
+.diary-contents {
   min-height: 460px;
+  margin-bottom: 30px;
 }
-.diary-img{
+.diary-img {
   display: block;
   margin: 0 auto;
   margin-top: 20px;
@@ -51,13 +52,13 @@
   min-height: 380px;
   object-fit: cover;
 }
-.diary-text{
-  font-size: 14px;
+.diary-text {
+  font-size: 16px;
   white-space: pre-wrap;
-  line-height: 1.2;
+  line-height: 1.5;
   margin: 20px 0;
 }
-.btn-back{
+.btn-back {
   position: absolute;
   top: 0px;
   left: -45px;
@@ -69,50 +70,50 @@
   cursor: pointer;
 }
 .btn-back::after,
-.btn-edit::after,
-.btn-del::after{
+.diary-btns .btn-edit::after,
+.diary-btns .btn-del::after {
   content: "";
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.btn-back::after{
+.btn-back::after {
   background: url(../img/sprite.png) no-repeat -477px -304px / 620px 416px;
   width: 8px;
   height: 15px;
 }
-.diary-btns{
+.diary-btns {
   position: absolute;
   top: 35px;
   right: 20px;
 }
-.btn-edit, 
-.btn-del,
-.btn-accuse{
+.diary-btns .btn-edit,
+.diary-btns .btn-del,
+.btn-accuse {
   border: none;
   width: 20px;
   height: 20px;
   cursor: pointer;
-  background:none;
+  background: none;
   position: relative;
 }
-.btn-edit::after{
+.btn-edit::after {
   background: url(../img/sprite.png) no-repeat -475px -354px / 620px 416px;
   width: 22px;
   height: 22px;
 }
 
-.btn-del::after{
+.btn-del::after {
   background: url(../img/sprite.png) no-repeat -542px -352px / 620px 416px;
   width: 20px;
   height: 20px;
 }
-.btn-accuse{
+.btn-accuse {
   margin-left: 10px;
   background: url(../img/accuse-icon.png) no-repeat center / contain;
 }
-.empathy-box{
+.empathy-box {
   border-radius: 5px;
   width: 80px;
   margin: 0 auto;
@@ -120,10 +121,10 @@
   background-color: #f19393;
   display: none;
 }
-.empathy-box.active{
+.empathy-box.active {
   display: block;
 }
-.btn-empathy{
+.btn-empathy {
   width: 24px;
   height: 24px;
   border-radius: 5px;
@@ -134,18 +135,19 @@
   background: url(../img/unheart.png) no-repeat center / contain;
   border: none;
 }
-.empathy-count{
+.empathy-count {
   display: block;
   text-align: center;
+  font-size: 14px;
 }
 /* edit-form */
-.edit-form{
+.edit-form {
   display: none;
   padding: 0 20px;
   flex-direction: column;
   align-items: center;
 }
-.edit-form.active{
+.edit-form.active {
   display: flex;
 }
 #input-title {
@@ -176,12 +178,12 @@
   gap: 40px;
   margin-bottom: 30px;
 }
-.upload-imgBox{
+.upload-imgBox {
   position: relative;
 }
-.btn-reset{
+.btn-reset {
   position: absolute;
-  top:0;
+  top: 0;
   right: -25px;
   width: 20px;
   height: 20px;
@@ -211,34 +213,34 @@
   height: 70px;
 }
 .btn-editCompleted,
-.btn-cancel{
+.diary-form .btn-cancel {
   padding: 10px 30px;
   font-size: 20px;
   border: none;
   border-radius: 5px;
   box-shadow: 3px 3px 0px 1px #555;
   cursor: pointer;
-  transition: all .5s;
+  transition: all 0.5s;
 }
-.btn-editCompleted{
+.btn-editCompleted {
   background-color: gold;
   margin-right: 20px;
 }
 .btn-editCompleted:hover,
-.btn-cancel:hover{
+.diary-form .btn-cancel:hover {
   box-shadow: 1px 1px 0px 1px #111;
   transform: translateY(5px);
 }
-.comment-title{
+.comment-title {
   margin-left: 20px;
   margin-bottom: 10px;
   font-size: 16px;
 }
-.comment-icon{
+.comment-icon {
   width: 24px;
   vertical-align: middle;
 }
-.comment-form{
+.comment-form {
   width: 90%;
   margin: 0 auto;
   border-top: 1px solid black;
@@ -246,37 +248,132 @@
   padding: 20px;
   background-color: #f9f9f9;
 }
-#comment-input{
+#input-comment {
   box-sizing: border-box;
-  padding: 15px;
+  padding: 5px 10px;
   resize: none;
   width: 100%;
   max-width: 560px;
   height: 50px;
   vertical-align: middle;
 }
-.btn-submit{
+.btn-submit {
   padding: 18px;
   box-shadow: inset 0px 0px 8px 1px rgba(0, 0, 0, 0.1);
   background-color: #eee;
   border: none;
   border-radius: 5px;
 }
-.comment-couter{
+.comment-lists {
+  padding: 20px;
+}
+.comment-item {
+  width: 100%;
+  margin: 0 auto;
+  background-color: #fff;
+  border-bottom: 1px solid #bdbdbd;
+  padding-bottom: 20px;
+  position: relative;
+  margin-bottom: 15px;
+}
+.auth-profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.comment-profileImg {
+  display: inline-block;
+  max-width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #bdbdbd;
+  margin-right: 10px;
+}
+.comment-auth {
+  font-size: 16px;
+  font-weight: bold;
+}
+.comment-contents{
+  display: none;
+}
+.comment-contents.active{
   display: block;
 }
-
-.links .allDiary-link.active{
+.comment-text {
+  padding: 0 10px;
+  box-sizing: border-box;
+  font-size: 14px;
+  margin-bottom: 5px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.comment-createdAt {
+  display: inline-block;
+  font-size: 12px;
+  color: #bdbdbd;
+  margin: 0 0 5px 10px;
+}
+.comment-btns {
+  display: flex;
+  gap:5px;
+  margin-left: 10px;
+}
+.comment-btns button {
+  border: none;
+  background: none;
+  border-radius: 3px;
+  font-size: 11px;
+  cursor: pointer;
+  color: #555;
+}
+.comment-btns .btn-edit::after,
+.comment-btns .btn-edit::before {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 10px;
+  vertical-align: middle;
+  background-color: #6f6f6f;
+}
+.comment-btns .btn-edit::before{
+  margin-right: 5px;
+}
+.comment-btns .btn-edit::after {
+  margin-left: 5px;
+}
+.editComment-form{
+  display: none;
+  gap: 5px;
+}
+.editComment-form.active{
+  display: flex;
+}
+#input-editComment{
+  width: 75%;
+  height: 50px;
+  resize: none;
+  padding: 5px 10px;
+  box-sizing: border-box;
+}
+.editComment-form button{
+  padding: 8px 15px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.editComment-form .btn-edit{
+  background-color: gold;
+}
+.links .allDiary-link.active {
   background-color: #fff;
   font-weight: bold;
   border-left: none;
   z-index: 10;
 }
-.links .diary-link.active{
+.links .diary-link.active {
   background-color: #fff;
   font-weight: bold;
   border-left: none;
   z-index: 10;
 }
-
-

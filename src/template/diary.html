@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="ko-KR">
   <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="미니 다이어리">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://main6419.github.io/mini-diary/">
-    <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/free-board-dd96c.appspot.com/o/images%2Fog.png?alt=media&token=59d9191f-6cd6-4818-b1ee-cc450c0c968e">
-    <meta name="description" content="미니 다이어리 사이트">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="미니 다이어리" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://main6419.github.io/mini-diary/" />
+    <meta
+      property="og:image"
+      content="https://firebasestorage.googleapis.com/v0/b/free-board-dd96c.appspot.com/o/images%2Fog.png?alt=media&token=59d9191f-6cd6-4818-b1ee-cc450c0c968e"
+    />
+    <meta name="description" content="미니 다이어리 사이트" />
     <title>Mini Diary</title>
-    <link rel="icon" type="image/png" sizes="48x48" href="../img/favicon.png">
-    <link rel="stylesheet" href="../css/commons.css">
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/diary.css">
+    <link rel="icon" type="image/png" sizes="48x48" href="../img/favicon.png" />
+    <link rel="stylesheet" href="../css/commons.css" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/diary.css" />
     <script src="../js/commons/commons.js" type="module"></script>
   </head>
   <body>
@@ -30,20 +33,22 @@
             <h3 class="diary-title"></h3>
             <div class="diary-info">
               <div class="auth-info">
-                <img class="diary-profileImg"src="" alt="유저 프로필 이미지">
-                <span class="diary-auth"></span>    
+                <img class="diary-profileImg" src="" alt="유저 프로필 이미지" />
+                <span class="diary-auth"></span>
                 <time class="diary-createdAt" datetime="2023"></time>
               </div>
               <div class="diary-contents">
                 <p class="diary-text"></p>
               </div>
-              
+
               <div class="empathy-box">
-                <button class="btn-empathy"><span class="a11y-hidden">공감하트</span></button>
+                <button class="btn-empathy">
+                  <span class="a11y-hidden">공감하트</span>
+                </button>
                 <span class="empathy-count">0</span>
               </div>
             </div>
-        
+
             <div class="diary-btns">
               <button class="btn-edit" type="button">
                 <span class="a11y-hidden">수정</span>
@@ -52,18 +57,18 @@
                 <span class="a11y-hidden">삭제</span>
               </button>
             </div>
-            <button class="btn-back" href="allDiary.html">
+            <button class="btn-back">
               <span class="a11y-hidden">이전 페이지로 돌아가기 버튼</span>
             </button>
           </div>
           <form class="edit-form">
             <label for="input-title" class="a11y-hidden">제목</label>
-            <input id="input-title" type="text" placeholder="제목">
+            <input id="input-title" type="text" placeholder="제목" />
             <label for="input-title" class="a11y-hidden">내용</label>
             <textarea id="input-contents" placeholder="내용"></textarea>
             <h2 class="upload-title">이미지 업로드</h2>
             <label for="input-upload" class="a11y-hidden"
-            >이미지 업로드 버튼</label
+              >이미지 업로드 버튼</label
             >
             <input type="file" multiple id="input-upload" />
             <div class="upload-wrapper">
@@ -110,17 +115,19 @@
             </div>
           </form>
           <h2 class="comment-title">
-            <img class="comment-icon" src="../img/comment-icon.png" alt="">
+            <img class="comment-icon" src="../img/comment-icon.png" alt="" />
             댓글
           </h2>
           <form class="comment-form">
-            <label for="comment-input">내용</label>
-            <textarea id="comment-input"></textarea>
+            <label for="input-comment">내용</label>
+            <textarea id="input-comment"></textarea>
             <button class="btn-submit">댓글달기</button>
           </form>
+          <ul class="comment-lists">
+          </ul>
           <article class="loading-modal">
             <h2 class="a11y-hidden">로딩화면</h2>
-            <img src="../img/loading.gif" alt="로딩중 이미지">
+            <img src="../img/loading.gif" alt="로딩중 이미지" />
             <span>Loading...</span>
           </article>
         </section>

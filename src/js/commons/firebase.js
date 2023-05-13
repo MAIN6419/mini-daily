@@ -147,7 +147,7 @@ async function deleteDiary(id) {
     const userCollection = collection(db, "user");
     const querySnapshot = await getDocs(userCollection);
     // 비동기 처리를 위해 for of문을 사용
-    for(const docs of querySnapshot.docs) {
+    for (const docs of querySnapshot.docs) {
       await updateDoc(doc(db, "user", docs.id), {
         empathyList: arrayRemove(id),
       });
@@ -162,6 +162,56 @@ async function deleteDiary(id) {
   }
 }
 
+async function writeComment(commentData) {
+  try {
+    const commentRef = collection(db, "comment");
+    await setDoc(doc(commentRef, commentData.commentId), {
+      ...commentData,
+    });
+
+    // // 데이터가 추가될 때마다 실시간으로 업데이트
+    // const queryRef = query(commentRef, where("diaryId", "==", commentData.diaryId));
+    // onSnapshot(queryRef, (snapshot) => {
+    //   const updatedData = snapshot.docs.map((doc) => doc.data());
+
+    // });
+  } catch (error) {
+    alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+    throw error;
+  }
+}
+async function fetchComment(id) {
+  try {
+    const commentRef = collection(db, `comment`);
+    const q = query(commentRef, where("diaryId", "==", id));
+    const res = await getDocs(q);
+    const datas = res.docs.map((el) => el.data());
+    return datas;
+  } catch (error) {
+    alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+    throw error;
+  }
+}
+
+async function deleteComment(id) {
+  try {
+    await deleteDoc(doc(db, `comment/${id}`));
+  } catch (error) {
+    alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+    throw error;
+  }
+}
+
+async function editComment(id, content) {
+  try {
+    await updateDoc(doc(db, `comment/${id}`), {
+      content,
+    });
+  } catch (error) {
+    alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+    throw error;
+  }
+}
 async function deleteChat(chatRoomId, id) {
   try {
     await updateDoc(doc(db, `chat${chatRoomId}/${id}`), {
@@ -191,52 +241,70 @@ async function writeDiary(newDiary) {
 
 // 이미지 업로드 함수
 async function uploadFile(files) {
-  const fileInfo = { url: [], fileName: [] };
-  for (const file of files) {
-    if (file) {
-      const fileName = uuidv4() + "_" + file.name;
-      const res = await uploadBytes(
-        storageRef(storage, `images/diary/${fileName}`),
-        file
-      );
-      const uploadfileUrl = await getDownloadURL(res.ref);
-      fileInfo.url.push(uploadfileUrl);
-      fileInfo.fileName.push(fileName);
+  try {
+    const fileInfo = { url: [], fileName: [] };
+    for (const file of files) {
+      if (file) {
+        const fileName = uuidv4() + "_" + file.name;
+        const res = await uploadBytes(
+          storageRef(storage, `images/diary/${fileName}`),
+          file
+        );
+        const uploadfileUrl = await getDownloadURL(res.ref);
+        fileInfo.url.push(uploadfileUrl);
+        fileInfo.fileName.push(fileName);
+      }
     }
+    return fileInfo;
+  } catch (error) {
+    alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+    throw error;
   }
-  return fileInfo;
 }
 
 async function deleteEditDiaryImg(filename) {
   // 빈배열이 올 수 있기 때문에 filename이 있는 경우에만 이미지 삭제 처리
-  if (filename) {
-    await deleteObject(storageRef(storage, `images/diary/${String(filename)}`));
+  try {
+    if (filename) {
+      await deleteObject(
+        storageRef(storage, `images/diary/${String(filename)}`)
+      );
+    }
+  } catch (error) {
+    alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+    throw error;
   }
 }
 
 async function updateEmpathy(id, count) {
-  const diary = doc(db, `diaryList/${id}`);
-  if (!diary) return;
-  const user = doc(db, `user/${currentUser}`);
-  await updateDoc(diary, { empathy: increment(count) });
-  if (count > 0) {
-    await updateDoc(user, { empathyList: arrayUnion(id) });
-  } else {
-    await updateDoc(user, { empathyList: arrayRemove(id) });
+  try {
+    const diary = doc(db, `diaryList/${id}`);
+    if (!diary) return;
+    const user = doc(db, `user/${currentUser.displayName}`);
+    await updateDoc(diary, { empathy: increment(count) });
+    if (count > 0) {
+      await updateDoc(user, { empathyList: arrayUnion(id) });
+    } else {
+      await updateDoc(user, { empathyList: arrayRemove(id) });
+    }
+  } catch (error) {
+    alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+    throw error;
   }
 }
 
 const auth = getAuth();
 let currentUser;
+
 onAuthStateChanged(auth, async (user) => {
-  const userDocRef = doc(db, "user", "test");
   if (!user) {
     console.log("유저상태 변경");
     // await updateDoc(userDocRef, { islogin: false });
   } else {
-    currentUser = user.displayName;
+    currentUser = user;
   }
 });
+
 const FetchUserData = async (nickname) => {
   try {
     const userRef = collection(db, "user");
@@ -251,26 +319,36 @@ const FetchUserData = async (nickname) => {
 
 // 유저 프로필 이미지 변경 함수
 const updateProfileImg = async (url) => {
-  if (!auth.currentUser) return;
-  await updateProfile(auth.currentUser, {
-    photoURL: url,
-  });
-  const updateUser = doc(getFirestore(app), `user/${userData.nickname}`);
-  await updateDoc(updateUser, { profileImgUrl: url });
+  try {
+    if (!auth.currentUser) return;
+    await updateProfile(auth.currentUser, {
+      photoURL: url,
+    });
+    const updateUser = doc(getFirestore(app), `user/${userData.nickname}`);
+    await updateDoc(updateUser, { profileImgUrl: url });
+  } catch (error) {
+    alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+    throw error;
+  }
 };
 
 export async function checkLogin(nickname) {
-  const userDocRef = doc(db, "user", nickname);
-  // islogin이 바뀔때 마다 감지를 위해 실시간 데이터베이스 사용
-  onSnapshot(userDocRef, async (doc) => {
-    const data = doc.data();
-    if (!data.islogin) {
-      await signOut(auth);
-      sessionStorage.removeItem("userData");
-      sessionStorage.removeItem("diaryData");
-      location.replace(`${baseUrl}/`);
-    }
-  });
+  try {
+    const userDocRef = doc(db, "user", nickname);
+    // islogin이 바뀔때 마다 감지를 위해 실시간 데이터베이스 사용
+    onSnapshot(userDocRef, async (doc) => {
+      const data = doc.data();
+      if (!data.islogin) {
+        await signOut(auth);
+        sessionStorage.removeItem("userData");
+        sessionStorage.removeItem("diaryData");
+        location.replace(`${baseUrl}/`);
+      }
+    });
+  } catch (error) {
+    alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+    throw error;
+  }
 }
 
 const login = async (email, password) => {
@@ -509,50 +587,51 @@ const signup = async ({ nickname, email, phone, password }) => {
   }
 };
 
-const setGameRecord = async (nickname, newRecord) => {
-  const updateUser = doc(db, `user/${nickname}`);
-  await updateDoc(updateUser, { gameRecord: newRecord });
-};
-const setFortune = async (nickname, fortune) => {
-  const updateUser = doc(db, `user/${nickname}`);
-  await updateDoc(updateUser, { fortune: fortune });
-};
-
 const findEmail = async (nickname, phone) => {
-  const userRef = collection(db, "user");
-  const q = query(
-    userRef,
-    where("nickname", "==", nickname),
-    where("phone", "==", phone)
-  );
-  const res = await getDocs(q);
-  const datas = res.docs.map((el) => el.data());
-  if (datas.length > 0) return datas[0].email;
-  else {
-    alert("일치하는 정보가 없습니다!");
-    return false;
+  try {
+    const userRef = collection(db, "user");
+    const q = query(
+      userRef,
+      where("nickname", "==", nickname),
+      where("phone", "==", phone)
+    );
+    const res = await getDocs(q);
+    const datas = res.docs.map((el) => el.data());
+    if (datas.length > 0) return datas[0].email;
+    else {
+      alert("일치하는 정보가 없습니다!");
+      return false;
+    }
+  } catch (error) {
+    alert("알 수 없는 에러가 발생하였습니다. 잠시후 다시 시도해 주세요.");
+    throw error;
   }
 };
 
 const changePassword = async (email, phone) => {
-  const userRef = collection(db, "user");
-  const q = query(
-    userRef,
-    where("email", "==", email),
-    where("phone", "==", phone)
-  );
-  const res = await getDocs(q);
-  const datas = res.docs.map((el) => el.data());
-  if (datas.length > 0) {
-    sendPasswordResetEmail(auth, email)
-      .then(() => {})
-      .catch((error) => {
-        throw error;
-      });
-    return true;
-  } else {
-    alert("일치하는 정보가 없습니다!");
-    return false;
+  try {
+    const userRef = collection(db, "user");
+    const q = query(
+      userRef,
+      where("email", "==", email),
+      where("phone", "==", phone)
+    );
+    const res = await getDocs(q);
+    const datas = res.docs.map((el) => el.data());
+    if (datas.length > 0) {
+      sendPasswordResetEmail(auth, email)
+        .then(() => {})
+        .catch((error) => {
+          throw error;
+        });
+      return true;
+    } else {
+      alert("일치하는 정보가 없습니다!");
+      return false;
+    }
+  } catch (error) {
+    alert("알 수 없는 에러가 발생하였습니다. 잠시후 다시 시도해 주세요.");
+    throw error;
   }
 };
 async function checkRoom(chatRoomId) {
@@ -706,13 +785,19 @@ async function addChatting(chatRoomId, newChat) {
       type: "added",
     });
   } catch (error) {
-    console.error(error);
+    alert("알 수 없는 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+    throw error;
   }
 }
 
 async function editIntroduce(introduce) {
-  const userRef = doc(db, `user/${userData.nickname}`);
-  await updateDoc(userRef, { introduce });
+  try {
+    const userRef = doc(db, `user/${userData.nickname}`);
+    await updateDoc(userRef, { introduce });
+  } catch (error) {
+    alert("알 수 없는 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+    throw error;
+  }
 }
 
 const applyProfileImg = async (file) => {
@@ -742,9 +827,15 @@ const applyProfileImg = async (file) => {
       location.reload();
       alert("프로필 이미지가 변경되었습니다.");
     } catch (error) {
-      console.log(error);
+      alert("알 수 없는 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+      throw error;
     }
   }
+};
+
+const setFortune = async (nickname, fortune) => {
+  const updateUser = doc(db, `user/${nickname}`);
+  await updateDoc(updateUser, { fortune: fortune });
 };
 
 export {
@@ -760,7 +851,6 @@ export {
   getSessionUser,
   duplication,
   writeDiary,
-  setGameRecord,
   setFortune,
   findEmail,
   editDiary,
@@ -778,6 +868,10 @@ export {
   deleteEditDiaryImg,
   fetchAllDiarys,
   fetchBestDiarys,
+  writeComment,
+  fetchComment,
+  deleteComment,
+  editComment,
   setDoc,
   getDoc,
   doc,

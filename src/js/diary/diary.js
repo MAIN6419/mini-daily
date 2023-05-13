@@ -9,7 +9,24 @@ import {
   currentUser,
   updateEmpathy,
   FetchUserData,
+  writeComment,
+  fetchComment,
+  deleteComment,
+  editComment,
+  db,
+
 } from "../commons/firebase.js";
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  where,
+  startAfter,
+  limit,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
+import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
@@ -42,6 +59,21 @@ const $resetBtn = document.querySelectorAll(".btn-reset");
 const $empathyBox = $diaryWrapper.querySelector(".empathy-box");
 const uploadImg = [];
 let imgIdx = "0";
+let lastpage;
+let hasNextpage = false;
+const fetchCommentData = async ()=>{
+  return await firstComment().then((res)=>{
+    return res
+  }).catch((error)=>{
+    throw error
+  });
+} 
+const commentData = await fetchCommentData();
+
+const $commentForm = $sectionContents.querySelector(".comment-form");
+const $commentInput = $commentForm.querySelector("#input-comment");
+const $commentSubitBtn = $commentForm.querySelector(".btn-submit");
+const $commentLists = $sectionContents.querySelector(".comment-lists");
 
 const previousPageUrl = document.referrer;
 
@@ -85,7 +117,7 @@ async function renderdiary() {
   }
   // 만약 작성자와 현재 로그인한 유저가 같지 않다면
   // 수정과 삭제버튼 없애기
-  if (currentUser !== data.auth) {
+  if (currentUser.displayName !== data.auth) {
     $editBtn.remove();
     $deleteBtn.remove();
   }
@@ -115,8 +147,8 @@ async function renderdiary() {
   });
   $empathyBox.classList.add("active");
   $diaryText.textContent = data.contents;
-  $empathyCount.textContent = data.empathy;
-  const user = await FetchUserData(currentUser);
+  $empathyCount.textContent = `공감 ${data.empathy}`;
+  const user = await FetchUserData(currentUser.displayName);
   if (user.empathyList.includes(id)) {
     $empathyBtn.style.backgroundImage = "url(../img/heart.png)";
   }
@@ -136,7 +168,9 @@ $editBtn.addEventListener("click", async () => {
 $deleteBtn.addEventListener("click", async () => {
   if (confirm("정말 삭제하시겠습니까?")) {
     await deleteDiary(id);
-    location.href = "diaryList.html";
+    previousPageUrl.includes("diaryList")
+      ? (location.href = "diaryList.html")
+      : (location.href = "allDiary.html");
     alert("삭제가 완료되었습니다.");
   }
 });
@@ -150,18 +184,18 @@ $empathyBtn.addEventListener("click", async () => {
       return (location.href = "allDiary.html");
     }
   }
-  const user = await FetchUserData(currentUser);
+  const user = await FetchUserData(currentUser.displayName);
   if (user.empathyList.includes(id)) {
     updateEmpathy(id, -1);
     data.empathy -= 1;
     // sessionStorage.setItem("diaryData", JSON.stringify(data));
-    $empathyCount.textContent = data.empathy;
+    $empathyCount.textContent = `공감 ${data.empathy}`;
     $empathyBtn.style.backgroundImage = "url(../img/unheart.png)";
   } else {
     updateEmpathy(id, 1);
     data.empathy += 1;
     // sessionStorage.setItem("diaryData", JSON.stringify(data));
-    $empathyCount.textContent = data.empathy;
+    $empathyCount.textContent = `공감 ${data.empathy}`;
     $empathyBtn.style.backgroundImage = "url(../img/heart.png)";
   }
 });
@@ -269,3 +303,235 @@ function validataionImg(file) {
   }
   return true;
 }
+
+$commentSubitBtn.addEventListener("click", (e) => submitComment(e));
+
+async function submitComment(e) {
+  e.preventDefault();
+  if (confirm("정말 작성하시겠습니까?")) {
+    if (!$commentInput.value.trim()) {
+      alert("내용을 입력해주세요!");
+      return;
+    }
+    const newComment = {
+      diaryId: id,
+      auth: currentUser.displayName,
+      profileImg: currentUser.photoURL,
+      content: $commentInput.value,
+      commentId: uuidv4(),
+      createdAt: new Date().getTime(),
+    };
+    await writeComment(newComment);
+    $commentInput.value = "";
+    savedScrollPosition = $sectionContents.scrollHeight - 1;
+    console.log(savedScrollPosition);
+  }
+
+  const commentData = await fetchCommentData();
+  $commentLists.innerHTML = '';
+  renderComment(commentData);
+  $sectionContents.scrollTop = savedScrollPosition;
+  console.log($sectionContents.scrollTop);
+}
+
+renderComment(commentData);
+async function renderComment(data) { 
+  const frag = new DocumentFragment();
+  for (const item of data) {
+    // li 요소 생성
+    const li = document.createElement("li");
+    li.classList.add("comment-item");
+
+    // auth-profile 요소 생성
+    const authProfile = document.createElement("div");
+    authProfile.classList.add("auth-profile");
+
+    // comment-profileImg 요소 생성
+    const profileImg = document.createElement("img");
+    profileImg.classList.add("comment-profileImg");
+    profileImg.src = "../img/profile.png";
+    profileImg.alt = "유저 프로필";
+
+    // comment-auth 요소 생성
+    const authSpan = document.createElement("span");
+    authSpan.classList.add("comment-auth");
+    authSpan.textContent = item.auth;
+
+    // auth-profile에 profileImg와 authSpan 추가
+    authProfile.appendChild(profileImg);
+    authProfile.appendChild(authSpan);
+
+    const contents = document.createElement("div");
+    contents.setAttribute("class", "comment-contents active");
+
+    // comment-content 요소 생성
+    const text = document.createElement("p");
+    text.classList.add("comment-text");
+    text.textContent = item.content;
+
+    // comment-createdAt 요소 생성
+    const createdAt = document.createElement("time");
+    createdAt.classList.add("comment-createdAt");
+    createdAt.textContent = getCreatedAt(item.createdAt);
+
+    // comment-btns 요소 생성
+    const btns = document.createElement("div");
+    btns.classList.add("comment-btns");
+
+    // btn-reply 요소 생성
+    const replyBtn = document.createElement("button");
+    replyBtn.classList.add("btn-reply");
+    replyBtn.textContent = "답글";
+
+    // btn-edit 요소 생성
+    const editBtn = document.createElement("button");
+    editBtn.classList.add("btn-edit");
+    editBtn.textContent = "수정";
+
+    // btn-del 요소 생성
+    const delBtn = document.createElement("button");
+    delBtn.classList.add("btn-del");
+    delBtn.textContent = "삭제";
+
+    // btns에 replyBtn, editBtn, delBtn 추가
+    btns.appendChild(replyBtn);
+    if (item.auth === currentUser.displayName) {
+      btns.appendChild(editBtn);
+      btns.appendChild(delBtn);
+    }
+
+    // li에 authProfile, content, createdAt, btns 추가
+    li.appendChild(authProfile);
+    contents.appendChild(text);
+    contents.appendChild(createdAt);
+    contents.appendChild(btns);
+    li.append(contents);
+    const editForm = document.createElement("form");
+    editForm.classList.add("editComment-form");
+
+    const editTextarea = document.createElement("textarea");
+    editTextarea.id = "input-editComment";
+    editTextarea.value = item.content;
+
+    const editCommpleteBtn = document.createElement("button");
+    editCommpleteBtn.classList.add("btn-edit");
+    editCommpleteBtn.type = "submit";
+    editCommpleteBtn.textContent = "수정하기";
+
+    const cancelButton = document.createElement("button");
+    cancelButton.classList.add("btn-cancel");
+    cancelButton.type = "button";
+    cancelButton.textContent = "취소하기";
+
+    editForm.appendChild(editTextarea);
+    editForm.appendChild(editCommpleteBtn);
+    editForm.appendChild(cancelButton);
+
+    li.appendChild(editForm);
+
+    frag.appendChild(li);
+
+    delBtn.addEventListener("click", async (e) => {
+      if (confirm("정말 삭제하시겠습니까?")) {
+        if (currentUser.displayName !== item.auth) {
+          alert("사용자 정보가 일치하지 않습니다!");
+          return;
+        }
+        await deleteComment(item.commentId);
+        alert("삭제가 완료되었습니다.");
+        e.target.closest("li").remove();
+      }
+    });
+
+    editBtn.addEventListener("click", async () => {
+      contents.classList.remove("active");
+      editForm.classList.add("active");
+    });
+
+    cancelButton.addEventListener("click", () => {
+      contents.classList.add("active");
+      editForm.classList.remove("active");
+    });
+
+    editCommpleteBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (currentUser.displayName !== item.auth) {
+        alert("사용자 정보가 일치하지 않습니다!");
+        contents.classList.add("active");
+        editForm.classList.remove("active");
+        return;
+      }
+      if(!editTextarea.value.trim()){
+        alert("내용을 입력해주세요!");
+        return;
+      }
+      editComment(item.commentId, editTextarea.value);
+      contents.classList.add("active");
+      editForm.classList.remove("active");
+      text.textContent = editTextarea.value;
+    });
+  }
+  $commentLists.appendChild(frag);
+}
+
+$commentInput.addEventListener("keydown", (e) => {
+  if (e.keyCode === 13 && e.shiftKey) {
+    // 쉬프트 + 엔터키를 눌렀을 때
+    e.preventDefault();
+    $commentInput.value += "\n";
+    return;
+  } else if (e.keyCode === 13) {
+    // 일반 엔터키를 눌렀을 때
+    e.preventDefault();
+    $commentSubitBtn.click();
+  }
+});
+async function firstComment() {
+  const comment = collection(db, "comment");
+  const q =  query(comment, where("diaryId","==", id), orderBy("createdAt", "asc"), limit(4));
+  const res = await getDocs(q);
+  lastpage = res.docs[res.docs.length - 1];
+  hasNextpage = res.docs.length === 4;
+  const datas =  res.docs.map((el) => el.data());
+  return datas;
+}
+
+async function nextComment() {
+  const commentRef = collection(db, "comment");
+    const q = query(commentRef, 
+      where("diaryId","==",id), 
+      orderBy("createdAt", "asc"),
+      startAfter(lastpage), limit(4));
+    const res = await getDocs(q);
+    lastpage = res.docs[res.docs.length - 1];
+    const datas = res.docs.map((el) => el.data());
+    hasNextpage = res.docs.length === 4;
+    return datas;
+}
+// 무한스크롤 구현
+let slicedData;
+async function addItems() {
+  if (!hasNextpage) {
+    return;
+  }
+
+  slicedData = await nextComment();
+  renderComment(slicedData);
+}
+let savedScrollPosition = 0;
+function handleScroll() {
+  // scrollTop 요소의 수직 스크롤 바의 현재 위치를 반환
+  // clientHeight 현재 요소의 높이
+  // scrollHeight 스크롤 가능한 전체 영역의 높이
+  const isScrollAtBottom =
+  $sectionContents.scrollTop + $sectionContents.clientHeight >=
+  $sectionContents.scrollHeight - 1;
+
+if (isScrollAtBottom) {
+  savedScrollPosition = $sectionContents.scrollHeight;
+  addItems();
+}
+}
+
+// 스크롤이 끝까지 내려가면 다음 4개 요소를 출력
+$sectionContents.addEventListener("scroll", handleScroll);
