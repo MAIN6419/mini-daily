@@ -161,7 +161,6 @@ async function loadTemplate() {
     <a class="diary-link" href="${baseUrl}/src/template/diaryList.html">마이다이어리</a>
     <a class="write-link" href="${baseUrl}/src/template/write.html">글작성</a>
     <a class="chattingRoom-link" href="${baseUrl}/src/template/chattingRoom.html">채팅방</a>
-    <a class="game-link" href="${baseUrl}/src/template/miniGame.html">미니게임</a>
     <a class="fortune-link" href="${baseUrl}/src/template/fortune.html">운세보기</a>
     <a class="mypage-link" href="${baseUrl}/src/template/mypage.html">마이페이지</a>
   `;

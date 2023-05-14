@@ -341,28 +341,33 @@
 .comment-btns .btn-edit::after {
   margin-left: 5px;
 }
-.editComment-form{
+.editComment-form,
+.replyComment-form{
   display: none;
   gap: 5px;
 }
-.editComment-form.active{
+.editComment-form.active,
+.replyComment-form.active{
   display: flex;
 }
-#input-editComment{
+#input-editComment,
+#input-replyComment{
   width: 75%;
   height: 50px;
   resize: none;
   padding: 5px 10px;
   box-sizing: border-box;
 }
-.editComment-form button{
+.editComment-form button,
+.replyComment-form button{
   padding: 8px 15px;
   font-size: 14px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
-.editComment-form .btn-edit{
+.editComment-form .btn-submit,
+.replyComment-form .btn-submit{
   background-color: gold;
 }
 .links .allDiary-link.active {

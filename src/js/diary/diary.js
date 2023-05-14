@@ -11,10 +11,11 @@ import {
   FetchUserData,
   writeComment,
   fetchComment,
+  // fetchReplyComment,
   deleteComment,
   editComment,
   db,
-
+  writeReplyComment,
 } from "../commons/firebase.js";
 import {
   collection,
@@ -24,7 +25,7 @@ import {
   where,
   startAfter,
   limit,
-  onSnapshot
+  onSnapshot,
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 
@@ -61,13 +62,15 @@ const uploadImg = [];
 let imgIdx = "0";
 let lastpage;
 let hasNextpage = false;
-const fetchCommentData = async ()=>{
-  return await firstComment().then((res)=>{
-    return res
-  }).catch((error)=>{
-    throw error
-  });
-} 
+const fetchCommentData = async () => {
+  return await firstComment()
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
 const commentData = await fetchCommentData();
 
 const $commentForm = $sectionContents.querySelector(".comment-form");
@@ -154,7 +157,8 @@ async function renderdiary() {
   }
 }
 
-$editBtn.addEventListener("click", async () => {
+$editBtn.addEventListener("click", async (e) => {
+  e.preventDefault();
   $editForm.classList.toggle("active");
   $diaryWrapper.classList.toggle("inactive");
   $inputTitle.value = data.title;
@@ -308,6 +312,7 @@ $commentSubitBtn.addEventListener("click", (e) => submitComment(e));
 
 async function submitComment(e) {
   e.preventDefault();
+  savedScrollPosition = $sectionContents.scrollHeight;
   if (confirm("정말 작성하시겠습니까?")) {
     if (!$commentInput.value.trim()) {
       alert("내용을 입력해주세요!");
@@ -323,19 +328,16 @@ async function submitComment(e) {
     };
     await writeComment(newComment);
     $commentInput.value = "";
-    savedScrollPosition = $sectionContents.scrollHeight - 1;
-    console.log(savedScrollPosition);
+    $sectionContents.scrollTop = $sectionContents.scrollHeight;
   }
 
   const commentData = await fetchCommentData();
-  $commentLists.innerHTML = '';
+  $commentLists.innerHTML = "";
   renderComment(commentData);
-  $sectionContents.scrollTop = savedScrollPosition;
-  console.log($sectionContents.scrollTop);
 }
 
 renderComment(commentData);
-async function renderComment(data) { 
+async function renderComment(data) {
   const frag = new DocumentFragment();
   for (const item of data) {
     // li 요소 생성
@@ -385,6 +387,7 @@ async function renderComment(data) {
 
     // btn-edit 요소 생성
     const editBtn = document.createElement("button");
+    editBtn.setAttribute("type", "submit");
     editBtn.classList.add("btn-edit");
     editBtn.textContent = "수정";
 
@@ -406,6 +409,8 @@ async function renderComment(data) {
     contents.appendChild(createdAt);
     contents.appendChild(btns);
     li.append(contents);
+
+    // 수정 폼 요소 생성
     const editForm = document.createElement("form");
     editForm.classList.add("editComment-form");
 
@@ -414,21 +419,45 @@ async function renderComment(data) {
     editTextarea.value = item.content;
 
     const editCommpleteBtn = document.createElement("button");
-    editCommpleteBtn.classList.add("btn-edit");
+    editCommpleteBtn.classList.add("btn-submit");
     editCommpleteBtn.type = "submit";
     editCommpleteBtn.textContent = "수정하기";
 
-    const cancelButton = document.createElement("button");
-    cancelButton.classList.add("btn-cancel");
-    cancelButton.type = "button";
-    cancelButton.textContent = "취소하기";
+    const editCancelBtn = document.createElement("button");
+    editCancelBtn.classList.add("btn-cancel");
+    editCancelBtn.type = "button";
+    editCancelBtn.textContent = "취소하기";
 
     editForm.appendChild(editTextarea);
     editForm.appendChild(editCommpleteBtn);
-    editForm.appendChild(cancelButton);
+    editForm.appendChild(editCancelBtn);
 
-    li.appendChild(editForm);
+    // 답글 폼 요소 생성
+    const replyForm = document.createElement("form");
+    replyForm.classList.add("replyComment-form");
 
+    const replyTextarea = document.createElement("textarea");
+    replyTextarea.id = "input-replyComment";
+
+    const replySubmitBtn = document.createElement("button");
+    replySubmitBtn.classList.add("btn-submit");
+    replySubmitBtn.type = "submit";
+    replySubmitBtn.textContent = "답글달기";
+
+    const replyCancelBtn = document.createElement("button");
+    replyCancelBtn.classList.add("btn-cancel");
+    replyCancelBtn.type = "button";
+    replyCancelBtn.textContent = "취소하기";
+
+    replyForm.appendChild(replyTextarea);
+    replyForm.appendChild(replySubmitBtn);
+    replyForm.appendChild(replyCancelBtn);
+
+    const replyLists = document.createElement("ul");
+
+    li.append(editForm, replyForm);
+    li.appendChild(replyLists);
+    // renderReplyComment(replyLists, item.commentId)
     frag.appendChild(li);
 
     delBtn.addEventListener("click", async (e) => {
@@ -448,7 +477,7 @@ async function renderComment(data) {
       editForm.classList.add("active");
     });
 
-    cancelButton.addEventListener("click", () => {
+    editCancelBtn.addEventListener("click", () => {
       contents.classList.add("active");
       editForm.classList.remove("active");
     });
@@ -461,15 +490,59 @@ async function renderComment(data) {
         editForm.classList.remove("active");
         return;
       }
-      if(!editTextarea.value.trim()){
+      if (!editTextarea.value.trim()) {
         alert("내용을 입력해주세요!");
         return;
       }
-      editComment(item.commentId, editTextarea.value);
-      contents.classList.add("active");
-      editForm.classList.remove("active");
-      text.textContent = editTextarea.value;
+      if (confirm("정말 수정하시겠습니까?")) {
+        editComment(item.commentId, editTextarea.value);
+        contents.classList.add("active");
+        editForm.classList.remove("active");
+        text.textContent = editTextarea.value;
+      }
     });
+
+    editTextarea.addEventListener("keydown", (e) => {
+      if (e.keyCode === 13 && e.shiftKey) {
+        // 쉬프트 + 엔터키를 눌렀을 때
+        e.preventDefault();
+        editTextarea.value += "\n";
+        return;
+      } else if (e.keyCode === 13) {
+        // 일반 엔터키를 눌렀을 때
+        e.preventDefault();
+        editCommpleteBtn.click();
+      }
+    });
+
+    replyBtn.addEventListener("click", ()=>{
+      contents.classList.remove("active");
+      replyForm.classList.add("active");
+    })
+    replyCancelBtn.addEventListener("click",()=>{
+      contents.classList.add("active");
+      replyForm.classList.remove("active");
+    })
+    replySubmitBtn.addEventListener("click",(e)=>{
+      e.preventDefault();
+      if (!replyTextarea.value.trim()) {
+        alert("내용을 입력해주세요!");
+        return;
+      }
+      if (confirm("정말 작성 하시겠습니까?")) {
+        const newReply = {
+          replyCommentId : uuidv4(),
+          content : replyTextarea.value,
+          createdAt : new Date().getTime(),
+          auth : currentUser.displayName,
+          profileImg : currentUser.photoURL,
+          parentCommentId : item.commentId,
+        }
+        writeReplyComment(newReply, item.commentId)
+        contents.classList.add("active");
+        replyForm.classList.remove("active");
+      }
+    })
   }
   $commentLists.appendChild(frag);
 }
@@ -488,50 +561,94 @@ $commentInput.addEventListener("keydown", (e) => {
 });
 async function firstComment() {
   const comment = collection(db, "comment");
-  const q =  query(comment, where("diaryId","==", id), orderBy("createdAt", "asc"), limit(4));
+  const q = query(
+    comment,
+    where("diaryId", "==", id),
+    orderBy("createdAt", "asc"),
+    limit(4)
+  );
   const res = await getDocs(q);
   lastpage = res.docs[res.docs.length - 1];
   hasNextpage = res.docs.length === 4;
-  const datas =  res.docs.map((el) => el.data());
+  const datas = res.docs.map((el) => el.data());
   return datas;
 }
 
 async function nextComment() {
   const commentRef = collection(db, "comment");
-    const q = query(commentRef, 
-      where("diaryId","==",id), 
-      orderBy("createdAt", "asc"),
-      startAfter(lastpage), limit(4));
-    const res = await getDocs(q);
-    lastpage = res.docs[res.docs.length - 1];
-    const datas = res.docs.map((el) => el.data());
-    hasNextpage = res.docs.length === 4;
-    return datas;
+  const q = query(
+    commentRef,
+    where("diaryId", "==", id),
+    orderBy("createdAt", "asc"),
+    startAfter(lastpage),
+    limit(4)
+  );
+  const res = await getDocs(q);
+  lastpage = res.docs[res.docs.length - 1];
+  const datas = res.docs.map((el) => el.data());
+  hasNextpage = res.docs.length === 4;
+  return datas;
 }
 // 무한스크롤 구현
-let slicedData;
 async function addItems() {
   if (!hasNextpage) {
     return;
   }
 
-  slicedData = await nextComment();
-  renderComment(slicedData);
+  const commentData = await nextComment();
+  renderComment(commentData);
+
+  // 불러온 댓글 수에 따라 hasNextpage 업데이트
+  hasNextpage = commentData.length === 4;
+
+  // hasNextpage가 true인 경우에만 스크롤 위치 업데이트
+  // 다음 데이터가 있는 경우
+  if (hasNextpage) {
+    // 현재 스크롤 높이 저장
+    savedScrollPosition = $sectionContents.scrollHeight;
+  }
 }
 let savedScrollPosition = 0;
 function handleScroll() {
-  // scrollTop 요소의 수직 스크롤 바의 현재 위치를 반환
-  // clientHeight 현재 요소의 높이
-  // scrollHeight 스크롤 가능한 전체 영역의 높이
-  const isScrollAtBottom =
-  $sectionContents.scrollTop + $sectionContents.clientHeight >=
-  $sectionContents.scrollHeight - 1;
+  const scrollBottom =
+    $sectionContents.scrollTop + $sectionContents.clientHeight >=
+    $sectionContents.scrollHeight - 1;
 
-if (isScrollAtBottom) {
-  savedScrollPosition = $sectionContents.scrollHeight;
-  addItems();
-}
+  if (scrollBottom) {
+    addItems();
+  }
 }
 
 // 스크롤이 끝까지 내려가면 다음 4개 요소를 출력
 $sectionContents.addEventListener("scroll", handleScroll);
+
+// async function renderReplyComment(replyLists, commentId) {
+//   // 대댓글 목록을 초기화합니다.
+//   replyLists.innerHTML = "";
+//   const replyCommentData = await fetchReplyComment(commentId);
+//   console.log(replyCommentData)
+//   // 대댓글 데이터를 순회하며 대댓글 아이템을 생성하여 대댓글 목록에 추가합니다.
+//   for (const replyComment of replyCommentData) {
+//     const li = document.createElement("li");
+//     li.classList.add("reply-comment-item");
+
+//     const profileImg = document.createElement("img");
+//     profileImg.classList.add("reply-comment-profileImg");
+//     profileImg.src = replyComment.profileImg;
+//     profileImg.alt = "유저 프로필";
+
+//     const authSpan = document.createElement("span");
+//     authSpan.classList.add("reply-comment-auth");
+//     authSpan.textContent = replyComment.auth;
+
+//     const contentSpan = document.createElement("span");
+//     contentSpan.classList.add("reply-comment-content");
+//     contentSpan.textContent = replyComment.content;
+
+//     li.appendChild(profileImg);
+//     li.appendChild(authSpan);
+//     li.appendChild(contentSpan);
+
+//     replyLists.appendChild(li);
+//   }
+// }

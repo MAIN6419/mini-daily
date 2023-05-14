@@ -18,6 +18,7 @@ import {
   getDoc,
   onSnapshot,
   increment,
+  addDoc,
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
 import {
   uploadBytes,
@@ -71,17 +72,29 @@ const storage = getStorage(app);
 // const analytics = getAnalytics(app);
 
 // 다이어리 목록을 불러오는 함수
-async function FetchDiarys(nickname) {
+async function FetchDiarys() {
   try {
     const diaryList = collection(db, "diaryList");
     const q = query(
       diaryList,
-      where("auth", "==", nickname),
+      where("auth", "==", currentUser.displayName),
       orderBy("createdAt", "desc"),
       limit(4)
     );
     const res = await getDocs(q);
     const datas = res.docs.map((el) => el.data());
+    return datas;
+  } catch (error) {
+    throw error;
+  }
+}
+async function fetchRecentDiary() {
+  try {
+    const diaryList = collection(db, "diaryList");
+    const q = query(diaryList, limit(4));
+    const res = await getDocs(q);
+    const datas = res.docs.map((el) => el.data());
+    console.log(datas);
     return datas;
   } catch (error) {
     throw error;
@@ -193,6 +206,24 @@ async function fetchComment(id) {
   }
 }
 
+// // 대댓글 가져오기 함수
+// // fetchReplyComment 함수 정의
+// async function fetchReplyComment(commentId) {
+//   // 부모 컬렉션과 문서의 참조
+// const parentCollectionRef = collection(db, "comment");
+// const parentDocRef = doc(parentCollectionRef, commentId);
+
+// // 중첩 컬렉션의 참조
+// const childCollectionRef = collection(parentDocRef, "replyComment");
+//   // 대댓글을 가져오기 위한 쿼리 작성
+//   const commentDocSnapshot = await getDoc(childCollectionRef);
+//   const querySnapshot = await getDocs(commentDocSnapshot);
+//   querySnapshot.forEach((doc) => {
+//     replyComments.push(doc.data());
+//   });
+//   return replyComments;
+// }
+
 async function deleteComment(id) {
   try {
     await deleteDoc(doc(db, `comment/${id}`));
@@ -211,6 +242,17 @@ async function editComment(id, content) {
     alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
     throw error;
   }
+}
+
+async function writeReplyComment(newReply, parentCommentId) {
+  const commentsCollection = collection(db, "comment");
+  const parentCommentRef = doc(commentsCollection, parentCommentId);
+  const replyCommentRef = collection(parentCommentRef, "replyComment");
+  const newChildCommentRef = await setDoc(doc(replyCommentRef, newReply.replyCommentId), {
+    ...newReply,
+  });
+
+  
 }
 async function deleteChat(chatRoomId, id) {
   try {
@@ -567,7 +609,6 @@ const signup = async ({ nickname, email, phone, password }) => {
       profileImgFileName: "",
       profileImgUrl: "",
       fortune: "",
-      gameRecord: null,
       introduce: "소개글을 작성하지 않았습니다.",
       point: 0,
       commentCount: 0,
@@ -868,10 +909,13 @@ export {
   deleteEditDiaryImg,
   fetchAllDiarys,
   fetchBestDiarys,
+  fetchRecentDiary,
   writeComment,
   fetchComment,
   deleteComment,
   editComment,
+  writeReplyComment,
+  // fetchReplyComment,
   setDoc,
   getDoc,
   doc,

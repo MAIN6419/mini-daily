@@ -2,8 +2,7 @@
 import _ from 'https://cdn.skypack.dev/lodash-es';
 import { getCreatedAt } from "../commons/libray.js";
 import { userData } from "../commons/commons.js";
-import { FetchDiary, FetchDiarys, FetchUserData, fetchBestDiarys, setFortune } from "../commons/firebase.js";
-
+import { FetchDiary, FetchUserData, fetchBestDiarys, fetchRecentDiary, setFortune } from "../commons/firebase.js";
 const $sectionContents = document.querySelector(".section-contents");
 const $recentDiaryLists = $sectionContents.querySelector(".recent-diaryLists");
 const $fortuneContents = $sectionContents.querySelector(".fortune-cotents");
@@ -15,7 +14,8 @@ rederRecentDiary();
 renderFortune();
 renderBestDiary();
 
-function rederRecentDiary() {
+async function rederRecentDiary() {
+  const data = await fetchRecentDiary();
   $recentDiaryLists.innerHTML = "";
   if (data.length === 0) {
     $recentDiaryLists.innerHTML += `
