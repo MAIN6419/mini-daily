@@ -1,3 +1,6 @@
+.section-contents{
+  position: relative;
+}
 .list-box {
   display: flex;
   margin-bottom: 80px;

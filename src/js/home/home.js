@@ -2,12 +2,12 @@
 import _ from 'https://cdn.skypack.dev/lodash-es';
 import { getCreatedAt } from "../commons/libray.js";
 import { userData } from "../commons/commons.js";
-import { FetchDiary, FetchUserData, fetchBestDiarys, fetchRecentDiary, setFortune } from "../commons/firebase.js";
+import { FetchDiary, FetchUserData, fetchBestDiarys, fetchRecentDiary, getAuthImg, setFortune } from "../commons/firebase.js";
 const $sectionContents = document.querySelector(".section-contents");
 const $recentDiaryLists = $sectionContents.querySelector(".recent-diaryLists");
 const $fortuneContents = $sectionContents.querySelector(".fortune-cotents");
 const $diaryLists = $sectionContents.querySelector(".diary-lists")
-const data = await fetchBestDiarys() || [];
+const $loadingModal = $sectionContents
 const fortune = await fetchFortuneData();
 
 rederRecentDiary();
@@ -108,7 +108,7 @@ async function renderBestDiary() {
 
     const profileImg = document.createElement('img');
     profileImg.classList.add('diary-profileImg');
-    profileImg.src = diary.profileImg||'../img/profile.png';
+    profileImg.src = await getAuthImg(diary.auth)||'../img/profile.png';
     profileImg.alt = '';
     bottomDiv.appendChild(profileImg);
 

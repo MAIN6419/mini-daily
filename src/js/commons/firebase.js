@@ -88,13 +88,18 @@ async function FetchDiarys() {
     throw error;
   }
 }
+async function getAuthImg(auth){
+  const userRef = doc(db, 'user', auth);
+  const res = await getDoc(userRef);
+  const datas = res.data();
+  return datas.profileImgUrl
+}
 async function fetchRecentDiary() {
   try {
     const diaryList = collection(db, "diaryList");
     const q = query(diaryList, limit(4));
     const res = await getDocs(q);
     const datas = res.docs.map((el) => el.data());
-    console.log(datas);
     return datas;
   } catch (error) {
     throw error;
@@ -248,11 +253,46 @@ async function writeReplyComment(newReply, parentCommentId) {
   const commentsCollection = collection(db, "comment");
   const parentCommentRef = doc(commentsCollection, parentCommentId);
   const replyCommentRef = collection(parentCommentRef, "replyComment");
-  const newChildCommentRef = await setDoc(doc(replyCommentRef, newReply.replyCommentId), {
+  await setDoc(doc(replyCommentRef, newReply.commentId), {
     ...newReply,
   });
 
-  
+}
+
+async function deleteReplyComment(replyCommentId, parentCommentId) {
+  const commentsCollection = collection(db, "comment");
+const parentCommentRef = doc(commentsCollection, parentCommentId);
+const replyCommentRef = collection(parentCommentRef, "replyComment");
+const deleteReplyRef = doc(replyCommentRef, replyCommentId);
+
+await deleteDoc(deleteReplyRef);
+}
+
+async function editReplyComment(replyCommentId, parentCommentId, content) {
+  const commentsCollection = collection(db, "comment");
+const parentCommentRef = doc(commentsCollection, parentCommentId);
+const replyCommentRef = collection(parentCommentRef, "replyComment");
+const updateReplyRef = doc(replyCommentRef, replyCommentId);
+
+await updateDoc(updateReplyRef,{
+  content 
+});
+}
+
+async function fetchReplyComments(parentCommentId) {
+  const parentCommentRef = doc(db, "comment", parentCommentId);
+  const replyCommentsRef = collection(parentCommentRef, "replyComment");
+
+  const q = query(replyCommentsRef);
+
+  const querySnapshot = await getDocs(q);
+  const replyComments = [];
+
+  querySnapshot.forEach((doc) => {
+    replyComments.push(doc.data());
+  });
+
+  return replyComments;
 }
 async function deleteChat(chatRoomId, id) {
   try {
@@ -916,6 +956,10 @@ export {
   editComment,
   writeReplyComment,
   // fetchReplyComment,
+  fetchReplyComments,
+  deleteReplyComment,
+  editReplyComment,
+  getAuthImg,
   setDoc,
   getDoc,
   doc,
