@@ -720,11 +720,11 @@ async function checkRoom(chatRoomId) {
   const chatRoomRef = doc(db, "chatRoom", chatRoomId);
   const docSnap = await getDoc(chatRoomRef);
   const res = docSnap.data();
-  if (res.users.length === 0) {
-    await deleteDoc(doc(db, `chatRoom/${chatRoomId}`));
-    alert("채팅방이 닫혔습니다!");
-    location.replace = "chatting.html";
-  }
+  // if (res.users.length === 0) {
+  //   await deleteDoc(doc(db, `chatRoom/${chatRoomId}`));
+  //   alert("채팅방이 닫혔습니다!");
+  //   location.replace = "chatting.html";
+  // }
 }
 const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
   // 채팅방 url 예외처리 아이디값을 없을 경우 
