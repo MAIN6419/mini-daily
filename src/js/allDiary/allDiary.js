@@ -22,6 +22,7 @@ const $allDiaryList = document.querySelector(".allDiary-lists");
 let lastpage;
 let hasNextpage = false;
 let keyword = "";
+let isfirstLoding = false;
 
 const $sectionContents = document.querySelector(".section-contents");
 const $inputSearch = $sectionContents.querySelector(".input-search");
@@ -77,6 +78,7 @@ async function nextDiaryList() {
     );
     const res = await getDocs(q);
     const datas = res.docs.map((el) => el.data());
+
     lastpage = res.docs[res.docs.length - 1];
     hasNextpage = res.docs.length === 6;
     console.log(hasNextpage);
@@ -99,7 +101,8 @@ async function nextDiaryList() {
 
 renderAllDiary(data);
 async function renderAllDiary(data) {
-  $loadingModal.classList.add("active");
+  // 최초로딩시에만 로딩화면을 보여주기 위해서
+  if (!isfirstLoding) $loadingModal.classList.add("active");
   const frag = new DocumentFragment();
 
   for (const diary of data) {
@@ -169,7 +172,8 @@ async function renderAllDiary(data) {
   }
 
   $allDiaryList.appendChild(frag);
-  $loadingModal.classList.remove("active");
+  if (!isfirstLoding) $loadingModal.classList.remove("active");
+  isfirstLoding = true;
 }
 
 // // 게시글 preload 과부하 방지
@@ -178,26 +182,26 @@ async function renderAllDiary(data) {
 //   sessionStorage.setItem("diaryData", JSON.stringify(diaryData))
 // }, 500);
 
-// 무한스크롤 구현
-let slicedData;
-
+// 스크롤이 빠르게 일어날시 마지막 데이터가 중복됨
+// 이 문제를 해결하기 위해 isloading 변수을 사용해 현재 로딩 중임을 체크하고 로딩중이 아닐때만 데이터가 추가 되도록 함
+let isLoading = false;
 async function addItems() {
-  slicedData = await nextDiaryList();
-  if (slicedData.length === 0) return;
-   renderAllDiary(slicedData);
-  $loadingModal.classList.remove("active");
-  if (!hasNextpage) {
-    $sectionContents.removeEventListener("scroll", handleScroll);
-  }
+  isLoading = true; // Set the loading state
+  const slicedData = await nextDiaryList();
+
+  renderAllDiary(slicedData);
+  isLoading = false; // Clear the loading state
 }
 
 function handleScroll() {
   // scrollTop 요소의 수직 스크롤 바의 현재 위치를 반환
   // clientHeight 현재 요소의 높이
   // scrollHeight 스크롤 가능한 전체 영역의 높이
+
+  if (isLoading || !hasNextpage) return;
   if (
     $sectionContents.scrollTop + $sectionContents.clientHeight >=
-    $sectionContents.scrollHeight
+    $sectionContents.scrollHeight - 20
   ) {
     addItems();
   }

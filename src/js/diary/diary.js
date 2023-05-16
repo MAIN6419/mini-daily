@@ -129,7 +129,7 @@ async function renderdiary() {
     $deleteBtn.remove();
   }
   $diaryAuth.textContent = data.auth;
-  $diaryProfileImg.setAttribute("src", await getAuthImg(data.auth));
+  $diaryProfileImg.setAttribute("src", (await getAuthImg(data.auth) || "../img/profile.png"));
   $diaryTitle.textContent = data.title;
   $diaryCreatedAt.textContent = getCreatedAt(data.createdAt);
   $diaryCreatedAt.setAttribute(
@@ -352,7 +352,7 @@ async function addComment(item) {
   // comment-profileImg 요소 생성
   const profileImg = document.createElement("img");
   profileImg.classList.add("comment-profileImg");
-  profileImg.src = await getAuthImg(data.auth);
+  profileImg.src =(await getAuthImg(diary.auth)) || "../img/profile.png";;
   profileImg.alt = "유저 프로필";
 
   // comment-auth 요소 생성
@@ -572,7 +572,7 @@ async function addReplyComment(replyLists, item) {
   // comment-profileImg 요소 생성
   const profileImg = document.createElement("img");
   profileImg.classList.add("comment-profileImg");
-  profileImg.src = await getAuthImg(item.auth);
+  profileImg.src = (await getAuthImg(diary.auth)) || "../img/profile.png";
   profileImg.alt = "유저 프로필";
 
   // comment-auth 요소 생성
@@ -724,7 +724,7 @@ async function renderComment(data) {
     // comment-profileImg 요소 생성
     const profileImg = document.createElement("img");
     profileImg.classList.add("comment-profileImg");
-    profileImg.src = await getAuthImg(item.auth);
+    profileImg.src = (await getAuthImg(diary.auth)) || "../img/profile.png";
     profileImg.alt = "유저 프로필";
 
     // comment-auth 요소 생성
@@ -1013,7 +1013,7 @@ async function renderReplyComment(replyLists, commentId) {
     // comment-profileImg 요소 생성
     const profileImg = document.createElement("img");
     profileImg.classList.add("comment-profileImg");
-    profileImg.src = await getAuthImg(item.auth);
+    profileImg.src = (await getAuthImg(diary.auth)) || "../img/profile.png";
     profileImg.alt = "유저 프로필";
 
     // comment-auth 요소 생성

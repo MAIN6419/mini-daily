@@ -23,9 +23,10 @@ const chatRoomId = urlParams.get("id");
 //   alert("존재하지않는 채팅방입니다.")
 //   location.replace("?id=chat")
 // }
+$loadingModal.classList.add("active");
 await joinChatRoom(chatRoomId, userData.nickname, rednerJoinUsers);
-fetchChatting($chattingBox, $loadingModal, chatRoomId, renderChattingMsg);
-
+await fetchChatting($chattingBox, chatRoomId, renderChattingMsg);
+$loadingModal.classList.remove("active");
 $chattingForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   if(!$chattingInput.value.trim()) return;

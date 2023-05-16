@@ -654,6 +654,7 @@ const signup = async ({ nickname, email, phone, password }) => {
       commentCount: 0,
       diaryCount: 0,
       grade: "일반",
+      empathyList: []
     });
 
     alert("회원가입이 완료되었습니다.");
@@ -726,46 +727,55 @@ async function checkRoom(chatRoomId) {
   }
 }
 const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
-  const chatRoomRef = doc(db, "chatRoom", chatRoomId);
+  // 채팅방 url 예외처리 아이디값을 없을 경우 
+  if(!chatRoomId) {
+    alert("잘못된 경로입니다!");
+    return location.replace("chattingRoom.html");
+  }
+  try{
+    const chatRoomRef = doc(db, "chatRoom", chatRoomId);
 
-  // chatRoomRef의 users 필드 업데이트
-  await updateDoc(chatRoomRef, {
-    users: arrayUnion(userNickname), // users 배열에 userNickname 추가
-  });
-
-  // Firestore 실시간 업데이트를 위한 onSnapshot 등록
-  onSnapshot(chatRoomRef, async (docs) => {
-    try {
-      const data = docs.data();
-      renderJoinUser(data);
-    } catch (error) {
-      console.log(error);
+    // chatRoomRef의 users 필드 업데이트
+    await updateDoc(chatRoomRef, {
+      users: arrayUnion(userNickname), // users 배열에 userNickname 추가
+    });
+    
+  
+    // Firestore 실시간 업데이트를 위한 onSnapshot 등록
+    onSnapshot(chatRoomRef, async (docs) => {
+      try {
+        const data = docs.data();
+        renderJoinUser(data);
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  
+    // 채팅방에서 나갈 때
+    window.addEventListener("beforeunload", () => {
+        updateDoc(chatRoomRef, {
+          users: arrayRemove(userNickname), // users 배열에서 userNickname 제거
+        });
+        checkRoom(chatRoomId);
+    });
+  } catch(error) {
+     // 채팅방 url 예외처리 채팅방이 없을 경우
+    if(error.message.includes("No document to update")) {
+      alert("삭제 되거나 존재하지 않는 채팅방 입니다!");
+      location.replace("chattingRoom.html");
     }
-  });
-
-  // 채팅방에서 나갈 때
-  window.addEventListener("beforeunload", () => {
-    try {
-      updateDoc(chatRoomRef, {
-        users: arrayRemove(userNickname), // users 배열에서 userNickname 제거
-      });
-      checkRoom(chatRoomId);
-    } catch (error) {
-      console.log("Error occurred while updating users:", error);
-    }
-  });
+  }
+ 
 };
 
 function fetchChatting(
   $chattingBox,
-  $loadingModal,
   chatRoomId,
   renderChattingMsg
 ) {
   const chatRef = collection(db, `chat${chatRoomId}`);
   const q = query(chatRef, orderBy("createdAt", "asc"));
   let prevDate = null; // 이전 메시지의 작성 날짜를 저장할 변수
-  $loadingModal.classList.add("active");
   onSnapshot(q, (querySnapshot) => {
     $chattingBox.innerHTML = ""; // 채팅 리스트 초기화
     querySnapshot.forEach((doc) => {
@@ -773,7 +783,6 @@ function fetchChatting(
       const currentDate = new Date(data.createdAt);
       renderChattingMsg(data, prevDate, currentDate);
     });
-    $loadingModal.classList.remove("active");
     $chattingBox.scrollTop = $chattingBox.scrollHeight;
   });
 }
@@ -799,7 +808,7 @@ async function createChattingRoom({
   location.href = `${baseUrl}/src/template/chatting.html?id=${id}`;
 }
 
-async function renderChattingRoom($roomLists, $loadingModal) {
+async function renderChattingRoom($roomLists, $loadingModal, modalPrompt) {
   const chatRoomRef = collection(db, "chatRoom");
   const q = query(chatRoomRef, orderBy("createdAt", "desc"));
   $loadingModal.classList.add("active");
@@ -810,9 +819,10 @@ async function renderChattingRoom($roomLists, $loadingModal) {
     }
     snapshot.docs.forEach((doc) => {
       const item = doc.data();
-
       const roomLi = document.createElement("li");
-      roomLi.className = "room";
+      item.isprivate 
+      roomLi.className = item.isprivate ? "room private" : "room";
+
 
       const roomLink = document.createElement("a");
       roomLink.href = `${baseUrl}/src/template/chatting.html?id=${doc.id}`;
@@ -820,12 +830,28 @@ async function renderChattingRoom($roomLists, $loadingModal) {
       const roomTitle = document.createElement("h3");
       roomTitle.textContent = item.title;
 
+      const countState = document.createElement("span");
+      countState.classList.add("count-state");
+      if(item.users.length===item.limit) {
+        countState.style.backgroundColor = "red";
+      }
+      else if(item.users.length >= Math.floor(item.limit / 2)) {
+        countState.style.backgroundColor = "gold";
+      }
+      else{
+        countState.style.backgroundColor = "yellowgreen";
+      }
+      const userCountBox = document.createElement("div");
+      userCountBox.className = "user-countBox";
+
       const userCount = document.createElement("span");
       userCount.className = "user-count";
-      userCount.textContent = `현재참여인원 ${item.users.length}/${item.limit}`;
+      userCount.textContent = `인원 : ${item.users.length}/${item.limit}`;
 
       roomLink.appendChild(roomTitle);
-      roomLink.appendChild(userCount);
+      userCountBox.appendChild(countState);
+      userCountBox.appendChild(userCount);
+      roomLink.appendChild(userCountBox);
       roomLi.appendChild(roomLink);
       $roomLists.appendChild(roomLi);
 
@@ -836,14 +862,8 @@ async function renderChattingRoom($roomLists, $loadingModal) {
           return;
         }
         if (item.isprivate) {
-          const password = prompt("비밀번호를 입력해주세요.");
-          if (password === item.password) {
-            location.href = `${baseUrl}/src/template/chatting.html?id=${doc.id}`;
-          } else {
-            e.preventDefault();
-            alert("비밀번호가 일치하지 않습니다.");
-            return;
-          }
+          e.preventDefault();
+          modalPrompt(item);
         } else {
           location.href = `${baseUrl}/src/template/chatting.html?id=${doc.id}`;
         }
@@ -869,6 +889,19 @@ async function addChatting(chatRoomId, newChat) {
     alert("알 수 없는 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
     throw error;
   }
+}
+
+async function checkJoinRoom(chatRoomId) {
+  try{
+    const roomRef = doc(db, `chatRoom/${chatRoomId}`)
+    const res = await getDoc(roomRef);
+    const data = res.data();
+    return data;
+  } catch(error) {
+    throw error
+  }
+
+   
 }
 
 async function editIntroduce(introduce) {
@@ -944,6 +977,7 @@ export {
   createChattingRoom,
   renderChattingRoom,
   checkRoom,
+  checkJoinRoom,
   editIntroduce,
   applyProfileImg,
   deleteEditDiaryImg,
