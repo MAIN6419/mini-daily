@@ -150,16 +150,18 @@
 }
 .introduce-form .btn-submit {
   padding: 10px 20px;
-  font-size: 16px;
+  font-size: 15px;
   border: none;
   background-color: gold;
+  font-weight: bold;
   cursor: pointer;
 }
 .introduce-form .btn-cancle {
   padding: 10px 20px;
-  font-size: 16px;
+  font-size: 15px;
   border: none;
   background-color: #eee;
+  font-weight: bold;
   cursor: pointer;
 }
 .btn-close {
@@ -215,6 +217,7 @@
   cursor: pointer;
   background-color: rgba(221, 158, 211);
   color: #fff;
+  font-weight: bold;
   border-radius: 5px;
 }
 .profileImg-form .btn-cancle {
@@ -230,7 +233,7 @@
   padding: 10px 0px;
   border-bottom: 1px solid black;
   margin-bottom: 20px;
-  background-color: #bdbdbd;
+  background-color: #7db2f0;
 }
 .password-form {
   display: flex;
@@ -239,24 +242,23 @@
   border: 1px solid black;
 }
 .password-form input{
-  width: 200px;
+  width:  70%;
   margin: 0 auto;
   border: 2px solid #bdbdbd;
   padding: 16px 10px;
   margin-bottom: 10px;
 }
 .password-form .form-btns{
-  flex-direction: column;
+  display: flex;
   width: 100%;
+  margin: 20px 0;
   gap: 10px;
-  padding: 10px 0px; 
   justify-content: center;
 }
 .password-form .btn-submit,
 .password-form .btn-cancle{
-  width: 220px;
-  padding: 16px 0px;
-  margin: 0 auto;
+  width: 150px;
+  padding: 10px 0px;
   display: block;
   text-align: center;
   border: none;
@@ -266,7 +268,7 @@
   cursor: pointer;
 }
 .password-form .btn-submit{
-  background-color: gold;
+  background-color: dodgerblue;
   color: #fff;
 }
 .password-form .btn-cancle{

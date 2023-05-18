@@ -30,6 +30,19 @@
         <section class="section-contents">
           <button class="btn-createRoomModal">채팅방 생성</button>
           <button class="btn-joinRoomModal">채팅방 참여</button>
+          <article class="search-bar">
+            <h2 class="a11y-hidden">검색창</h2>
+              <label for="input-search" class="a11y-hidden">다이어리 제목 검색창</label>
+              <input type="text" id="input-search" class="input-search" placeholder="방이름 검색">
+          </article>
+          <div>
+            <div class="page-btns">
+              <span class="currentpage">1</span>/<span class="totalpage">2</span>
+              <button class="btn-prev"><span class="a11y-hidden">이전</span></button>
+              <button class="btn-next"><span class="a11y-hidden">다음</span></button>
+            </div>
+          </div>
+         
           <h2 class="a11y-hidden">채팅방</h2>
           <ul class="room-list"></ul>
 
@@ -41,7 +54,7 @@
 
               <div class="input-box">
                 <label for="input-title">방이름</label>
-                <input id="input-title" type="text" />
+                <input id="input-title" type="text" maxlength="20"/>
               </div>
 
               <div class="input-box">
@@ -53,7 +66,7 @@
                 <label for="checkbox-private">비공개</label>
                 <input id="checkbox-private" type="checkbox" />
                 <label for="input-password" class="a11y-hidden">암호</label>
-                <input id="input-password" type="password" placeholder="암호" maxlength="12"/>
+                <input id="input-password" type="password" placeholder="암호" maxlength="12"  autocomplete="off" />
               </div>
               <button class="btn-createRoom" type="submit">생성하기</button>
               <button class="btn-close" type="button">X</button>
@@ -75,7 +88,7 @@
             <form class="modal-form">
                 <h3 class="modal-title">비밀번호 확인</h3>
                 <p class="modal-text">비밀번호를 입력해주세요.</p>
-                <input class="input-password" type="password" />
+                <input class="input-password" type="password"  autocomplete="off" />
               <div class="modal-btns">
                 <button type="submit" class="btn-confirm">Confirm</button>
                 <button type="button" class="btn-cancel">Cancel</button>

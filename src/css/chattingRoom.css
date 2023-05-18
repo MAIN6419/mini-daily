@@ -1,11 +1,34 @@
-.section-contents{
+.section-contents {
   position: relative;
   background-color: antiquewhite;
   height: 660px;
   overflow-y: scroll;
 }
+.page-btns {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.btn-prev,
+.btn-next {
+  width: 30px;
+  height: 30px;
+  background: url("../img/prev-btn.png") no-repeat center / 24px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn-prev.inactive,
+.btn-next.inactive{
+  opacity: 0.3;
+}
+.btn-next {
+  background: url("../img/next-btn.png") no-repeat center / 24px;
+}
 .btn-createRoomModal,
-.btn-joinRoomModal{
+.btn-joinRoomModal {
   border: none;
   background-color: gold;
   padding: 10px;
@@ -13,16 +36,45 @@
   cursor: pointer;
   margin-bottom: 20px;
 }
-.btn-openModal:hover{
-  background-color: rgb(253, 227, 77);
+.btn-createRoomModal:hover {
+  background-color: rgb(252, 236, 10);
 }
-.btn-joinRoomModal{
+.btn-joinRoomModal {
   background-color: #fff;
 }
-.btn-joinRoomModal:hover{
+.btn-joinRoomModal:hover {
   background-color: #f2f2f2;
 }
-.room-list{
+.search-bar {
+  display: block;
+  float: right;
+  width: 180px;
+  border-radius: 20px;
+  border: none;
+  border: 2px solid #bdbdbd;
+  padding: 5px 20px;
+  background-color: white;
+  position: relative;
+}
+.search-bar::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  display: block;
+  background: url(/src/img/sprite.png) no-repeat -572px -353px / 620px 416px;
+  width: 20px;
+  height: 20px;
+}
+.input-search {
+  width: 100%;
+  margin-left: 15px;
+  padding: 5px;
+  box-sizing: border-box;
+  border: none;
+}
+.room-list {
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -30,7 +82,7 @@
   place-content: center;
   margin: 0 auto;
 }
-.room{
+.room {
   position: relative;
   height: 120px;
   border: 2px solid #bdbdbd;
@@ -39,10 +91,10 @@
   background-color: #fff;
   height: 150px;
 }
-.room:hover{
+.room:hover {
   background-color: #f2f2f2;
 }
-.room a{
+.room a {
   display: flex;
   text-align: center;
   flex-direction: column;
@@ -50,18 +102,34 @@
   gap: 10px;
   width: 100%;
   height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
 }
-.room.private::after{
- content: "";
- display: block;
- width: 30px;
- height: 30px;
- background: url(../img/lock.png) no-repeat right / 30px;
- position: absolute;
- top: 10px;
- right: 10px;
+.room.private::after {
+  content: "";
+  display: block;
+  width: 30px;
+  height: 30px;
+  background: url(../img/lock.png) no-repeat right / 30px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
-.count-state{
+.roomId{
+  position: absolute;
+  top: 20px;
+  left: 8px;
+  font-size: 11px;
+}
+.room-title{
+  font-size: 16px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 200px;
+  white-space: nowrap;
+  text-align: left;
+}
+.count-state {
   display: inline-block;
   width: 12px;
   height: 12px;
@@ -69,11 +137,11 @@
   border: 1px solid #bdbdbd;
   margin-right: 5px;
 }
-.user-count{
+.user-count {
   vertical-align: top;
 }
-.createRoom-modal, 
-.joinRoom-modal{
+.createRoom-modal,
+.joinRoom-modal {
   display: none;
   position: absolute;
   left: 0;
@@ -82,10 +150,10 @@
   right: 0;
 }
 .createRoom-modal.active,
-.joinRoom-modal.active{
+.joinRoom-modal.active {
   display: block;
 }
-.dim{
+.dim {
   position: absolute;
   left: 0;
   top: 0;
@@ -93,24 +161,24 @@
   right: 0;
   background-color: rgba(255, 255, 255, 0.5);
 }
-.modal-form{
+.modal-form {
   position: absolute;
-  top:50%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   width: 300px;
   padding: 20px;
-  background-color:#fff;
+  background-color: #fff;
   border-radius: 10px;
   border: 1px solid #bdbdbd;
 }
-.input-box{
+.input-box {
   margin-bottom: 10px;
   width: 100%;
 }
-#input-title{
+#input-title {
   display: block;
   width: 100%;
   padding: 10px;
@@ -119,7 +187,7 @@
   box-sizing: border-box;
   margin-top: 8px;
 }
-#input-limit{
+#input-limit {
   width: 40px;
   height: 20px;
   padding: 5px;
@@ -136,13 +204,13 @@
   box-sizing: border-box;
   width: 200px;
 }
-#checkbox-private{
+#checkbox-private {
   vertical-align: middle;
 }
-#input-password.active{
+#input-password.active {
   display: inline-block;
 }
-.btn-createRoom{
+.btn-createRoom {
   width: 200px;
   margin: 0 auto;
   border: none;
@@ -154,7 +222,7 @@
   margin-top: 10px;
   cursor: pointer;
 }
-.btn-close{
+.btn-close {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -168,25 +236,25 @@
   border: 1px solid #bdbdbd;
   cursor: pointer;
 }
-.btn-close:hover{
+.btn-close:hover {
   background-color: #f2f2f2;
 }
 
-.joinRoom-modal label{
+.joinRoom-modal label {
   color: dodgerblue;
   margin-bottom: 10px;
 }
-.joinRoom-modal .modal-form{
+.joinRoom-modal .modal-form {
   align-items: center;
 }
-.joinRoom-modal #input-roomId{
+.joinRoom-modal #input-roomId {
   width: 250px;
   padding: 10px;
   margin-bottom: 20px;
   border-radius: 5px;
   border: 1px solid #bdbdbd;
 }
-.joinRoom-modal .btn-join{
+.joinRoom-modal .btn-join {
   padding: 10px 15px;
   background-color: dodgerblue;
   border: none;
@@ -195,14 +263,14 @@
   font-size: 15px;
   color: #fff;
 }
-.joinRoom-modal .btn-join:hover{
-  background-color: rgb(11, 117, 224)
+.joinRoom-modal .btn-join:hover {
+  background-color: rgb(11, 117, 224);
 }
-.modal-title{
+.modal-title {
   text-align: center;
   margin-bottom: 20px;
 }
-.loading-modal span{
+.loading-modal span {
   font-size: 20px;
 }
 .password-modal {
@@ -214,13 +282,13 @@
   width: 100%;
   height: 100%;
 }
-.dim{
+.dim {
   position: absolute;
   width: 100%;
   height: 100%;
   background-color: rgba(255, 255, 255, 0.5);
 }
-.password-modal.active{
+.password-modal.active {
   display: block;
 }
 .password-modal .modal-form {
@@ -237,12 +305,12 @@
   font-weight: bold;
   margin-bottom: 20px;
 }
-.modal-text{
+.modal-text {
   margin-bottom: 20px;
   font-size: 14px;
 }
 
-.input-password{
+.input-password {
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
@@ -250,7 +318,7 @@
   border: 2px solid #bdbdbd;
   margin-bottom: 20px;
 }
-.input-password:focus{
+.input-password:focus {
   outline: none;
   border: 2px solid dodgerblue;
 }
@@ -287,7 +355,7 @@
 .btn-cancel:hover {
   background-color: #da190b;
 }
-.links .chattingRoom-link{
+.links .chattingRoom-link {
   background-color: antiquewhite;
   font-weight: bold;
   border-left: none;

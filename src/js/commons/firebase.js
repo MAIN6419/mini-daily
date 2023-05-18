@@ -49,7 +49,7 @@ const host = window.location.host;
 if (host.includes("github.io")) {
   baseUrl = "/mini-diary";
 }
-let lastpage;
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -718,9 +718,9 @@ const changePassword = async (email, phone) => {
 };
 async function checkRoom(chatRoomId) {
   const chatRoomRef = doc(db, "chatRoom", chatRoomId);
-  const docSnap = await getDoc(chatRoomRef);
-  const res = docSnap.data();
-  // if (res.users.length === 0) {
+  const res = await getDoc(chatRoomRef);
+  const data = res.data();
+  // if (data.users.length === 0) {
   //   await deleteDoc(doc(db, `chatRoom/${chatRoomId}`));
   //   alert("채팅방이 닫혔습니다!");
   //   location.replace = "chatting.html";
@@ -732,9 +732,15 @@ const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
     alert("잘못된 경로입니다!");
     return location.replace("chattingRoom.html");
   }
+  
   try{
     const chatRoomRef = doc(db, "chatRoom", chatRoomId);
-
+    const res = await getDoc(chatRoomRef);
+    const data = res.data();
+    if(data.users.length>=data.limit){
+      alert("입장 가능한인원을 초과하였습니다!");
+      return location.replace("chattingRoom.html");
+    }
     // chatRoomRef의 users 필드 업데이트
     await updateDoc(chatRoomRef, {
       users: arrayUnion(userNickname), // users 배열에 userNickname 추가
@@ -808,70 +814,19 @@ async function createChattingRoom({
   location.href = `${baseUrl}/src/template/chatting.html?id=${id}`;
 }
 
-async function renderChattingRoom($roomLists, $loadingModal, modalPrompt) {
+async function fetchChattingRoom() {
   const chatRoomRef = collection(db, "chatRoom");
   const q = query(chatRoomRef, orderBy("createdAt", "desc"));
-  $loadingModal.classList.add("active");
-  onSnapshot(q, (snapshot) => {
-    while ($roomLists.firstChild) {
-      // 리스트 초기화
-      $roomLists.removeChild($roomLists.firstChild);
-    }
-    snapshot.docs.forEach((doc) => {
-      const item = doc.data();
-      const roomLi = document.createElement("li");
-      item.isprivate 
-      roomLi.className = item.isprivate ? "room private" : "room";
-
-
-      const roomLink = document.createElement("a");
-      roomLink.href = `${baseUrl}/src/template/chatting.html?id=${doc.id}`;
-
-      const roomTitle = document.createElement("h3");
-      roomTitle.textContent = item.title;
-
-      const countState = document.createElement("span");
-      countState.classList.add("count-state");
-      if(item.users.length===item.limit) {
-        countState.style.backgroundColor = "red";
+  return new Promise((resolve, reject)=>{
+    onSnapshot(q, (snapshot)=>{
+      try {
+        const data = snapshot.docs.map((el) => el.data());
+        resolve(data);
+      } catch (error) {
+        reject(error);
       }
-      else if(item.users.length >= Math.floor(item.limit / 2)) {
-        countState.style.backgroundColor = "gold";
-      }
-      else{
-        countState.style.backgroundColor = "yellowgreen";
-      }
-      const userCountBox = document.createElement("div");
-      userCountBox.className = "user-countBox";
-
-      const userCount = document.createElement("span");
-      userCount.className = "user-count";
-      userCount.textContent = `인원 : ${item.users.length}/${item.limit}`;
-
-      roomLink.appendChild(roomTitle);
-      userCountBox.appendChild(countState);
-      userCountBox.appendChild(userCount);
-      roomLink.appendChild(userCountBox);
-      roomLi.appendChild(roomLink);
-      $roomLists.appendChild(roomLi);
-
-      roomLink.addEventListener("click", async (e) => {
-        if (item.users.length >= item.limit) {
-          e.preventDefault();
-          alert("입장가능한 인원수가 모두 찼습니다!");
-          return;
-        }
-        if (item.isprivate) {
-          e.preventDefault();
-          modalPrompt(item);
-        } else {
-          location.href = `${baseUrl}/src/template/chatting.html?id=${doc.id}`;
-        }
-      });
-    });
-
-    $loadingModal.classList.remove("active");
-  });
+    })
+  })
 }
 
 async function addChatting(chatRoomId, newChat) {
@@ -900,8 +855,6 @@ async function checkJoinRoom(chatRoomId) {
   } catch(error) {
     throw error
   }
-
-   
 }
 
 async function editIntroduce(introduce) {
@@ -975,7 +928,6 @@ export {
   joinChatRoom,
   deleteChat,
   createChattingRoom,
-  renderChattingRoom,
   checkRoom,
   checkJoinRoom,
   editIntroduce,
@@ -994,6 +946,7 @@ export {
   deleteReplyComment,
   editReplyComment,
   getAuthImg,
+  fetchChattingRoom,
   setDoc,
   getDoc,
   doc,

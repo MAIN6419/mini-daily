@@ -1,9 +1,21 @@
+import _ from "https://cdn.skypack.dev/lodash-es";
 import {
   checkJoinRoom,
   createChattingRoom,
-  renderChattingRoom,
+  db,
+  fetchChattingRoom,
 } from "../commons/firebase.js";
-
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  where,
+  startAt,
+  startAfter,
+  limit,
+  onSnapshot,
+} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
 const $sectionContents = document.querySelector(".section-contents");
 
 const $roomList = $sectionContents.querySelector(".room-list");
@@ -27,6 +39,23 @@ const $joinRoomModalDim = $joinRoomModal.querySelector(".dim");
 const $inputRoomId = $joinRoomModal.querySelector("#input-roomId");
 const $joinRoomCloseBtn = $joinRoomModal.querySelector(".btn-close");
 const $joinRoomBtn = $joinRoomModal.querySelector(".btn-join");
+
+const $currentPage = $sectionContents.querySelector(".currentpage");
+const $totalPage = $sectionContents.querySelector(".totalpage");
+
+let keyword = "";
+let hasNextPage = false;
+let nextFirstPage = null;
+let prevFirstPage = null;
+let currentPage = 1; // 현재 페이지 번호
+let totalPage = 1;
+let currentSnapshotUnsubscribe; // 현재 페이지의 onSnapshot 구독 객체
+
+let baseUrl = "";
+const host = window.location.host;
+if (host.includes("github.io")) {
+  baseUrl = "/mini-diary";
+}
 
 // createRoom 모달창 이벤트
 $createRoomBtn.addEventListener("click", (e) => {
@@ -64,7 +93,6 @@ $createRoomBtn.addEventListener("click", (e) => {
   $inputTitle.value = "";
   $createRoomModal.classList.remove("active");
 });
-renderChattingRoom($roomList, $loadingModal, modalPrompt);
 
 $createRoomModalBtn.addEventListener("click", () => {
   $createRoomModal.classList.add("active");
@@ -140,7 +168,7 @@ $joinRoomBtn.addEventListener("click", async (e) => {
     if (res.isprivate) {
       modalPrompt(res);
     } else {
-      location.href = `/src/template/chatting.html?id=${res.id}`;
+      location.href = `${baseUrl}/src/template/chatting.html?id=${res.id}`;
     }
   } else {
     alert("존재하지 않는 채팅방입니다!");
@@ -206,7 +234,7 @@ function modalPrompt(roomData) {
       $passwordModalInput.value = "";
       return;
     }
-    location.href = `/src/template/chatting.html?id=${roomData.id}`;
+    location.href = `${baseUrl}/src/template/chatting.html?id=${roomData.id}`;
     handleCancel();
   }
   function handleCancel() {
@@ -220,3 +248,192 @@ function modalPrompt(roomData) {
   $passwordModalCancleBtn.addEventListener("click", handleCancel);
   $passwordModalDim.addEventListener("click", handleCancel);
 }
+
+async function renderChattingRooms(data) {
+  $totalPage.textContent = totalPage;
+  hasNextPage ? $nextBtn.classList.remove("inactive") : $nextBtn.classList.add("inactive");
+  $roomList.innerHTML = "";
+  currentPage>1 ? $prevBtn.classList.remove("inactive") : $prevBtn.classList.add("inactive");
+  for (const item of data) {
+    const roomLi = document.createElement("li");
+    item.isprivate;
+    roomLi.className = item.isprivate ? "room private" : "room";
+
+    const roomLink = document.createElement("a");
+    roomLink.href = `${baseUrl}/src/template/chatting.html?id=${item.id}`;
+    
+    const roomTitle = document.createElement("h3");
+    roomTitle.classList.add("room-title")
+    roomTitle.textContent = `방이름 : ${item.title}`;
+
+    const countState = document.createElement("span");
+    countState.classList.add("count-state");
+    if (item.users.length === item.limit) {
+      countState.style.backgroundColor = "red";
+    } else if (item.users.length >= Math.floor(item.limit / 2)) {
+      countState.style.backgroundColor = "gold";
+    } else {
+      countState.style.backgroundColor = "yellowgreen";
+    }
+    const userCountBox = document.createElement("div");
+    userCountBox.className = "user-countBox";
+
+    const userCount = document.createElement("span");
+    userCount.className = "user-count";
+    userCount.textContent = `인원 : ${item.users.length}/${item.limit}`;
+
+    roomLink.appendChild(roomTitle);
+    userCountBox.appendChild(countState);
+    userCountBox.appendChild(userCount);
+    roomLink.appendChild(userCountBox);
+    roomLi.appendChild(roomLink);
+    $roomList.appendChild(roomLi);
+
+    roomLink.addEventListener("click", async (e) => {
+      if (item.users.length >= item.limit) {
+        e.preventDefault();
+        alert("입장가능한 인원수가 모두 찼습니다!");
+        return;
+      }
+      if (item.isprivate) {
+        e.preventDefault();
+        modalPrompt(item);
+      } else {
+        location.href = `${baseUrl}/src/template/chatting.html?id=${item.id}`;
+      }
+    });
+    $loadingModal.classList.remove("active");
+  }
+}
+
+fetchFirstPage();
+
+async function fetchFirstPage() {
+  $loadingModal.classList.add("active");
+  const chattingRoomRef = collection(db, "chatRoom");
+  if (keyword.trim()) {
+    const q = query(
+      chattingRoomRef,
+      orderBy("title"),
+      where("title", ">=", keyword),
+      where("title", "<=", keyword + "\uf8ff"),
+      limit(9)
+    );
+    return new Promise((resolve, reject) => {
+      currentSnapshotUnsubscribe = onSnapshot(q, (snapshot) => {
+        try {
+          totalPage = Math.ceil(snapshot.docs.length / 9);
+          const data = snapshot.docs.map((el) => el.data()).slice(0, 9);
+          hasNextPage = snapshot.docs.length === 10;
+          resolve(data);
+          renderChattingRooms(data);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+  } else {
+    const q = query(chattingRoomRef, orderBy("createdAt", "desc"), limit(10));
+    return new Promise((resolve, reject) => {
+      currentSnapshotUnsubscribe = onSnapshot(q, (snapshot) => {
+        try {
+          totalPage = Math.ceil(snapshot.docs.length / 9);
+          const data = snapshot.docs.map((el) => el.data()).slice(0, 9);
+          prevFirstPage = snapshot.docs[0];
+          nextFirstPage = snapshot.docs[snapshot.docs.length - 1];
+          hasNextPage = snapshot.docs.length === 10;
+          resolve(data);
+          renderChattingRooms(data);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+  }
+}
+
+async function fetchPage(page) {
+  const chattingRoomRef = collection(db, "chatRoom");
+  let q;
+  if (keyword.trim()) {
+    q = query(
+      chattingRoomRef,
+      orderBy("title"),
+      where("title", ">=", keyword),
+      where("title", "<=", keyword + "\uf8ff"),
+      startAt(page),
+      limit(9)
+    );
+  } else {
+    q = query(
+      chattingRoomRef,
+      orderBy("createdAt", "desc"),
+      startAt(page),
+      limit(9)
+    );
+  }
+ 
+  return new Promise((resolve, reject) => {
+    currentSnapshotUnsubscribe = onSnapshot(q, (snapshot) => {
+      try {
+        const data = snapshot.docs.map((el) => el.data());
+        page = snapshot.docs[0];
+        hasNextPage = snapshot.docs.length === 9;
+        resolve(data);
+        renderChattingRooms(data);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+}
+
+const $nextBtn = $sectionContents.querySelector(".btn-next");
+const $prevBtn = $sectionContents.querySelector(".btn-prev");
+
+$prevBtn.addEventListener("click", goToPrevPage);
+$nextBtn.addEventListener("click", goToNextPage);
+
+async function goToPrevPage() {
+  if (currentPage > 1) {
+    currentPage--;
+    $currentPage.textContent = currentPage;
+    currentSnapshotUnsubscribe();
+    fetchPage(prevFirstPage);
+  }
+}
+
+async function goToNextPage() {
+  if (hasNextPage) {
+    currentPage++;
+    $currentPage.textContent = currentPage;
+    currentSnapshotUnsubscribe();
+    fetchPage(nextFirstPage);
+  }
+}
+
+const $inputSearch = $sectionContents.querySelector(".input-search");
+$inputSearch.addEventListener("input", (e) => {
+  // 첫 글자 스페이스 방지 => 검색 최적화 스페이스가 된다면 검색이 이루어져서 불필요한 데이터 요청 발생
+  if (e.target.value.length === 1 && e.target.value[0] === " ") {
+    e.target.value = ""; // 입력한 값을 빈 문자열로 대체하여 막음
+    return;
+  }
+  debounceSearch(e);
+});
+
+// 검색 기능
+const debounceSearch = _.debounce(async (e) => {
+  keyword = e.target.value;
+  prevFirstPage = null;
+  nextFirstPage = null; // 검색시 nextFirstPage를 지워줘야 검색했을때 페이지를 정상적으로 불러옴
+  if (!e.target.value) {
+    $roomList.innerHTML = "";
+    currentSnapshotUnsubscribe();
+    await fetchFirstPage();
+    return;
+  }
+  currentSnapshotUnsubscribe();
+  $roomList.innerHTML = "";
+  await fetchFirstPage();
+}, 500);
