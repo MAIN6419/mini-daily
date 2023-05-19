@@ -7,6 +7,10 @@ import { getCreatedAt } from '../commons/libray.js';
 // 인원수 확인 로직 추가
 
 //===============================================
+const $sectionContents = document.querySelector(".section-contents");
+const $roomName = $sectionContents.querySelector(".room-name");
+const $roomId =  $sectionContents.querySelector(".room-id");
+const $copyBtn = $sectionContents.querySelector(".btn-copy");
 const $chattingBox = document.querySelector(".chatting-box");
 const $chattingForm = document.querySelector(".chatting-form");
 const $chattingInput = $chattingForm .querySelector("#input-chatting");
@@ -37,7 +41,7 @@ $chattingForm.addEventListener("submit", async (e) => {
     createdAt: new Date().getTime(),
     type: "added"
   }
-  await addChatting(chatRoomId, newChat)
+  await addChatting(chatRoomId, newChat);
   $chattingInput.value = "";
 });
 
@@ -127,9 +131,10 @@ function renderChattingMsg(data, prevDate, currentDate) {
   prevDate = currentDate;
 }
 
-function rednerJoinUsers({users, limit}){
+function rednerJoinUsers({users, limit, title, id}){
+  $roomName.textContent = `방 이름 : ${title}`;
+  $roomId.textContent = `id : ${id}`
   $joinCount.textContent = `총 참여자 ${users.length}/${limit}`
-  $joinLists.innerHTML='';
   for(const user of users){
     $joinLists.innerHTML +=`
     <li class="join-user">
@@ -138,5 +143,17 @@ function rednerJoinUsers({users, limit}){
   </li>
     `
   }
+}
+$copyBtn.addEventListener("click", copyId);
+
+function copyId() {
+  const el = document.createElement(`textarea`);
+    el.value = $roomId.textContent.replace("id : ","")
+    el.setAttribute(`readonly`, ``);
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand(`copy`);
+    document.body.removeChild(el);
+    alert('아이디가 복사되었습니다.');
 }
 

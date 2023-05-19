@@ -88,11 +88,11 @@ async function FetchDiarys() {
     throw error;
   }
 }
-async function getAuthImg(auth){
-  const userRef = doc(db, 'user', auth);
+async function getAuthImg(auth) {
+  const userRef = doc(db, "user", auth);
   const res = await getDoc(userRef);
   const datas = res.data();
-  return datas.profileImgUrl
+  return datas.profileImgUrl;
 }
 async function fetchRecentDiary() {
   try {
@@ -256,27 +256,26 @@ async function writeReplyComment(newReply, parentCommentId) {
   await setDoc(doc(replyCommentRef, newReply.commentId), {
     ...newReply,
   });
-
 }
 
 async function deleteReplyComment(replyCommentId, parentCommentId) {
   const commentsCollection = collection(db, "comment");
-const parentCommentRef = doc(commentsCollection, parentCommentId);
-const replyCommentRef = collection(parentCommentRef, "replyComment");
-const deleteReplyRef = doc(replyCommentRef, replyCommentId);
+  const parentCommentRef = doc(commentsCollection, parentCommentId);
+  const replyCommentRef = collection(parentCommentRef, "replyComment");
+  const deleteReplyRef = doc(replyCommentRef, replyCommentId);
 
-await deleteDoc(deleteReplyRef);
+  await deleteDoc(deleteReplyRef);
 }
 
 async function editReplyComment(replyCommentId, parentCommentId, content) {
   const commentsCollection = collection(db, "comment");
-const parentCommentRef = doc(commentsCollection, parentCommentId);
-const replyCommentRef = collection(parentCommentRef, "replyComment");
-const updateReplyRef = doc(replyCommentRef, replyCommentId);
+  const parentCommentRef = doc(commentsCollection, parentCommentId);
+  const replyCommentRef = collection(parentCommentRef, "replyComment");
+  const updateReplyRef = doc(replyCommentRef, replyCommentId);
 
-await updateDoc(updateReplyRef,{
-  content 
-});
+  await updateDoc(updateReplyRef, {
+    content,
+  });
 }
 
 async function fetchReplyComments(parentCommentId) {
@@ -654,7 +653,7 @@ const signup = async ({ nickname, email, phone, password }) => {
       commentCount: 0,
       diaryCount: 0,
       grade: "일반",
-      empathyList: []
+      empathyList: [],
     });
 
     alert("회원가입이 완료되었습니다.");
@@ -727,17 +726,21 @@ async function checkRoom(chatRoomId) {
   // }
 }
 const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
-  // 채팅방 url 예외처리 아이디값을 없을 경우 
-  if(!chatRoomId) {
+  // 채팅방 url 예외처리 아이디값을 없을 경우
+  if (!chatRoomId) {
     alert("잘못된 경로입니다!");
     return location.replace("chattingRoom.html");
   }
-  
-  try{
+
+  try {
     const chatRoomRef = doc(db, "chatRoom", chatRoomId);
     const res = await getDoc(chatRoomRef);
     const data = res.data();
-    if(data.users.length>=data.limit){
+    if (!data) {
+      alert("삭제 되거나 존재하지 않는 채팅방 입니다!");
+      location.replace("chattingRoom.html");
+    }
+    if (data.users.length >= data.limit) {
       alert("입장 가능한인원을 초과하였습니다!");
       return location.replace("chattingRoom.html");
     }
@@ -745,40 +748,48 @@ const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
     await updateDoc(chatRoomRef, {
       users: arrayUnion(userNickname), // users 배열에 userNickname 추가
     });
-    
-  
-    // Firestore 실시간 업데이트를 위한 onSnapshot 등록
-    onSnapshot(chatRoomRef, async (docs) => {
+
+    onSnapshot(chatRoomRef, async (snapshot) => {
       try {
-        const data = docs.data();
+        const data = snapshot.data();
+
+        // data 객체가 undefined인 경우 처리
+        if (!data) {
+          console.log("Data is undefined.");
+          return; // 함수 실행 중단 또는 예외 처리
+        }
+
         renderJoinUser(data);
+
+        // // users 속성이 존재하고 유저 수가 0인 경우에만 채팅방 삭제
+        // if (data.users && data.users.length === 0) {
+        //   // 유저 수가 0이면 채팅방 삭제
+        //   await deleteDoc(chatRoomRef);
+        //   // 더 이상 실시간 업데이트를 받을 필요가 없으므로 구독 해제
+        //   currentSnapshotUnsubscribe();
+        // }
       } catch (error) {
         console.log(error);
       }
     });
-  
+
     // 채팅방에서 나갈 때
     window.addEventListener("beforeunload", () => {
-        updateDoc(chatRoomRef, {
-          users: arrayRemove(userNickname), // users 배열에서 userNickname 제거
-        });
-        checkRoom(chatRoomId);
+      updateDoc(chatRoomRef, {
+        users: arrayRemove(userNickname), // users 배열에서 userNickname 제거
+      });
+      checkRoom(chatRoomId);
     });
-  } catch(error) {
-     // 채팅방 url 예외처리 채팅방이 없을 경우
-    if(error.message.includes("No document to update")) {
+  } catch (error) {
+    // 채팅방 url 예외처리 채팅방이 없을 경우
+    if (error.message.includes("No document to update")) {
       alert("삭제 되거나 존재하지 않는 채팅방 입니다!");
       location.replace("chattingRoom.html");
     }
   }
- 
 };
 
-function fetchChatting(
-  $chattingBox,
-  chatRoomId,
-  renderChattingMsg
-) {
+function fetchChatting($chattingBox, chatRoomId, renderChattingMsg) {
   const chatRef = collection(db, `chat${chatRoomId}`);
   const q = query(chatRef, orderBy("createdAt", "asc"));
   let prevDate = null; // 이전 메시지의 작성 날짜를 저장할 변수
@@ -817,16 +828,16 @@ async function createChattingRoom({
 async function fetchChattingRoom() {
   const chatRoomRef = collection(db, "chatRoom");
   const q = query(chatRoomRef, orderBy("createdAt", "desc"));
-  return new Promise((resolve, reject)=>{
-    onSnapshot(q, (snapshot)=>{
+  return new Promise((resolve, reject) => {
+    onSnapshot(q, (snapshot) => {
       try {
         const data = snapshot.docs.map((el) => el.data());
         resolve(data);
       } catch (error) {
         reject(error);
       }
-    })
-  })
+    });
+  });
 }
 
 async function addChatting(chatRoomId, newChat) {
@@ -847,13 +858,13 @@ async function addChatting(chatRoomId, newChat) {
 }
 
 async function checkJoinRoom(chatRoomId) {
-  try{
-    const roomRef = doc(db, `chatRoom/${chatRoomId}`)
+  try {
+    const roomRef = doc(db, `chatRoom/${chatRoomId}`);
     const res = await getDoc(roomRef);
     const data = res.data();
     return data;
-  } catch(error) {
-    throw error
+  } catch (error) {
+    throw error;
   }
 }
 

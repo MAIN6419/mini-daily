@@ -1,18 +1,51 @@
 .section-contents{
-  display: flex;
-  gap: 50px;
   position: relative;
   background-color: antiquewhite;
 }
+.chatting-contents{
+  display: flex;
+  width: 100%;
+  gap: 50px;
+  position: relative;
+}
+.chatting-header{
+  width: 750px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-sizing: border-box;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  box-shadow: 5px 5px 0px 1px rgba(0, 0, 0, 0.2);
+}
+.room-name{
+  display: block;
+}
+.room-id {
+  display: inline-block;
+  min-width: 287px;
+  font-size: 14px;
+  color: gray;
+}
+.btn-copy{
+  padding: 5px 10px;
+  border: none;
+  border-radius: 10px;
+  background-color: gold;
+  cursor: pointer;
+  font-size: 12px;
+}
 .joinUsers-wrapper{
+  position: relative;
   flex-basis: 300px;
   height: 500px;
-  padding: 20px;
   box-sizing: border-box;
   border: 1px solid #bdbdbd;
   border-radius: 10px;
   background-color: #fff;
   overflow: hidden;
+}
+.joinUsers-header{
+  font-size: 20px;
 }
 .join-count{
   display: block;
@@ -20,14 +53,17 @@
   text-align: center;
   margin-bottom: 10px;
 }
-.title{
-  margin: -20px -20px 10px -20px;
+.joinUsers-header{
   background-color: aliceblue;
   border-bottom: 1px solid #bdbdbd;
   padding: 15px 0px;
   text-align: center;
 }
+.joinUser-content{
+  padding: 20px 0 20px 20px;
+}
 .join-lists{
+  max-height: 445px;
   overflow-y: scroll;
 }
 .join-user{
@@ -45,6 +81,7 @@
 }
 .chatting{
   flex-basis: 400px;
+  height: 530px;
   border: 1px solid #bdbdbd;
   border-radius: 10px;
   overflow: hidden;
@@ -58,7 +95,6 @@
   padding: 10px;
   background-color: lightblue;
   overflow: scroll;
-  
 }
 .message-box{
   display: flex;
@@ -189,9 +225,10 @@
 }
 .exit-btn{
   position: absolute;
-  bottom: 80px;
-  left: 24px;
+  bottom: 20px;
+  right: 24px;
   color: crimson;
+  font-size: 14px;
 }
 
 .links .chattingRoom-link{
