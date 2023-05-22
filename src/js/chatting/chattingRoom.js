@@ -18,6 +18,7 @@ import {
   endAt,
   limit,
   onSnapshot,
+  limitToLast
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
 const $sectionContents = document.querySelector(".section-contents");
 
@@ -376,6 +377,7 @@ async function fetchFirstPage() {
 async function fetchPage(type) {
   const chattingRoomRef = collection(db, "chatRoom");
   let q;
+
   if (keyword.trim()) {
     q = query(
       chattingRoomRef,
@@ -390,27 +392,19 @@ async function fetchPage(type) {
       chattingRoomRef,
       orderBy("createdAt", "desc"),
       type === "prev" ? endBefore(prevFirstPage) : startAfter(nextFirstPage),
-      type === "prev" && currentPage !== 1 ? limit(currentPage * 9) : limit(9)
+      type === "prev" ? limitToLast(9) : limit(9)
     );
   }
 
   return new Promise((resolve, reject) => {
-    let data;
-    currentSnapshotUnsubscribe();
+    currentSnapshotUnsubscribe()
     currentSnapshotUnsubscribe = onSnapshot(q, async (snapshot) => {
       try {
         const res = await getDocs(chattingRoomRef);
         totalPage = Math.ceil(res.docs.length / 9);
-        if (type === "prev" && currentPage !== 1) {
-          data = snapshot.docs.map((el) => el.data()).slice((currentPage * 9) - 9, currentPage * 9);
-          prevFirstPage = snapshot.docs[currentPage * 9 - 9];
-          nextFirstPage = snapshot.docs[snapshot.docs.length - 1];
-        } else {
-          data = snapshot.docs.map((el) => el.data());
+        const data = snapshot.docs.map((el) => el.data());
           prevFirstPage = snapshot.docs[0];
           nextFirstPage = snapshot.docs[snapshot.docs.length - 1];
-        }
-
         hasNextPage = snapshot.docs.length === 9;
         resolve(data);
         renderChattingRooms(data);
@@ -442,6 +436,7 @@ async function goToNextPage() {
     $pageNum.textContent = currentPage + "/" + totalPage;
     currentSnapshotUnsubscribe();
     fetchPage("next");
+    
   }
 }
 
