@@ -1,5 +1,6 @@
 import _ from "https://cdn.skypack.dev/lodash-es";
 import {
+  checkDeleteRoom,
   checkJoinRoom,
   createChattingRoom,
   db,
@@ -13,6 +14,8 @@ import {
   where,
   startAt,
   startAfter,
+  endBefore,
+  endAt,
   limit,
   onSnapshot,
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
@@ -40,8 +43,7 @@ const $inputRoomId = $joinRoomModal.querySelector("#input-roomId");
 const $joinRoomCloseBtn = $joinRoomModal.querySelector(".btn-close");
 const $joinRoomBtn = $joinRoomModal.querySelector(".btn-join");
 
-const $currentPage = $sectionContents.querySelector(".currentpage");
-const $totalPage = $sectionContents.querySelector(".totalpage");
+const $pageNum = $sectionContents.querySelector(".page-num");
 
 let keyword = "";
 let hasNextPage = false;
@@ -250,10 +252,26 @@ function modalPrompt(roomData) {
 }
 
 async function renderChattingRooms(data) {
-  $totalPage.textContent = totalPage;
-  hasNextPage ? $nextBtn.classList.remove("inactive") : $nextBtn.classList.add("inactive");
+  if (!data.length) {
+    hasNextPage = false;
+    $roomList.innerHTML = `<li>현재 채팅방이 없습니다.</li>`;
+    $loadingModal.classList.remove("active");
+    return;
+  }
+
+  $pageNum.textContent = currentPage + "/" + totalPage;
+  hasNextPage
+    ? $nextBtn.classList.remove("inactive")
+    : $nextBtn.classList.add("inactive");
+
   $roomList.innerHTML = "";
-  currentPage>1 ? $prevBtn.classList.remove("inactive") : $prevBtn.classList.add("inactive");
+  currentPage > 1
+    ? $prevBtn.classList.remove("inactive")
+    : $prevBtn.classList.add("inactive");
+  if (currentPage === 1 && totalPage === 1) {
+    $prevBtn.classList.add("inactive");
+    $nextBtn.classList.add("inactive");
+  }
   for (const item of data) {
     const roomLi = document.createElement("li");
     item.isprivate;
@@ -261,9 +279,9 @@ async function renderChattingRooms(data) {
 
     const roomLink = document.createElement("a");
     roomLink.href = `${baseUrl}/src/template/chatting.html?id=${item.id}`;
-    
+
     const roomTitle = document.createElement("h3");
-    roomTitle.classList.add("room-title")
+    roomTitle.classList.add("room-title");
     roomTitle.textContent = `방이름 : ${item.title}`;
 
     const countState = document.createElement("span");
@@ -320,11 +338,12 @@ async function fetchFirstPage() {
       limit(9)
     );
     return new Promise((resolve, reject) => {
-      currentSnapshotUnsubscribe = onSnapshot(q, (snapshot) => {
+      currentSnapshotUnsubscribe = onSnapshot(q, async (snapshot) => {
         try {
-          totalPage = Math.ceil(snapshot.docs.length / 9);
           const data = snapshot.docs.map((el) => el.data()).slice(0, 9);
-          hasNextPage = snapshot.docs.length === 10;
+          const res = await getDocs(chattingRoomRef);
+          totalPage = Math.ceil(res.docs.length / 9);
+          hasNextPage = snapshot.docs.length === 9;
           resolve(data);
           renderChattingRooms(data);
         } catch (error) {
@@ -333,15 +352,17 @@ async function fetchFirstPage() {
       });
     });
   } else {
-    const q = query(chattingRoomRef, orderBy("createdAt", "desc"), limit(10));
+    const q = query(chattingRoomRef, orderBy("createdAt", "desc"), limit(9));
     return new Promise((resolve, reject) => {
-      currentSnapshotUnsubscribe = onSnapshot(q, (snapshot) => {
+      currentSnapshotUnsubscribe = onSnapshot(q, async (snapshot) => {
         try {
-          totalPage = Math.ceil(snapshot.docs.length / 9);
+          // 현재 최신 전체 데이터 수를 불러옴
+          const res = await getDocs(chattingRoomRef);
+          totalPage = Math.ceil(res.docs.length / 9);
           const data = snapshot.docs.map((el) => el.data()).slice(0, 9);
           prevFirstPage = snapshot.docs[0];
           nextFirstPage = snapshot.docs[snapshot.docs.length - 1];
-          hasNextPage = snapshot.docs.length === 10;
+          hasNextPage = snapshot.docs.length === 9;
           resolve(data);
           renderChattingRooms(data);
         } catch (error) {
@@ -352,7 +373,7 @@ async function fetchFirstPage() {
   }
 }
 
-async function fetchPage(page) {
+async function fetchPage(type) {
   const chattingRoomRef = collection(db, "chatRoom");
   let q;
   if (keyword.trim()) {
@@ -361,23 +382,35 @@ async function fetchPage(page) {
       orderBy("title"),
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
-      startAt(page),
+      type === "prev" ? endBefore(prevFirstPage) : startAfter(nextFirstPage),
       limit(9)
     );
   } else {
     q = query(
       chattingRoomRef,
       orderBy("createdAt", "desc"),
-      startAt(page),
-      limit(9)
+      type === "prev" ? endBefore(prevFirstPage) : startAfter(nextFirstPage),
+      type === "prev" && currentPage !== 1 ? limit(currentPage * 9) : limit(9)
     );
   }
- 
+
   return new Promise((resolve, reject) => {
-    currentSnapshotUnsubscribe = onSnapshot(q, (snapshot) => {
+    let data;
+    currentSnapshotUnsubscribe();
+    currentSnapshotUnsubscribe = onSnapshot(q, async (snapshot) => {
       try {
-        const data = snapshot.docs.map((el) => el.data());
-        page = snapshot.docs[0];
+        const res = await getDocs(chattingRoomRef);
+        totalPage = Math.ceil(res.docs.length / 9);
+        if (type === "prev" && currentPage !== 1) {
+          data = snapshot.docs.map((el) => el.data()).slice((currentPage * 9) - 9, currentPage * 9);
+          prevFirstPage = snapshot.docs[currentPage * 9 - 9];
+          nextFirstPage = snapshot.docs[snapshot.docs.length - 1];
+        } else {
+          data = snapshot.docs.map((el) => el.data());
+          prevFirstPage = snapshot.docs[0];
+          nextFirstPage = snapshot.docs[snapshot.docs.length - 1];
+        }
+
         hasNextPage = snapshot.docs.length === 9;
         resolve(data);
         renderChattingRooms(data);
@@ -397,18 +430,18 @@ $nextBtn.addEventListener("click", goToNextPage);
 async function goToPrevPage() {
   if (currentPage > 1) {
     currentPage--;
-    $currentPage.textContent = currentPage;
+    $pageNum.textContent = currentPage + "/" + totalPage;
     currentSnapshotUnsubscribe();
-    fetchPage(prevFirstPage);
+    fetchPage("prev");
   }
 }
 
 async function goToNextPage() {
   if (hasNextPage) {
     currentPage++;
-    $currentPage.textContent = currentPage;
+    $pageNum.textContent = currentPage + "/" + totalPage;
     currentSnapshotUnsubscribe();
-    fetchPage(nextFirstPage);
+    fetchPage("next");
   }
 }
 

@@ -15,7 +15,7 @@
   box-sizing: border-box;
   padding: 10px 15px;
   margin-bottom: 20px;
-  box-shadow: 5px 5px 0px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 5px 5px 3px 1px rgba(0, 0, 0, 0.2);
 }
 .room-name{
   display: block;
@@ -229,6 +229,8 @@
   right: 24px;
   color: crimson;
   font-size: 14px;
+  padding-left: 21px;
+  background: url(../img/logout-icon.png) no-repeat left / 18px;
 }
 
 .links .chattingRoom-link{

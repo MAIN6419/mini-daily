@@ -1,7 +1,7 @@
 'use strict';
 import { v4 as uuidv4 } from 'https://cdn.skypack.dev/uuid@8.3.2?dts';
 import { userData } from "../commons/commons.js";
-import { joinChatRoom, fetchChatting, addChatting, doc, deleteChat, checkRoom } from "../commons/firebase.js";
+import { joinChatRoom, fetchChatting, addChatting, deleteChat } from "../commons/firebase.js";
 import { getCreatedAt } from '../commons/libray.js';
 
 // 인원수 확인 로직 추가
@@ -132,6 +132,7 @@ function renderChattingMsg(data, prevDate, currentDate) {
 }
 
 function rednerJoinUsers({users, limit, title, id}){
+  $joinLists.innerHTML = '';
   $roomName.textContent = `방 이름 : ${title}`;
   $roomId.textContent = `id : ${id}`
   $joinCount.textContent = `총 참여자 ${users.length}/${limit}`

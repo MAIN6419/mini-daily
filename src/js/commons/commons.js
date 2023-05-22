@@ -2,7 +2,7 @@
 
 import { updateTime } from "./clock.js";
 import { calendar } from "./calendar.js";
-import { checkLogin, logout } from "./firebase.js";
+import { checkDeleteRoom, checkLogin, logout } from "./firebase.js";
 export let userData;
 
 const host = window.location.host;
@@ -49,6 +49,8 @@ else{
   );
 })();
 
+// 채팅방 삭제 구독 => 전체 페이지에서 해주어야함 그래야 채팅방 페이지를 벗어나도 동작
+// checkDeleteRoom()
 async function loadTemplate() {
   const sectionProfile = document.querySelector(".section-profile");
   sectionProfile.innerHTML = `
