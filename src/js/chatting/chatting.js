@@ -1,7 +1,7 @@
 'use strict';
 import { v4 as uuidv4 } from 'https://cdn.skypack.dev/uuid@8.3.2?dts';
 import { userData } from "../commons/commons.js";
-import { joinChatRoom, fetchChatting, addChatting, deleteChat } from "../commons/firebase.js";
+import { joinChatRoom, fetchChatting, addChatting, deleteChat, FetchUserData } from "../commons/firebase.js";
 import { getCreatedAt } from '../commons/libray.js';
 
 // 인원수 확인 로직 추가
@@ -20,8 +20,8 @@ const $joinLists = document.querySelector(".join-lists");
 const $loadingModal = document.querySelector(".loading-modal");
 const urlParams = new URLSearchParams(window.location.search);
 const chatRoomId = urlParams.get("id");
-
-
+const $userInfoModal = $sectionContents.querySelector(".userInfo-modal");
+const $closeBtn = $userInfoModal.querySelector(".btn-close")
 // 입장 제한
 // if(parseInt(chatRoomId.slice(4)) > 6){
 //   alert("존재하지않는 채팅방입니다.")
@@ -57,26 +57,26 @@ $chattingInput.addEventListener("keydown",(e)=>{
     }
 })
 
-function renderChattingMsg(data, prevDate, currentDate) {
-
+async function renderChattingMsg(data, prevDate, currentDate) {
+  // const userInfo = await FetchUserData(data.user);
   // 날짜가 달라졌을 때 새로운 날짜를 삽입
-  if (!prevDate || prevDate.getDate() !== currentDate.getDate()) {
-    const dateBox = document.createElement("div");
-    dateBox.classList.add("date-box");
+  // if (!prevDate || prevDate.getDate() !== currentDate.getDate()) {
+  //   const dateBox = document.createElement("div");
+  //   dateBox.classList.add("date-box");
 
-    const dateText = document.createElement("span");
-    dateText.classList.add("date-text");
-    dateText.innerText = `${currentDate.getFullYear()}년 ${
-      currentDate.getMonth() + 1
-    }월 ${currentDate.getDate()}일 ${
-      ["일", "월", "화", "수", "목", "금", "토"][currentDate.getDay()] +
-      "요일"
-    }`;
-    dateBox.appendChild(dateText);
+  //   const dateText = document.createElement("span");
+  //   dateText.classList.add("date-text");
+  //   dateText.innerText = `${currentDate.getFullYear()}년 ${
+  //     currentDate.getMonth() + 1
+  //   }월 ${currentDate.getDate()}일 ${
+  //     ["일", "월", "화", "수", "목", "금", "토"][currentDate.getDay()] +
+  //     "요일"
+  //   }`;
+  //   dateBox.appendChild(dateText);
 
-    $chattingBox.appendChild(dateBox);
-    prevDate = currentDate;
-  }
+  //   $chattingBox.appendChild(dateBox);
+  //   prevDate = currentDate;
+  // }
   // 채팅 리스트에 새로운 메시지 추가
   const messageBox = document.createElement("div");
   messageBox.classList.add("message-box");
@@ -85,6 +85,18 @@ function renderChattingMsg(data, prevDate, currentDate) {
   messageImg.classList.add("message-img");
   messageImg.src = "../img/profile.png";
   messageImg.alt = "유저 프로필";
+
+  // const userGrade = document.createElement('span');
+  // userGrade.classList.add('user-grade');
+  // userGrade.textContent = userInfo.grade;
+
+  // if(userInfo.grade === "우수") {
+  //   userGrade.classList.add("good");
+  // } else if(userInfo.grade === "프로") {
+  //   userGrade.classList.add("pro");
+  // } else if(userInfo.grade === "VIP") {
+  //   userGrade.classList.add("VIP");
+  // }
 
   const userName = document.createElement("span");
   userName.classList.add("user-name");
@@ -109,6 +121,7 @@ function renderChattingMsg(data, prevDate, currentDate) {
       deleteChat(chatRoomId, data.id);
     }
   });
+
   // 작성자가 나인 경우
   if (data.user === userData.nickname) {
     messageBox.classList.add("sent");
@@ -119,7 +132,8 @@ function renderChattingMsg(data, prevDate, currentDate) {
 
   // 메시지 박스에 새로운 요소들 추가
   messageBox.appendChild(messageImg);
-  messageBox.appendChild(userName);
+  // messageBox.appendChild(userGrade);
+  messageBox.appendChild(userName)
   messageBox.appendChild(message);
   messageBox.appendChild(createdAt);
   if (data.user === userData.nickname && data.type !== "delete") {
@@ -128,21 +142,63 @@ function renderChattingMsg(data, prevDate, currentDate) {
 
   // 채팅 리스트에 메시지 박스 추가
   $chattingBox.appendChild(messageBox);
-  prevDate = currentDate;
+  // prevDate = currentDate;
 }
 
-function rednerJoinUsers({users, limit, title, id}){
+async function rednerJoinUsers({users, limit, title, id}){
   $joinLists.innerHTML = '';
   $roomName.textContent = `방 이름 : ${title}`;
   $roomId.textContent = `id : ${id}`
   $joinCount.textContent = `총 참여자 ${users.length}/${limit}`
-  for(const user of users){
-    $joinLists.innerHTML +=`
-    <li class="join-user">
-    <img class="profile-img" src="../img/profile.png" alt="유저 프로필 이미지">
-    <span class="user-name">${user}</span>
-  </li>
-    `
+
+  for (const user of users) {
+    const userInfo = await FetchUserData(user);
+    const listItem = document.createElement('li');
+    listItem.classList.add('join-user');
+  
+    const profileImg = document.createElement('img');
+    profileImg.classList.add('profile-img');
+    profileImg.src = userInfo.profileImgUrl||'../img/profile.png';
+    profileImg.alt = '유저 프로필 이미지';
+
+    const userGrade = document.createElement('span');
+    userGrade.classList.add('user-grade');
+    userGrade.textContent = userInfo.grade;
+    if(userInfo.grade === "우수") {
+      userGrade.classList.add("good");
+    } else if(userInfo.grade === "프로") {
+      userGrade.classList.add("pro");
+    } else if(userInfo.grade === "VIP") {
+      userGrade.classList.add("VIP");
+    }
+    const userInfoButton = document.createElement('button');
+    userInfoButton.classList.add('btn-userInfo');
+  
+    const userNameSpan = document.createElement('span');
+    userNameSpan.classList.add('user-name');
+    userNameSpan.textContent = user;
+  
+    userInfoButton.appendChild(userNameSpan);
+  
+    listItem.appendChild(profileImg);
+    listItem.appendChild(userGrade);
+    listItem.appendChild(userInfoButton);
+  
+    $joinLists.appendChild(listItem);
+
+    userInfoButton.addEventListener("click", async ()=> {
+      $userInfoModal.classList.add("active");
+      const nickname = $userInfoModal.querySelector(".nickname");
+      const grade = $userInfoModal.querySelector(".grade");
+      const introduce = $userInfoModal.querySelector(".introduce-content");
+      nickname.textContent = '닉네임 : ';
+      grade.textContent = '등급 : '
+      introduce.textContent = '';
+      nickname.textContent = '닉네임 : ' + user;
+      const currentUser = await FetchUserData(user);
+      grade.textContent = '등급 : ' + currentUser.grade;
+      introduce.textContent = currentUser.introduce;
+    })
   }
 }
 $copyBtn.addEventListener("click", copyId);
@@ -158,3 +214,8 @@ function copyId() {
     alert('아이디가 복사되었습니다.');
 }
 
+$userInfoModal.addEventListener("click", (e)=>{
+  if(e.target===$userInfoModal || e.target===$closeBtn) {
+    $userInfoModal.classList.remove("active");
+  }
+})

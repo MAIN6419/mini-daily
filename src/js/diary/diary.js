@@ -57,11 +57,12 @@ const $loadingModal = $sectionContents.querySelector(".loading-modal");
 const $backBtn = $sectionContents.querySelector(".btn-back");
 const $diaryLink = document.querySelector(".diary-link");
 const $allDiaryLink = document.querySelector(".allDiary-link");
-const $inputUpload = document.querySelector("#input-upload");
-const $btnUpload = document.querySelectorAll(".btn-upload");
-const $previewImg = document.querySelectorAll(".preview-img");
-const $resetBtn = document.querySelectorAll(".btn-reset");
+const $inputUpload = $sectionContents.querySelector("#input-upload");
+const $btnUpload = $sectionContents.querySelectorAll(".btn-upload");
+const $previewImg = $sectionContents.querySelectorAll(".preview-img");
+const $resetBtn = $sectionContents.querySelectorAll(".btn-reset");
 const $empathyBox = $diaryWrapper.querySelector(".empathy-box");
+const $authGrade = $sectionContents.querySelector(".auth-grade");
 const uploadImg = [];
 let imgIdx = "0";
 let lastpage;
@@ -128,8 +129,17 @@ async function renderdiary() {
     $editBtn.remove();
     $deleteBtn.remove();
   }
+  const auth = await FetchUserData(data.auth);
+  if(auth.grade === "우수") {
+    $authGrade.classList.add("good");
+  } else if(auth.grade === "프로") {
+    $authGrade.classList.add("pro");
+  } else if(auth.grade === "VIP") {
+    $authGrade.classList.add("VIP");
+  }
+  $authGrade.textContent = auth.grade;
   $diaryAuth.textContent = data.auth;
-  $diaryProfileImg.setAttribute("src", (await getAuthImg(data.auth) || "../img/profile.png"));
+  $diaryProfileImg.setAttribute("src", (auth.profileImgUrl || "../img/profile.png"));
   $diaryTitle.textContent = data.title;
   $diaryCreatedAt.textContent = getCreatedAt(data.createdAt);
   $diaryCreatedAt.setAttribute(

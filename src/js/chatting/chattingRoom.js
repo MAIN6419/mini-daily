@@ -1,6 +1,5 @@
 import _ from "https://cdn.skypack.dev/lodash-es";
 import {
-  checkDeleteRoom,
   checkJoinRoom,
   createChattingRoom,
   db,
@@ -257,6 +256,8 @@ async function renderChattingRooms(data) {
     hasNextPage = false;
     $roomList.innerHTML = `<li>현재 채팅방이 없습니다.</li>`;
     $loadingModal.classList.remove("active");
+    $nextBtn.classList.add("inactive");
+    $prevBtn.classList.add("inactive");
     return;
   }
 
@@ -271,6 +272,9 @@ async function renderChattingRooms(data) {
     : $prevBtn.classList.add("inactive");
   if (currentPage === 1 && totalPage === 1) {
     $prevBtn.classList.add("inactive");
+    $nextBtn.classList.add("inactive");
+  }
+  if( currentPage === totalPage){
     $nextBtn.classList.add("inactive");
   }
   for (const item of data) {
@@ -403,8 +407,13 @@ async function fetchPage(type) {
         const res = await getDocs(chattingRoomRef);
         totalPage = Math.ceil(res.docs.length / 9);
         const data = snapshot.docs.map((el) => el.data());
+        // 마지막 페이지 첫번째 데이터가 삭제될 경우 예외 처리
+        // 데이터가 있을 경우에만 페이지를 저장
+        if(data.length > 0){
           prevFirstPage = snapshot.docs[0];
           nextFirstPage = snapshot.docs[snapshot.docs.length - 1];
+        }
+       
         hasNextPage = snapshot.docs.length === 9;
         resolve(data);
         renderChattingRooms(data);
@@ -431,7 +440,8 @@ async function goToPrevPage() {
 }
 
 async function goToNextPage() {
-  if (hasNextPage) {
+  if (hasNextPage&& currentPage !== totalPage) {
+
     currentPage++;
     $pageNum.textContent = currentPage + "/" + totalPage;
     currentSnapshotUnsubscribe();

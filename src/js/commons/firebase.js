@@ -425,6 +425,15 @@ export async function checkLogin(nickname) {
         sessionStorage.removeItem("diaryData");
         location.replace(`${baseUrl}/`);
       }
+      if (data.point >= 100 && data.grade === "일반") {
+        await updateDoc(doc.ref, { grade: "우수" });
+        alert("축하합니다! 우수 등급으로 등업되었습니다!");
+      } else if(data.point >= 500 && data.grade === "우수") {
+        await updateDoc(doc.ref, { grade: "프로" });
+        alert("축하합니다! 프로 등급으로 등업되었습니다!");
+      } else if(data.point >= 1000 && data.grade === "프로") {
+        alert("축하합니다! VIP 등급으로 등업되었습니다!");
+      }
     });
   } catch (error) {
     alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
@@ -720,10 +729,7 @@ let isfirst = true;
 let timer = null;
 let currentSnapshotUnsubscribe;
 
-
-
 const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
-  clearTimeout(timer);
   if (!chatRoomId) {
     alert("잘못된 경로입니다!");
     return location.replace("chattingRoom.html");
@@ -748,24 +754,21 @@ const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
       users: arrayUnion(userNickname),
     });
 
-    currentSnapshotUnsubscribe = onSnapshot(
-      chatRoomRef,
-      async (snapshot) => {
-        try {
-          const data = snapshot.data();
+    currentSnapshotUnsubscribe = onSnapshot(chatRoomRef, async (snapshot) => {
+      try {
+        const data = snapshot.data();
 
-          if (!data) {
-            console.log("Data is undefined.");
-            return;
-          }
-
-          renderJoinUser(data);
-          isfirst = false;
-        } catch (error) {
-          console.log(error);
+        if (!data) {
+          console.log("Data is undefined.");
+          return;
         }
+
+        renderJoinUser(data);
+        isfirst = false;
+      } catch (error) {
+        console.log(error);
       }
-    );
+    });
 
     window.addEventListener("beforeunload", async (event) => {
       if (!isfirst) {
@@ -782,27 +785,6 @@ const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
   }
 };
 
-// 채팅방 삭제 기능 
-function checkDeleteRoom() {
-  clearInterval(timer);
-  const chatRoomRef = collection(db,"chatRoom");
-  currentSnapshotUnsubscribe = onSnapshot(chatRoomRef, async(snapshot)=>{
-    snapshot.forEach((doc_) => {
-      const data = doc_.data();
-      if (data.users.length === 0) {
-        timer = setTimeout(async () => {
-          const snapshot = await getDoc(doc_.ref);
-          const roomData = snapshot.data();
-          if (roomData&&roomData.users.length === 0) {
-            currentSnapshotUnsubscribe();
-            await deleteDoc(doc(db, `chatRoom/${roomData.id}`));
-          }
-        }, 60000); //  1분동안 채팅방에 아무도없다면 해당 채팅방 삭제
-      }
-    })
-  })
-}
-
 function fetchChatting($chattingBox, chatRoomId, renderChattingMsg) {
   const chatRef = collection(db, `chat${chatRoomId}`);
   const q = query(chatRef, orderBy("createdAt", "asc"));
@@ -812,9 +794,9 @@ function fetchChatting($chattingBox, chatRoomId, renderChattingMsg) {
     querySnapshot.forEach((doc) => {
       const data = doc.data();
       const currentDate = new Date(data.createdAt);
-      renderChattingMsg(data, prevDate, currentDate);
+      renderChattingMsg(data);
     });
-    $chattingBox.scrollTop = $chattingBox.scrollHeight;
+  
   });
 }
 
@@ -857,7 +839,7 @@ async function fetchChattingRoom() {
 async function getTotalpage() {
   const chatRoomRef = collection(db, "chatRoom");
   const res = await getDocs(chatRoomRef);
-  return res.docs.length
+  return res.docs.length;
 }
 
 async function addChatting(chatRoomId, newChat) {
@@ -977,8 +959,8 @@ export {
   editReplyComment,
   getAuthImg,
   fetchChattingRoom,
-  checkDeleteRoom,
   getTotalpage,
+  timer,
   setDoc,
   getDoc,
   doc,

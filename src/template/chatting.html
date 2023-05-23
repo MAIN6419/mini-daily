@@ -28,11 +28,10 @@
           <!-- section-profile -->
         </section>
         <section class="section-contents">
+          <h2 class="a11y-hidden">채팅 페이지</h2>
           <div class="chatting-header">
             <span class="room-name">방 이름 : </span>
-            <span class="room-id"
-              >id : 
-            </span>
+            <span class="room-id">id : </span>
             <button class="btn-copy">복사하기</button>
           </div>
           <h2 class="a11y-hidden">채팅방 페이지</h2>
@@ -44,7 +43,6 @@
                 <ul class="join-lists"></ul>
                 <a class="exit-btn" href="chattingRoom.html">퇴장하기</a>
               </div>
-    
             </section>
             <section class="chatting">
               <h2 class="a11y-hidden">채팅창</h2>
@@ -60,7 +58,19 @@
               </form>
             </section>
           </div>
-          <h2 class="a11y-hidden">채팅 페이지</h2>
+          <article class="userInfo-modal">
+            <h2 class="a11y-hidden">유저 정보창</h2>
+            <div class="modal-contents">
+              <h3 class="modal-title">유저정보</h3>
+              <span class="nickname">닉네임 : </span>
+              <span class="grade">등급 : </span>
+              <div class="introduce-wrapper">
+                <h4 class="introduce-title">자기소개</h4>
+                <p class="introduce-content"></p>
+              </div>
+              <button type="button" class="btn-close">X</button>
+            </div>
+          </article>
           <article class="loading-modal">
             <h2 class="a11y-hidden">로딩화면</h2>
             <img src="../img/loading.gif" alt="로딩중 이미지" />
