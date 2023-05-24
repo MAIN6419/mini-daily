@@ -185,11 +185,13 @@ $editBtn.addEventListener("click", async (e) => {
 });
 $deleteBtn.addEventListener("click", async () => {
   if (confirm("정말 삭제하시겠습니까?")) {
+    $loadingModal.classList.add("active");
     await deleteDiary(id);
     previousPageUrl.includes("diaryList")
       ? (location.href = "diaryList.html")
       : (location.href = "allDiary.html");
     alert("삭제가 완료되었습니다.");
+    $loadingModal.classList.remove("active");
   }
 });
 $empathyBtn.addEventListener("click", async () => {
@@ -362,7 +364,7 @@ async function addComment(item) {
   // comment-profileImg 요소 생성
   const profileImg = document.createElement("img");
   profileImg.classList.add("comment-profileImg");
-  profileImg.src =(await getAuthImg(diary.auth)) || "../img/profile.png";;
+  profileImg.src =(await getAuthImg(item.auth)) || "../img/profile.png";;
   profileImg.alt = "유저 프로필";
 
   // comment-auth 요소 생성
@@ -582,7 +584,7 @@ async function addReplyComment(replyLists, item) {
   // comment-profileImg 요소 생성
   const profileImg = document.createElement("img");
   profileImg.classList.add("comment-profileImg");
-  profileImg.src = (await getAuthImg(diary.auth)) || "../img/profile.png";
+  profileImg.src = (await getAuthImg(item.auth)) || "../img/profile.png";
   profileImg.alt = "유저 프로필";
 
   // comment-auth 요소 생성
@@ -734,7 +736,7 @@ async function renderComment(data) {
     // comment-profileImg 요소 생성
     const profileImg = document.createElement("img");
     profileImg.classList.add("comment-profileImg");
-    profileImg.src = (await getAuthImg(diary.auth)) || "../img/profile.png";
+    profileImg.src = (await getAuthImg(item.auth)) || "../img/profile.png";
     profileImg.alt = "유저 프로필";
 
     // comment-auth 요소 생성
@@ -1023,7 +1025,7 @@ async function renderReplyComment(replyLists, commentId) {
     // comment-profileImg 요소 생성
     const profileImg = document.createElement("img");
     profileImg.classList.add("comment-profileImg");
-    profileImg.src = (await getAuthImg(diary.auth)) || "../img/profile.png";
+    profileImg.src = (await getAuthImg(item.auth)) || "../img/profile.png";
     profileImg.alt = "유저 프로필";
 
     // comment-auth 요소 생성

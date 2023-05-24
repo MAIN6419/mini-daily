@@ -42,10 +42,11 @@
   text-align: center;
 }
 .profileImg-box img {
-  width: 120px;
-  height: 120px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
   border: 1px solid #bdbdbd;
+  margin-bottom: 18px;
 }
 .profile-info {
   display: flex;

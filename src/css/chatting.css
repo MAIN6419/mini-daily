@@ -63,7 +63,7 @@
   padding: 20px 0 20px 20px;
 }
 .join-lists {
-  max-height: 445px;
+  height: 400px;
   overflow-y: scroll;
 }
 .join-user {
@@ -94,7 +94,7 @@
   box-sizing: border-box;
   padding: 10px;
   background-color: lightblue;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 .message-box {
   display: flex;
@@ -158,7 +158,7 @@
   background-color: #f9f9f9;
   align-self: center;
   font-weight: bold;
-  width: 20px;
+  width: 26px;
   text-align: center;
 }
 .message-box.sent .user-grade {

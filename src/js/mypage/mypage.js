@@ -30,6 +30,7 @@ const $inputProfileImg = $profileImgModal.querySelector(".input-profileImg");
 const $userEmail = $sectionContents.querySelector(".user-email");
 const $userNickname = $sectionContents.querySelector(".user-nickname");
 const $userGrade = $sectionContents.querySelector(".user-grade");
+const $userPoint = $sectionContents.querySelector(".user-point");
 const $diaryCount = $sectionContents.querySelector(".diary-count");
 const $commentCount = $sectionContents.querySelector(".comment-count");
 const $loadingModal = document.querySelector(".loading-modal");
@@ -46,6 +47,7 @@ const userInfo = await FetchUserData(userData.nickname);
 $userEmail.textContent = `이메일 : ${userInfo.email} `;
 $userNickname.textContent = `닉네임 : ${userInfo.nickname}`;
 $userGrade.textContent = `등급 : ${userInfo.grade}`;
+$userPoint.textContent = `등업 포인트 : ${userInfo.point}점`
 $profileImg.setAttribute("src", userData.profileImgURL||`${baseUrl}/src/img/profile.png`);
 $diaryCount.textContent = `${userInfo.diaryCount}개`;
 $commentCount.textContent = `${userInfo.commentCount}개`;

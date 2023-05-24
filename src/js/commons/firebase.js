@@ -170,8 +170,16 @@ async function deleteDiary(id) {
         empathyList: arrayRemove(id),
       });
     }
+    const diaryRef = doc(db, `diaryList/${id}`);
+    const diaryDoc = await getDoc(diaryRef);
+    const data = diaryDoc.data();
+    if (new Date(data.createdAt).getDate() === new Date().getDate()) {
+      await updateDoc(doc(db, "user", userData.nickname), {
+        lastDiaryDate: null,
+      });
+    }
+    await deleteDoc(diaryRef);
 
-    await deleteDoc(doc(db, `diaryList/${id}`));
     await updateDoc(doc(db, "user", userData.nickname), {
       diaryCount: increment(-1),
     });
@@ -182,17 +190,26 @@ async function deleteDiary(id) {
 
 async function writeComment(commentData) {
   try {
+    const userRef = doc(db, "user", currentUser.displayName);
+    const userDoc = await getDoc(userRef);
+    const data = userDoc.data();
+    const maxCommentPoint = data.maxCommentPoint;
+
+    if (new Date(data.lastCommentDate).getDate() !== new Date().getDate()) {
+      await updateDoc(userRef, {
+        maxCommentPoint: 0,
+      });
+    }
     const commentRef = collection(db, "comment");
     await setDoc(doc(commentRef, commentData.commentId), {
       ...commentData,
     });
 
-    // // 데이터가 추가될 때마다 실시간으로 업데이트
-    // const queryRef = query(commentRef, where("diaryId", "==", commentData.diaryId));
-    // onSnapshot(queryRef, (snapshot) => {
-    //   const updatedData = snapshot.docs.map((doc) => doc.data());
-
-    // });
+    await updateDoc(userRef, {
+      lastCommentDate: new Date().getTime(),
+      maxCommentPoint: maxCommentPoint < 3 ? increment(1) : increment(0),
+      point: maxCommentPoint < 3 ? increment(1) : increment(0),
+    });
   } catch (error) {
     alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
     throw error;
@@ -210,24 +227,6 @@ async function fetchComment(id) {
     throw error;
   }
 }
-
-// // 대댓글 가져오기 함수
-// // fetchReplyComment 함수 정의
-// async function fetchReplyComment(commentId) {
-//   // 부모 컬렉션과 문서의 참조
-// const parentCollectionRef = collection(db, "comment");
-// const parentDocRef = doc(parentCollectionRef, commentId);
-
-// // 중첩 컬렉션의 참조
-// const childCollectionRef = collection(parentDocRef, "replyComment");
-//   // 대댓글을 가져오기 위한 쿼리 작성
-//   const commentDocSnapshot = await getDoc(childCollectionRef);
-//   const querySnapshot = await getDocs(commentDocSnapshot);
-//   querySnapshot.forEach((doc) => {
-//     replyComments.push(doc.data());
-//   });
-//   return replyComments;
-// }
 
 async function deleteComment(id) {
   try {
@@ -250,11 +249,28 @@ async function editComment(id, content) {
 }
 
 async function writeReplyComment(newReply, parentCommentId) {
+  const userRef = doc(db, "user", currentUser.displayName);
+  const userDoc = await getDoc(userRef);
+  const data = userDoc.data();
+  const maxCommentPoint = data.maxCommentPoint;
+
+  if (new Date(data.lastCommentDate).getDate() !== new Date().getDate()) {
+    await updateDoc(userRef, {
+      maxCommentPoint: 0,
+    });
+  }
+
   const commentsCollection = collection(db, "comment");
   const parentCommentRef = doc(commentsCollection, parentCommentId);
   const replyCommentRef = collection(parentCommentRef, "replyComment");
   await setDoc(doc(replyCommentRef, newReply.commentId), {
     ...newReply,
+  });
+
+  await updateDoc(userRef, {
+    lastCommentDate: new Date().getTime(),
+    maxCommentPoint: maxCommentPoint < 3 ? increment(1) : increment(0),
+    point: maxCommentPoint < 3 ? increment(1) : increment(0),
   });
 }
 
@@ -306,15 +322,34 @@ async function deleteChat(chatRoomId, id) {
 // 다이어리 추가 함수
 async function writeDiary(newDiary) {
   try {
+    const userRef = doc(db, "user", userData.nickname);
+    const userDoc = await getDoc(userRef);
+    const data = userDoc.data();
+    const maxDiaryPoint = data.maxDiaryPoint;
+    if (new Date(data.lastDiaryDate).getDate() !== new Date().getDate()) {
+      await updateDoc(userRef, {
+        lastDiaryDate: null,
+        maxDiaryPoint: 0,
+        maxCommentPoint: 0,
+      });
+    }
+
+    if (data.lastDiaryDate) {
+      alert("이미 오늘의 다이어리를 작성하였습니다!");
+      return;
+    }
     const diaryList = collection(db, "diaryList");
     await setDoc(doc(diaryList, newDiary.id), {
       ...newDiary,
     });
-    await updateDoc(doc(db, "user", userData.nickname), {
+    await updateDoc(userRef, {
       diaryCount: increment(1),
-      point: increment(1),
+      point: maxDiaryPoint !== 3 ? increment(3) : increment(0),
+      lastDiaryDate: new Date().getTime(),
+      maxDiaryPoint: 3,
     });
     alert("등록이 완료되었습니다.");
+    location.href = `diary.html?id=${newDiary.id}`;
   } catch (error) {
     throw error;
   }
@@ -428,10 +463,10 @@ export async function checkLogin(nickname) {
       if (data.point >= 100 && data.grade === "일반") {
         await updateDoc(doc.ref, { grade: "우수" });
         alert("축하합니다! 우수 등급으로 등업되었습니다!");
-      } else if(data.point >= 500 && data.grade === "우수") {
+      } else if (data.point >= 500 && data.grade === "우수") {
         await updateDoc(doc.ref, { grade: "프로" });
         alert("축하합니다! 프로 등급으로 등업되었습니다!");
-      } else if(data.point >= 1000 && data.grade === "프로") {
+      } else if (data.point >= 1000 && data.grade === "프로") {
         alert("축하합니다! VIP 등급으로 등업되었습니다!");
       }
     });
@@ -588,55 +623,6 @@ const getSessionUser = () => {
   }
 };
 
-// 휴대폰 인증 로직
-// auth.languageCode = "ko";
-// const $btnAuth = document.getElementById("btn-authentication");
-// window.recaptchaVerifier = new RecaptchaVerifier(
-//   "btn-authentication",
-//   {
-//     size: "invisible",
-//     callback: (response) => {
-//       // reCAPTCHA solved, allow signInWithPhoneNumber.
-//       onSignInSubmit();
-//     },
-//   },
-//   auth
-// );
-
-// $btnAuth.addEventListener("click", () => {
-//   const phoneNumber = document.querySelector("#input-phone").value;
-//   const appVerifier = window.recaptchaVerifier;
-//   signInWithPhoneNumber(auth, "+82" + phoneNumber, appVerifier)
-//     .then((confirmationResult) => {
-//       alert("인증코드가 발송되었습니다.");
-//       // SMS sent. Prompt user to type the code from the message, then sign the
-//       // user in with confirmationResult.confirm(code).
-//       window.confirmationResult = confirmationResult;
-//       console.log(confirmationResult)
-//       // ...
-//     })
-//     .catch((error) => {
-//       console.log(error)
-//       // Error; SMS not sent
-//       // ...
-//     });
-// });
-// const $btnCode = document.getElementById("btn-code");
-// $btnCode.addEventListener("click", ()=>{
-//   const code = document.getElementById('input-code').value;
-//   confirmationResult.confirm(code).then((result) => {
-//     // User signed in successfully.
-//     const user = result.user;
-//     console.log(result);
-//     alert('인증이 완료되었습니다.')
-//     // ...
-//   }).catch((error) => {
-//     console.log(error);
-//     // User couldn't sign in (bad verification code?)
-//     // ...
-//   });
-// })
-
 // 회원가입을 위한 함수
 // 인자로 닉네임 이메일 비밀번호를 받는다.
 // createUserWithEmailAndPassword 아이디를 생성하는 api 함수
@@ -785,19 +771,26 @@ const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
   }
 };
 
-function fetchChatting($chattingBox, chatRoomId, renderChattingMsg) {
+async function fetchChatting($chattingBox, chatRoomId, renderChattingMsg) {
   const chatRef = collection(db, `chat${chatRoomId}`);
+  const userRef = collection(db, "user");
+  const asdf = await getDocs(userRef);
+  const res = asdf.docs.map((el) => el.data());
+
   const q = query(chatRef, orderBy("createdAt", "asc"));
-  let prevDate = null; // 이전 메시지의 작성 날짜를 저장할 변수
-  onSnapshot(q, (querySnapshot) => {
-    $chattingBox.innerHTML = ""; // 채팅 리스트 초기화
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      const currentDate = new Date(data.createdAt);
-      renderChattingMsg(data);
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    querySnapshot.docChanges().forEach(async (change) => {
+      if (change.type === "added") {
+        const data = change.doc.data();
+        const userInfo = res.find((el) => el.nickname === data.user);
+        console.log("af");
+        await renderChattingMsg(data, userInfo);
+      }
     });
-  
+    $chattingBox.scrollTop = $chattingBox.scrollHeight;
   });
+
+  return unsubscribe; // 이벤트 리스너 해제를 위해 unsubscribe 함수 반환
 }
 
 async function createChattingRoom({
@@ -953,7 +946,6 @@ export {
   deleteComment,
   editComment,
   writeReplyComment,
-  // fetchReplyComment,
   fetchReplyComments,
   deleteReplyComment,
   editReplyComment,
