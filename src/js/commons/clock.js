@@ -1,13 +1,12 @@
 "use strict";
 import {calendar} from "./calendar.js";
-import { userData } from "./commons.js";
-import { setFortune } from "./firebase.js";
+import { getKST } from "./libray.js";
 
 export function updateTime() {
   // dom에서 시간을 표시하는 요소를 가져옵니다.
   const $time = document.querySelector(".time");
   // 현재 날짜 정보를 가져온다.
-  const now = new Date();
+  const now = getKST();
   // 현재 hour을 가져온다.
   let hours = now.getHours();
   // 현재 minute을 가져온다.

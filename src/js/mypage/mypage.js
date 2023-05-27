@@ -1,11 +1,6 @@
 import { userData } from "../commons/commons.js";
-import {
-  editIntroduce,
-  applyProfileImg,
-  FetchUserData,
-  changePassword,
-  changeUserPassword,
-} from "../commons/firebase.js";
+
+import { FetchUserData, applyProfileImg, changeUserPassword, editIntroduce } from "../firebase/auth/firebase_auth.js";
 
 const $sectionContents = document.querySelector(".section-contents");
 const $changeIntroduceBtn = $sectionContents.querySelector(
@@ -31,8 +26,8 @@ const $userEmail = $sectionContents.querySelector(".user-email");
 const $userNickname = $sectionContents.querySelector(".user-nickname");
 const $userGrade = $sectionContents.querySelector(".user-grade");
 const $userPoint = $sectionContents.querySelector(".user-point");
-const $diaryCount = $sectionContents.querySelector(".diary-count");
-const $commentCount = $sectionContents.querySelector(".comment-count");
+const $userDiary = $sectionContents.querySelector(".user-diary");
+const $userComment = $sectionContents.querySelector(".user-Comment");
 const $loadingModal = document.querySelector(".loading-modal");
 
 let tempUrl;
@@ -49,8 +44,8 @@ $userNickname.textContent = `닉네임 : ${userInfo.nickname}`;
 $userGrade.textContent = `등급 : ${userInfo.grade}`;
 $userPoint.textContent = `등업 포인트 : ${userInfo.point}점`
 $profileImg.setAttribute("src", userData.profileImgURL||`${baseUrl}/src/img/profile.png`);
-$diaryCount.textContent = `${userInfo.diaryCount}개`;
-$commentCount.textContent = `${userInfo.commentCount}개`;
+$userDiary.textContent = `다이어리 : ${userInfo.diaryCount}개`;
+$userComment.textContent = `댓글 : ${userInfo.commentCount}개`;
 
 const $passwordModal = $sectionContents.querySelector(".password-modal");
 const $changePasswordBtn = $sectionContents.querySelector(

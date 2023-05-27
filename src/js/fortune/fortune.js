@@ -1,7 +1,8 @@
 "use strict";
 import { userData } from "../commons/commons.js";
-import { setFortune } from "../commons/firebase.js";
+import { setFortune } from "../firebase/fortune/firebase_fortune.js";
 initFortune();
+setFortune
 
 function fetchFortuneData() {
   return fetch("../db/db.json")

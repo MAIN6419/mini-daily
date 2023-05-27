@@ -42,6 +42,7 @@ import {
   updatePassword,
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
+import { getKST } from "./libray.js";
 
 const userData = JSON.parse(sessionStorage.getItem("userData"));
 let baseUrl = "";
@@ -191,14 +192,21 @@ async function deleteDiary(id) {
 async function writeComment(commentData) {
   try {
     const userRef = doc(db, "user", currentUser.displayName);
-    const userDoc = await getDoc(userRef);
-    const data = userDoc.data();
-    const maxCommentPoint = data.maxCommentPoint;
+    let userDoc = await getDoc(userRef);
+    let data = userDoc.data();
+    let maxCommentPoint = data.maxCommentPoint;
+    const resetCommentPoint =
+    new Date(data.lastCommentDate).getFullYear() !== getKST().getFullYear() &&
+    new Date(data.lastCommentDate).getMonth() !== getKST().getMonth() &&
+    new Date(data.lastCommentDate).getDate() !== getKST().getDate();
 
-    if (new Date(data.lastCommentDate).getDate() !== new Date().getDate()) {
+    if (resetCommentPoint) {
       await updateDoc(userRef, {
         maxCommentPoint: 0,
       });
+      userDoc = await getDoc(userRef);
+      data = userDoc.data();
+      maxCommentPoint = data.maxCommentPoint;
     }
     const commentRef = collection(db, "comment");
     await setDoc(doc(commentRef, commentData.commentId), {
@@ -206,6 +214,7 @@ async function writeComment(commentData) {
     });
 
     await updateDoc(userRef, {
+      commentCount: increment(1),
       lastCommentDate: new Date().getTime(),
       maxCommentPoint: maxCommentPoint < 3 ? increment(1) : increment(0),
       point: maxCommentPoint < 3 ? increment(1) : increment(0),
@@ -230,7 +239,10 @@ async function fetchComment(id) {
 
 async function deleteComment(id) {
   try {
+    const userRef = doc(db, "user", currentUser.displayName);
+
     await deleteDoc(doc(db, `comment/${id}`));
+    await updateDoc(userRef, { commentCount: increment(-1) });
   } catch (error) {
     alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
     throw error;
@@ -250,14 +262,20 @@ async function editComment(id, content) {
 
 async function writeReplyComment(newReply, parentCommentId) {
   const userRef = doc(db, "user", currentUser.displayName);
-  const userDoc = await getDoc(userRef);
-  const data = userDoc.data();
-  const maxCommentPoint = data.maxCommentPoint;
-
-  if (new Date(data.lastCommentDate).getDate() !== new Date().getDate()) {
+  let userDoc = await getDoc(userRef);
+  let data = userDoc.data();
+  let maxCommentPoint = data.maxCommentPoint;
+  const resetCommentPoint =
+    new Date(data.lastCommentDate).getFullYear() !== getKST().getFullYear() &&
+    new Date(data.lastCommentDate).getMonth() !== getKST().getMonth() &&
+    new Date(data.lastCommentDate).getDate() !== getKST().getDate();
+  if (resetCommentPoint) {
     await updateDoc(userRef, {
       maxCommentPoint: 0,
     });
+    userDoc = await getDoc(userRef);
+    data = userDoc.data();
+    maxCommentPoint = data.maxCommentPoint;
   }
 
   const commentsCollection = collection(db, "comment");
@@ -268,9 +286,10 @@ async function writeReplyComment(newReply, parentCommentId) {
   });
 
   await updateDoc(userRef, {
-    lastCommentDate: new Date().getTime(),
+    lastCommentDate: getKST().getTime(),
     maxCommentPoint: maxCommentPoint < 3 ? increment(1) : increment(0),
     point: maxCommentPoint < 3 ? increment(1) : increment(0),
+    commentCount: increment(1),
   });
 }
 
@@ -280,7 +299,10 @@ async function deleteReplyComment(replyCommentId, parentCommentId) {
   const replyCommentRef = collection(parentCommentRef, "replyComment");
   const deleteReplyRef = doc(replyCommentRef, replyCommentId);
 
+  const userRef = doc(db, "user", currentUser.displayName);
+
   await deleteDoc(deleteReplyRef);
+  await updateDoc(userRef, { commentCount: increment(-1) });
 }
 
 async function editReplyComment(replyCommentId, parentCommentId, content) {
@@ -323,21 +345,32 @@ async function deleteChat(chatRoomId, id) {
 async function writeDiary(newDiary) {
   try {
     const userRef = doc(db, "user", userData.nickname);
-    const userDoc = await getDoc(userRef);
-    const data = userDoc.data();
-    const maxDiaryPoint = data.maxDiaryPoint;
-    if (new Date(data.lastDiaryDate).getDate() !== new Date().getDate()) {
+    let userDoc = await getDoc(userRef);
+    let data = userDoc.data();
+    let maxDiaryPoint = data.maxDiaryPoint;
+    const resetDiaryPoint =
+      new Date(data.lastDiaryDate).getFullYear() !== getKST().getFullYear() &&
+      new Date(data.lastDiaryDate).getMonth() !== getKST().getMonth() &&
+      new Date(data.lastDiaryDate).getDate() !== getKST().getDate();
+
+    // data.lastDiaryDate && 추가한 이유는 삭제시 lastDiaryDate null로 초기화 하기 때문
+    // null값이면 삭제로 간주하여 maxDiaryPoint를 초기화 하지 않음
+    // 하루가 지났을 경우에만 maxDiaryPoint를 초기화
+    if (data.lastDiaryDate && resetDiaryPoint) {
       await updateDoc(userRef, {
-        lastDiaryDate: null,
         maxDiaryPoint: 0,
-        maxCommentPoint: 0,
       });
+      userDoc = await getDoc(userRef);
+      data = userDoc.data();
+      maxDiaryPoint = data.maxDiaryPoint;
     }
 
-    if (data.lastDiaryDate) {
+    // 다이어리 작성일자와 현재일이 같다면 다이어리 작성을 막음
+    else if (!resetDiaryPoint) {
       alert("이미 오늘의 다이어리를 작성하였습니다!");
       return;
     }
+
     const diaryList = collection(db, "diaryList");
     await setDoc(doc(diaryList, newDiary.id), {
       ...newDiary,
@@ -345,7 +378,7 @@ async function writeDiary(newDiary) {
     await updateDoc(userRef, {
       diaryCount: increment(1),
       point: maxDiaryPoint !== 3 ? increment(3) : increment(0),
-      lastDiaryDate: new Date().getTime(),
+      lastDiaryDate: getKST().getTime(),
       maxDiaryPoint: 3,
     });
     alert("등록이 완료되었습니다.");
@@ -392,16 +425,19 @@ async function deleteEditDiaryImg(filename) {
   }
 }
 
-async function updateEmpathy(id, count) {
+async function updateEmpathy(id, count, auth) {
   try {
     const diary = doc(db, `diaryList/${id}`);
     if (!diary) return;
-    const user = doc(db, `user/${currentUser.displayName}`);
+    const userRef = doc(db, `user/${currentUser.displayName}`);
+    const authRef = doc(db, `user/${auth}`);
     await updateDoc(diary, { empathy: increment(count) });
     if (count > 0) {
-      await updateDoc(user, { empathyList: arrayUnion(id) });
+      await updateDoc(userRef, { empathyList: arrayUnion(id) });
+      await updateDoc(authRef, { point: increment(1) });
     } else {
-      await updateDoc(user, { empathyList: arrayRemove(id) });
+      await updateDoc(userRef, { empathyList: arrayRemove(id) });
+      await updateDoc(authRef, { point: increment(-1) });
     }
   } catch (error) {
     alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
@@ -649,6 +685,11 @@ const signup = async ({ nickname, email, phone, password }) => {
       diaryCount: 0,
       grade: "일반",
       empathyList: [],
+      lastCommentData: null,
+      lastDiaryData: null,
+      maxCommentPoint: 0,
+      maxDiaryPoint: 0
+
     });
 
     alert("회원가입이 완료되었습니다.");
@@ -774,8 +815,8 @@ const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
 async function fetchChatting($chattingBox, chatRoomId, renderChattingMsg) {
   const chatRef = collection(db, `chat${chatRoomId}`);
   const userRef = collection(db, "user");
-  const asdf = await getDocs(userRef);
-  const res = asdf.docs.map((el) => el.data());
+  const userDocs = await getDocs(userRef);
+  const res = userDocs.docs.map((el) => el.data());
 
   const q = query(chatRef, orderBy("createdAt", "asc"));
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -783,7 +824,6 @@ async function fetchChatting($chattingBox, chatRoomId, renderChattingMsg) {
       if (change.type === "added") {
         const data = change.doc.data();
         const userInfo = res.find((el) => el.nickname === data.user);
-        console.log("af");
         await renderChattingMsg(data, userInfo);
       }
     });

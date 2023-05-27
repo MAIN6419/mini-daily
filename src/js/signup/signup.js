@@ -1,4 +1,4 @@
-import { signup, duplication} from "../commons/firebase.js";
+import { signup, duplication } from "../firebase/auth/firebase_auth.js";
 
 const $signupForm = document.querySelector(".signup-form");
 const $inputNickname = $signupForm.querySelector("#input-nickname");

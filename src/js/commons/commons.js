@@ -21,8 +21,6 @@ else{
 }
   await checkLogin(userData.nickname);
 
-
-
 (async function () {
   await loadTemplate();
   const $logoutBtn = document.querySelector(".btn-logout");

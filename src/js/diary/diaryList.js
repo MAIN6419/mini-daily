@@ -1,8 +1,8 @@
 "use strict";
-import _ from 'https://cdn.skypack.dev/lodash-es';
+import _ from "https://cdn.skypack.dev/lodash-es";
 import { getCreatedAt } from "../commons/libray.js";
 import { userData } from "../commons/commons.js";
-import { FetchDiary, currentUser, db } from "../commons/firebase.js";
+
 import {
   collection,
   getDocs,
@@ -12,32 +12,35 @@ import {
   startAfter,
   limit,
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
+import { FetchDiary } from "../firebase/diary/firebase_diary.js";
+import { db } from "../firebase/setting/firebase_setting.js";
 const $sectionContents = document.querySelector(".section-contents");
-const $diaryList = $sectionContents.querySelector(".diary-lists"); 
+const $diaryList = $sectionContents.querySelector(".diary-lists");
 
 
 const $inputSearch = $sectionContents.querySelector(".input-search");
 const $loadingModal = $sectionContents.querySelector(".loading-modal");
 let lastpage;
 let hasNextpage = false;
-let keyword = '';
-const fetch = async ()=>{
+let keyword = "";
+const fetch = async () => {
   $loadingModal.classList.add("active");
-  return await FetchDiarys().then((res)=>{
+  return await FetchDiarys().then((res) => {
     $loadingModal.classList.remove("active");
     return res;
-  })
+  });
 };
 const data = await fetch();
 renderDiaryList(data);
 
 async function FetchDiarys() {
   if (keyword.trim()) {
-    const dirayList = collection(db, "diaryList")
+    const dirayList = collection(db, "diaryList");
     const q = query(
       dirayList,
       orderBy("title"),
-      where("auth","==",currentUser),
+      orderBy("createdAt", "desc"),
+      where("auth", "==", userData.nickname),
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
       startAfter(lastpage),
@@ -47,27 +50,31 @@ async function FetchDiarys() {
     const datas = res.docs.map((el) => el.data());
     lastpage = res.docs[res.docs.length - 1];
     hasNextpage = res.docs.length === 4;
-    $diaryList.innerHTML = '';
+    $diaryList.innerHTML = "";
     return datas;
-  } 
-  else{
+  } else {
     const diaryList = collection(db, "diaryList");
-    const q =  query(diaryList, where("auth","==", userData.nickname), orderBy("createdAt", "desc"), limit(4));
+    const q = query(
+      diaryList,
+      where("auth", "==", userData.nickname),
+      orderBy("createdAt", "desc"),
+      limit(4)
+    );
     const res = await getDocs(q);
     lastpage = res.docs[res.docs.length - 1];
     hasNextpage = res.docs.length === 4;
-    const datas =  res.docs.map((el) => el.data());
+    const datas = res.docs.map((el) => el.data());
     return datas;
   }
-  
 }
 
 async function nextDiaryList() {
   if (keyword.trim()) {
-    const dirayList = collection(db, "diaryList")
+    const dirayList = collection(db, "diaryList");
     const q = query(
       dirayList,
       orderBy("title"),
+      orderBy("createdAt", "desc"),
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
       startAfter(lastpage),
@@ -77,15 +84,17 @@ async function nextDiaryList() {
     const datas = res.docs.map((el) => el.data());
     lastpage = res.docs[res.docs.length - 1];
     hasNextpage = res.docs.length === 4;
-    console.log(hasNextpage)
+    console.log(hasNextpage);
     return datas;
-  } 
-  else{
+  } else {
     const diaryList = collection(db, "diaryList");
-    const q = query(diaryList, 
-      where("auth","==", userData.nickname), 
+    const q = query(
+      diaryList,
+      where("auth", "==", userData.nickname),
       orderBy("createdAt", "desc"),
-      startAfter(lastpage), limit(4));
+      startAfter(lastpage),
+      limit(4)
+    );
     const res = await getDocs(q);
     lastpage = res.docs[res.docs.length - 1];
     const datas = res.docs.map((el) => el.data());
@@ -108,7 +117,7 @@ function renderDiaryList(data) {
     const $diaryItem = document.createElement("li");
     $diaryItem.setAttribute("class", "diary-item");
     $diaryItem.setAttribute("data-id", item.id);
-    $diaryItem.addEventListener("mouseover", ()=> getThorttle(item.id))
+    $diaryItem.addEventListener("mouseover", () => getThorttle(item.id));
 
     const $diaryLink = document.createElement("a");
     $diaryLink.setAttribute("href", `diary.html?id=${item.id}`);
@@ -140,9 +149,9 @@ function renderDiaryList(data) {
 }
 
 // 게시글 preload 과부하 방지
-const getThorttle = _.throttle( async (id)=>{
-  const diaryData = await FetchDiary(id)
-  sessionStorage.setItem("diaryData", JSON.stringify(diaryData))
+const getThorttle = _.throttle(async (id) => {
+  const diaryData = await FetchDiary(id);
+  sessionStorage.setItem("diaryData", JSON.stringify(diaryData));
 }, 500);
 
 // 무한스크롤 구현
@@ -174,24 +183,24 @@ $sectionContents.addEventListener("scroll", handleScroll);
 
 $inputSearch.addEventListener("input", (e) => {
   // 첫 글자 스페이스 방지 => 검색 최적화 스페이스가 된다면 검색이 이루어져서 불필요한 데이터 요청 발생
-  if (e.target.value.length === 1 && e.target.value[0] === ' ') {
-    e.target.value = ''; // 입력한 값을 빈 문자열로 대체하여 막음
+  if (e.target.value.length === 1 && e.target.value[0] === " ") {
+    e.target.value = ""; // 입력한 값을 빈 문자열로 대체하여 막음
     return;
   }
-  debounceSearch(e)
+  debounceSearch(e);
 });
 
 // 검색 기능
 const debounceSearch = _.debounce(async (e) => {
   keyword = e.target.value;
   lastpage = null; // 검색시 lastpage를 지워줘야 검색했을때 페이지를 정상적으로 불러옴
-  if(!e.target.value){
-    $diaryList.innerHTML = '';
-    const data =  await FetchDiarys()
+  if (!e.target.value) {
+    $diaryList.innerHTML = "";
+    const data = await FetchDiarys();
     renderDiaryList(data);
     return;
   }
   const data = await FetchDiarys();
-  $diaryList.innerHTML = '';
+  $diaryList.innerHTML = "";
   renderDiaryList(data);
 }, 500);

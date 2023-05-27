@@ -1,12 +1,6 @@
 "use strict";
 import _ from "https://cdn.skypack.dev/lodash-es";
-import {
-  fetchAllDiarys,
-  FetchDiary,
-  currentUser,
-  db,
-  getAuthImg,
-} from "../commons/firebase.js";
+
 import { getCreatedAt } from "../commons/libray.js";
 import {
   collection,
@@ -17,6 +11,8 @@ import {
   startAfter,
   limit,
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
+import { db } from "../firebase/setting/firebase_setting.js";
+import { getAuthImg } from "../firebase/auth/firebase_auth.js";
 
 const $allDiaryList = document.querySelector(".allDiary-lists");
 let lastpage;
@@ -43,6 +39,7 @@ async function FetchDiarys() {
     const q = query(
       dirayList,
       orderBy("title"),
+      orderBy("createdAt", "desc"),
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
       startAfter(lastpage),
@@ -71,6 +68,7 @@ async function nextDiaryList() {
     const q = query(
       dirayList,
       orderBy("title"),
+      orderBy("createdAt", "desc"),
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
       startAfter(lastpage),

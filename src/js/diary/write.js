@@ -1,6 +1,7 @@
 "use strict";
 import { userData } from "../commons/commons.js";
-import { uploadFile, writeDiary } from "../commons/firebase.js";
+import { writeDiary, uploadFile } from "../firebase/diary/firebase_diary.js";
+
 const data = JSON.parse(localStorage.getItem("diary")) || [];
 
 const $inputTitle = document.querySelector("#input-title");

@@ -1,12 +1,10 @@
 'use strict';
 import { v4 as uuidv4 } from 'https://cdn.skypack.dev/uuid@8.3.2?dts';
 import { userData } from "../commons/commons.js";
-import { joinChatRoom, fetchChatting, addChatting, deleteChat, FetchUserData } from "../commons/firebase.js";
+import { joinChatRoom, fetchChatting, addChatting, deleteChat } from '../firebase/chatting/firebase_chatting.js';
 import { getCreatedAt } from '../commons/libray.js';
+import { FetchUserData } from '../firebase/auth/firebase_auth.js';
 
-// 인원수 확인 로직 추가
-
-//===============================================
 const $sectionContents = document.querySelector(".section-contents");
 const $roomName = $sectionContents.querySelector(".room-name");
 const $roomId =  $sectionContents.querySelector(".room-id");
@@ -22,11 +20,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const chatRoomId = urlParams.get("id");
 const $userInfoModal = $sectionContents.querySelector(".userInfo-modal");
 const $closeBtn = $userInfoModal.querySelector(".btn-close")
-// 입장 제한
-// if(parseInt(chatRoomId.slice(4)) > 6){
-//   alert("존재하지않는 채팅방입니다.")
-//   location.replace("?id=chat")
-// }
+
 $loadingModal.classList.add("active");
 await joinChatRoom(chatRoomId, userData.nickname, rednerJoinUsers);
 await fetchChatting($chattingBox, chatRoomId, renderChattingMsg);
@@ -59,6 +53,7 @@ $chattingInput.addEventListener("keydown",(e)=>{
 
 async function renderChattingMsg(data, userInfo) {
   // 채팅 리스트에 새로운 메시지 추가
+
   const messageBox = document.createElement("div");
   messageBox.classList.add("message-box");
 
@@ -89,7 +84,7 @@ async function renderChattingMsg(data, userInfo) {
 
   const createdAt = document.createElement("time");
   createdAt.classList.add("createdAt");
-  createdAt.innerText = getCreatedAt(data.createdAt).slice(11);
+  createdAt.innerText = getCreatedAt(data.createdAt).slice(2);
   createdAt.setAttribute(
     "datetime",
     new Date(data.createdAt).toISOString()

@@ -1,4 +1,5 @@
-import { findEmail, changePassword } from "../commons/firebase.js";
+import { findEmail, changePassword } from "../firebase/auth/firebase_auth.js";
+
 
 const $emailFormBtn = document.querySelector(".btn-emailForm");
 const $pwFormBtn = document.querySelector(".btn-pwForm");

@@ -11,7 +11,6 @@ import {
   FetchUserData,
   writeComment,
   fetchComment,
-  // fetchReplyComment,
   fetchReplyComments,
   deleteComment,
   editComment,
@@ -206,13 +205,13 @@ $empathyBtn.addEventListener("click", async () => {
   }
   const user = await FetchUserData(currentUser.displayName);
   if (user.empathyList.includes(id)) {
-    updateEmpathy(id, -1);
+    updateEmpathy(id, -1, data.auth);
     data.empathy -= 1;
     // sessionStorage.setItem("diaryData", JSON.stringify(data));
     $empathyCount.textContent = `공감 ${data.empathy}`;
     $empathyBtn.style.backgroundImage = "url(../img/unheart.png)";
   } else {
-    updateEmpathy(id, 1);
+    updateEmpathy(id, 1, data.auth);
     data.empathy += 1;
     // sessionStorage.setItem("diaryData", JSON.stringify(data));
     $empathyCount.textContent = `공감 ${data.empathy}`;

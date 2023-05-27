@@ -2,7 +2,10 @@
 import _ from 'https://cdn.skypack.dev/lodash-es';
 import { getCreatedAt } from "../commons/libray.js";
 import { userData } from "../commons/commons.js";
-import { FetchDiary, FetchUserData, fetchBestDiarys, fetchRecentDiary, getAuthImg, setFortune } from "../commons/firebase.js";
+import { FetchDiary, fetchBestDiarys, fetchRecentDiary } from '../firebase/diary/firebase_diary.js';
+import { FetchUserData, getAuthImg } from '../firebase/auth/firebase_auth.js';
+import { setFortune } from '../firebase/fortune/firebase_fortune.js';
+
 const $sectionContents = document.querySelector(".section-contents");
 const $recentDiaryLists = $sectionContents.querySelector(".recent-diaryLists");
 const $fortuneContents = $sectionContents.querySelector(".fortune-cotents");
@@ -33,7 +36,7 @@ async function rederRecentDiary() {
     $diaryItem.setAttribute("class", "recent-item");
 
     $recentLink.textContent = item.title;
-    $recentLink.setAttribute("href", `src/template/diary.html?id=${item.id}`);
+    $recentLink.setAttribute("href", `/src/template/diary.html?id=${item.id}`);
 
     $createdAt.setAttribute("class", "createdAt");
     $createdAt.setAttribute("datetime", new Date(item.createdAt).toISOString());
