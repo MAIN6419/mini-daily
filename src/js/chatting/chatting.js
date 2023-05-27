@@ -1,9 +1,12 @@
 'use strict';
-import { v4 as uuidv4 } from 'https://cdn.skypack.dev/uuid@8.3.2?dts';
-import { userData } from "../commons/commons.js";
+import {v4 as uuidv4} from 'uuid';
 import { joinChatRoom, fetchChatting, addChatting, deleteChat } from '../firebase/chatting/firebase_chatting.js';
 import { getCreatedAt } from '../commons/libray.js';
-import { FetchUserData } from '../firebase/auth/firebase_auth.js';
+import { FetchUserData, currentUser } from '../firebase/auth/firebase_auth.js';
+import "../../css/commons.css";
+import "../../css/main.css";
+import "../../css/chatting.css";
+import "../../img/loading.gif";
 
 const $sectionContents = document.querySelector(".section-contents");
 const $roomName = $sectionContents.querySelector(".room-name");
@@ -13,25 +16,26 @@ const $chattingBox = document.querySelector(".chatting-box");
 const $chattingForm = document.querySelector(".chatting-form");
 const $chattingInput = $chattingForm .querySelector("#input-chatting");
 const $sendBtn = $chattingForm.querySelector(".btn-send");
-const $joinCount = document.querySelector(".join-count");
-const $joinLists = document.querySelector(".join-lists");
+const $closeBtn = $userInfoModal.querySelector(".btn-close");
+
+const $userInfoModal = $sectionContents.querySelector(".userInfo-modal");
 const $loadingModal = document.querySelector(".loading-modal");
+
 const urlParams = new URLSearchParams(window.location.search);
 const chatRoomId = urlParams.get("id");
-const $userInfoModal = $sectionContents.querySelector(".userInfo-modal");
-const $closeBtn = $userInfoModal.querySelector(".btn-close")
 
 $loadingModal.classList.add("active");
-await joinChatRoom(chatRoomId, userData.nickname, rednerJoinUsers);
+await joinChatRoom(chatRoomId, currentUser.displayName, rednerJoinUsers);
 await fetchChatting($chattingBox, chatRoomId, renderChattingMsg);
 $loadingModal.classList.remove("active");
+
 $chattingForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   if(!$chattingInput.value.trim()) return;
   const newChat = {
     id: uuidv4(),
     message: $chattingInput.value.trim(),
-    user: userData.nickname,
+    user: currentUser.displayName,
     createdAt: new Date().getTime(),
     type: "added"
   }
@@ -99,7 +103,7 @@ async function renderChattingMsg(data, userInfo) {
   });
 
   // 작성자가 나인 경우
-  if (data.user === userData.nickname) {
+  if (data.user === currentUser.displayName) {
     messageBox.classList.add("sent");
   } else {
     // 작성자가 다른 경우
@@ -112,7 +116,7 @@ async function renderChattingMsg(data, userInfo) {
   messageBox.appendChild(userName)
   messageBox.appendChild(message);
   messageBox.appendChild(createdAt);
-  if (data.user === userData.nickname && data.type !== "delete") {
+  if (data.user === currentUser.displayName && data.type !== "delete") {
     messageBox.appendChild(delBtn);
   }
 
@@ -122,6 +126,9 @@ async function renderChattingMsg(data, userInfo) {
 }
 
 async function rednerJoinUsers({users, limit, title, id}){
+  const $joinCount = document.querySelector(".join-count");
+  const $joinLists = document.querySelector(".join-lists");
+
   $joinLists.innerHTML = '';
   $roomName.textContent = `방 이름 : ${title}`;
   $roomId.textContent = `id : ${id}`

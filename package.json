@@ -1,0 +1,27 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode=development --config ./webpack.config",
+    "start": "webpack serve --open --mode=development"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^9.22.1",
+    "lodash": "^4.17.21",
+    "uuidv4": "^6.2.13"
+  },
+  "devDependencies": {
+    "css-loader": "^6.7.4",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.1",
+    "mini-css-extract-plugin": "^2.7.6",
+    "style-loader": "^3.3.3",
+    "webpack-cli": "^5.0.2",
+    "webpack-dev-server": "^4.15.0"
+  }
+}

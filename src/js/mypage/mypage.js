@@ -1,6 +1,15 @@
 import { userData } from "../commons/commons.js";
-
-import { FetchUserData, applyProfileImg, changeUserPassword, editIntroduce } from "../firebase/auth/firebase_auth.js";
+import "../../css/commons.css";
+import "../../css/main.css";
+import "../../css/mypage.css";
+import "../../img/loading.gif";
+import {
+  FetchUserData,
+  applyProfileImg,
+  changeUserPassword,
+  currentUser,
+  editIntroduce,
+} from "../firebase/auth/firebase_auth.js";
 
 const $sectionContents = document.querySelector(".section-contents");
 const $changeIntroduceBtn = $sectionContents.querySelector(
@@ -42,8 +51,11 @@ const userInfo = await FetchUserData(userData.nickname);
 $userEmail.textContent = `이메일 : ${userInfo.email} `;
 $userNickname.textContent = `닉네임 : ${userInfo.nickname}`;
 $userGrade.textContent = `등급 : ${userInfo.grade}`;
-$userPoint.textContent = `등업 포인트 : ${userInfo.point}점`
-$profileImg.setAttribute("src", userData.profileImgURL||`${baseUrl}/src/img/profile.png`);
+$userPoint.textContent = `등업 포인트 : ${userInfo.point}점`;
+$profileImg.setAttribute(
+  "src",
+  currentUser.photoURL || `${baseUrl}/src/img/profile.png`
+);
 $userDiary.textContent = `다이어리 : ${userInfo.diaryCount}개`;
 $userComment.textContent = `댓글 : ${userInfo.commentCount}개`;
 
@@ -104,8 +116,8 @@ $profileImgSubmitBtn.addEventListener("click", async () => {
 
 // 소개글 수정 모달창 관련
 $changeIntroduceBtn.addEventListener("click", () => {
-  $inputIntroduce.value = userData.introduce;
-  $textCounter.textContent = `${userData.introduce.length}/300`;
+  $inputIntroduce.value = userInfo.introduce;
+  $textCounter.textContent = `${userInfo.introduce.length}/300`;
   $introduceModal.classList.add("active");
   $inputIntroduce.focus();
 });
@@ -142,16 +154,18 @@ $introduceSubmitBtn.addEventListener("click", async (e) => {
     alert("입력된 내용이 없습니다!");
     return;
   }
-  if ($inputIntroduce.value === userData.introduce) {
+  if ($inputIntroduce.value === userInfo.introduce) {
     alert("수정된 내용이 없습니다!");
     return;
   }
-  // 데이터 전송로직
-  await editIntroduce($inputIntroduce.value);
-  userData.introduce = $inputIntroduce.value;
-  sessionStorage.setItem("userData", JSON.stringify(userData));
-  alert("수정이 완료되었습니다.");
-  location.reload();
+  if (confirm("정말 수정하시겠습니까?")) {
+    // 데이터 전송로직
+    await editIntroduce($inputIntroduce.value);
+    userData.introduce = $inputIntroduce.value;
+    sessionStorage.setItem("userData", JSON.stringify(userData));
+    alert("수정이 완료되었습니다.");
+    location.reload();
+  }
 });
 
 // 비밀번호 변경 모달창
@@ -162,9 +176,9 @@ $changePasswordBtn.addEventListener("click", () => {
 $passwordModal.addEventListener("click", (e) => {
   if (e.target === $passwordModal || e.target === $passwordCancleBtn) {
     $passwordModal.classList.remove("active");
-    $inputCurrentPw.value = '';
-    $inputNewPw.value = '';
-    $inputChkNewPw.value = '';
+    $inputCurrentPw.value = "";
+    $inputNewPw.value = "";
+    $inputChkNewPw.value = "";
   }
 });
 
@@ -181,22 +195,28 @@ $passwordSubmitBtn.addEventListener("click", async () => {
     alert("새 비밀번호 확인을 입력해주세요!");
     return;
   }
-  if (!passwordReg.test($inputCurrentPw.value)&&!passwordReg.test($inputNewPw.value)) {
+  if (
+    !passwordReg.test($inputCurrentPw.value) &&
+    !passwordReg.test($inputNewPw.value)
+  ) {
     alert("비밀번호는 8~16자 영문, 숫자, 특수문자를 사용하세요.");
     return;
   }
-  if ($inputNewPw.value!==$inputChkNewPw.value) {
+  if ($inputNewPw.value !== $inputChkNewPw.value) {
     alert("비밀번호가 일치하지 않습니다!");
     return;
   }
   // 비밀번호 변경로직
   $loadingModal.classList.add("active");
-  const res =  await changeUserPassword($inputCurrentPw.value, $inputNewPw.value)
+  const res = await changeUserPassword(
+    $inputCurrentPw.value,
+    $inputNewPw.value
+  );
   $loadingModal.classList.remove("active");
   $passwordModal.classList.remove("active");
-  if(!res){
-    $inputCurrentPw.value= '';
-    $inputNewPw.value = '';
-    $inputChkNewPw.value = '';
+  if (!res) {
+    $inputCurrentPw.value = "";
+    $inputNewPw.value = "";
+    $inputChkNewPw.value = "";
   }
 });

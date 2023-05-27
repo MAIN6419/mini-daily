@@ -1,7 +1,11 @@
 "use strict";
-import _ from "https://cdn.skypack.dev/lodash-es";
+import _ from "lodash";
 import { getCreatedAt } from "../commons/libray.js";
 import { userData } from "../commons/commons.js";
+import "../../css/commons.css";
+import "../../css/main.css";
+import "../../css/myDiary.css";
+import "../../img/loading.gif";
 
 import {
   collection,
@@ -11,7 +15,7 @@ import {
   where,
   startAfter,
   limit,
-} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
+} from "firebase/firestore";
 import { FetchDiary } from "../firebase/diary/firebase_diary.js";
 import { db } from "../firebase/setting/firebase_setting.js";
 const $sectionContents = document.querySelector(".section-contents");

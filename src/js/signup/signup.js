@@ -1,5 +1,8 @@
 import { signup, duplication } from "../firebase/auth/firebase_auth.js";
-
+import "../../css/commons.css";
+import "../../css/main.css";
+import "../../css/signup.css";
+import "../../img/loading.gif";
 const $signupForm = document.querySelector(".signup-form");
 const $inputNickname = $signupForm.querySelector("#input-nickname");
 const $nicknameMsg = $signupForm.querySelector("#input-nickname+.input-msg");

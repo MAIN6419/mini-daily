@@ -3,6 +3,9 @@ import { userData } from "../commons/commons.js";
 import { setFortune } from "../firebase/fortune/firebase_fortune.js";
 initFortune();
 setFortune
+import "../../css/commons.css";
+import "../../css/main.css";
+import "../../css/fortune.css";
 
 function fetchFortuneData() {
   return fetch("../db/db.json")

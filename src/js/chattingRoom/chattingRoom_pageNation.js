@@ -9,7 +9,7 @@ import {
   limit,
   onSnapshot,
   limitToLast,
-} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
+} from "firebase/firestore";
 import { db } from "../firebase/setting/firebase_setting.js";
 import { keyword, renderChattingRooms } from "./chattingRoom.js";
 const $sectionContents = document.querySelector(".section-contents");

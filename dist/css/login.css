@@ -1,0 +1,135 @@
+/*!*********************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/css/login.css ***!
+  \*********************************************************************/
+.a11y-hidden{
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+}
+.login-wrapper{
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+.login-form{
+  width: calc(100% - 60px);
+  max-width: 400px;
+  background-color: #f2f2f2;
+  box-shadow: 0 8px 20px rgba(35, 0, 77, 0.2);
+  border-radius: 20px;
+  padding: 30px 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: animateLogin 1s;
+}
+.login-form h2{
+  margin: 20px 0px;
+  text-align: center;
+}
+#input-email,
+#input-password{
+  box-sizing: border-box;
+  padding: 20px;
+  width: 100%;
+  border-radius: 10px;
+  border: none;
+  font-size: 15px;
+  font-weight: bold;
+}
+.find-link{
+  text-align: right;
+  font-size: 12px;
+  color: gray;
+  font-weight: bold;
+}
+.btn-login{
+  background-color: #16e789;
+  border: none;
+  border-radius: 10px;
+  padding: 18px 0px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 20px 0px;
+  cursor: pointer;
+}
+.signup{
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+.signup-link{
+  color: #4ad395;
+}
+@keyframes animateLogin{
+  0%{
+    transform:scale(1,1);
+  }
+  50%{
+    transform:scale(1.1,1.1);
+  }
+  100%{
+    transform:scale(1,1);
+  }
+}
+/*!***********************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/css/commons.css ***!
+  \***********************************************************************/
+@font-face {
+  font-family: "NeoDunggeunmo";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.3/NeoDunggeunmo.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+/* rest-css */
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "NeoDunggeunmo", "sans-serif";
+}
+ul{
+  list-style-type: none;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+.a11y-hidden {
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+}
+
+/* loading-css */
+.loading-modal{
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.loading-modal {
+  font-size: 30px;
+  font-weight: bold;
+}
+.loading-modal.active{
+  display: flex;
+}

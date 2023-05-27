@@ -1,10 +1,14 @@
-import _ from "https://cdn.skypack.dev/lodash-es";
+import _ from "lodash";
 import {
   fetchFirstPage,
   goToNextPage,
   goToPrevPage,
   variables,
 } from "./chattingRoom_pageNation.js";
+import "../../css/commons.css";
+import "../../css/main.css";
+import "../../css/chattingRoom.css";
+import "../../img/loading.gif";
 
 const $sectionContents = document.querySelector(".section-contents");
 const $roomList = $sectionContents.querySelector(".room-list");

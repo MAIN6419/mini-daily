@@ -1,11 +1,13 @@
 "use strict";
-import _ from 'https://cdn.skypack.dev/lodash-es';
+import _ from 'lodash';
 import { getCreatedAt } from "../commons/libray.js";
 import { userData } from "../commons/commons.js";
 import { FetchDiary, fetchBestDiarys, fetchRecentDiary } from '../firebase/diary/firebase_diary.js';
 import { FetchUserData, getAuthImg } from '../firebase/auth/firebase_auth.js';
 import { setFortune } from '../firebase/fortune/firebase_fortune.js';
-
+import "../../css/commons.css";
+import "../../css/main.css";
+import "../../css/home.css";
 const $sectionContents = document.querySelector(".section-contents");
 const $recentDiaryLists = $sectionContents.querySelector(".recent-diaryLists");
 const $fortuneContents = $sectionContents.querySelector(".fortune-cotents");
@@ -36,7 +38,7 @@ async function rederRecentDiary() {
     $diaryItem.setAttribute("class", "recent-item");
 
     $recentLink.textContent = item.title;
-    $recentLink.setAttribute("href", `/src/template/diary.html?id=${item.id}`);
+    $recentLink.setAttribute("href", `diary.html?id=${item.id}`);
 
     $createdAt.setAttribute("class", "createdAt");
     $createdAt.setAttribute("datetime", new Date(item.createdAt).toISOString());
@@ -89,7 +91,7 @@ async function renderBestDiary() {
 
     const img = document.createElement('img');
     img.classList.add('diary-img');
-    img.src = diary.imgURL[0] || '../img/no-image.png';
+    img.src = diary.imgURL[0] || '../../img/no-image.png';
     img.alt = '다이어리 이미지';
     anchor.appendChild(img);
 
@@ -111,7 +113,7 @@ async function renderBestDiary() {
 
     const profileImg = document.createElement('img');
     profileImg.classList.add('diary-profileImg');
-    profileImg.src = await getAuthImg(diary.auth)||'../img/profile.png';
+    profileImg.src = await getAuthImg(diary.auth)||'../../img/profile.png';
     profileImg.alt = '';
     bottomDiv.appendChild(profileImg);
 
@@ -138,7 +140,7 @@ async function renderBestDiary() {
 
     const empathyImg = document.createElement("img");
     empathyImg.setAttribute("class", "empathy-img");
-    empathyImg.setAttribute("src", "../img/heart.png");
+    empathyImg.setAttribute("src", "../../img/heart.png");
     empathyImg.setAttribute("alt", "공감 아이콘");
     empathy.insertAdjacentElement("afterbegin",empathyImg);
 

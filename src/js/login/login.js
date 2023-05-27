@@ -1,7 +1,8 @@
-import { login } from "../commons/firebase.js";
-if (window.navigator.msSaveOrOpenBlob) {
-  alert("이 기능은 인터넷 익스플로러에서 지원되지 않습니다. 다른 브라우저를 사용해주세요.");
-}
+import { login } from "../firebase/auth/firebase_auth.js";
+import "../../css/login.css";
+import "../../css/commons.css";
+import "../../img/loading.gif";
+
 const $loginForm = document.querySelector(".login-form");
 const $inputEmail = $loginForm.querySelector("#input-email");
 const $inputPw = $loginForm.querySelector("#input-password");
@@ -10,7 +11,7 @@ const $loadingModal = document.querySelector(".loading-modal");
 const $signUpLink = document.querySelector(".signup-link");
 if (sessionStorage.getItem("userData")){
   alert("이미 로그인 되어있습니다!");
-  location.href = '/src/template/home.html';
+  location.href = 'home.html';
 }
 
 $inputEmail.addEventListener("input", (e) => {

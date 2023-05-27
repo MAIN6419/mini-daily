@@ -110,8 +110,7 @@
   right: 20px;
 }
 .diary-btns .btn-edit,
-.diary-btns .btn-del,
-.btn-accuse {
+.diary-btns .btn-del{
   border: none;
   width: 20px;
   height: 20px;
@@ -130,10 +129,7 @@
   width: 20px;
   height: 20px;
 }
-.btn-accuse {
-  margin-left: 10px;
-  background: url(../img/accuse-icon.png) no-repeat center / contain;
-}
+
 .empathy-box {
   border-radius: 5px;
   width: 80px;

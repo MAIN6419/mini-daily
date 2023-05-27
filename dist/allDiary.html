@@ -11,40 +11,39 @@
     <meta name="description" content="미니 다이어리 사이트">
     <title>Mini Diary</title>
     <link rel="icon" type="image/png" sizes="48x48" href="../img/favicon.png">
-    <link rel="stylesheet" href="../css/commons.css">
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/diaryList.css">
-    <script src="../js/commons/commons.js" type="module"></script>
-  </head>
+
+  <script defer src="commons.bundle.js"></script><script defer src="allDiary.bundle.js"></script><link href="css/allDiary.css" rel="stylesheet"></head>
   <body>
-    <h1 class="a11y-hidden">Mini Daily</h1>
+    <h1 class="a11y-hidden">Mini diary</h1>
     <div class="wrapper">
       <div class="inner">
         <section class="section-profile">
           <h2 class="a11y-hidden">프로필 영역</h2>
-          <!-- sectopm-profile -->
+          <!-- section-profile -->
         </section>
         <section class="section-contents">
-          <h2 class="a11y-hidden">다이어리 글 목록</h2>
-          <article class="search-bar">
-            <h2 class="a11y-hidden">검색창</h2>
-              <label for="input-search" class="a11y-hidden">다이어리 제목 검색창</label>
-              <input type="text" id="input-search" class="input-search" placeholder="제목 검색">
-          </article>
-          <ul class="diary-lists">
-            <!-- 다이어리 -->
+          <div class="title-box">
+            <h2 class="title">전체 다이어리</h2>
+            <article class="search-bar">
+              <h2 class="a11y-hidden">검색창</h2>
+                <label for="input-search" class="a11y-hidden">다이어리 제목 검색창</label>
+                <input type="text" id="input-search" class="input-search" placeholder="제목 검색">
+            </article>
+          </div>
+  
+          
+          <ul class="allDiary-lists">
           </ul>
           <article class="loading-modal">
             <h2 class="a11y-hidden">로딩화면</h2>
-            <img src="../img/loading.gif" alt="로딩중 이미지">
+            <img src="./img/loading.gif" alt="로딩중 이미지">
             <span>Loading...</span>
           </article>
         </section>
         <div class="links">
-          <!-- links  -->
+          <!-- links -->
         </div>
       </div>
     </div>
-    <script src="../js/diary/diaryList.js" type="module"></script>
   </body>
 </html>

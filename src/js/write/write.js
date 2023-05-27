@@ -1,7 +1,11 @@
 "use strict";
 import { userData } from "../commons/commons.js";
 import { writeDiary, uploadFile } from "../firebase/diary/firebase_diary.js";
-
+import "../../css/commons.css";
+import "../../css/main.css";
+import "../../css/write.css";
+import "../../img/imgUpload.png";
+import "../../img/loading.gif";
 const data = JSON.parse(localStorage.getItem("diary")) || [];
 
 const $inputTitle = document.querySelector("#input-title");
@@ -73,7 +77,7 @@ function previewImg(e) {
   uploadImg[imgIdx] = file;
 }
 function resetImg(idx) {
-  $previewImg[idx].setAttribute("src", "../img/imgUpload.png");
+  $previewImg[idx].setAttribute("src", "../../img/imgUpload.png");
   $previewImg[idx].style.width = "70px";
   $previewImg[idx].style.height = "70px";
   uploadImg[idx] = "";

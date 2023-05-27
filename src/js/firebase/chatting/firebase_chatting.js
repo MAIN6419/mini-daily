@@ -10,10 +10,10 @@ import {
   updateDoc,
   getDoc,
   onSnapshot,
-} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
+} from "firebase/firestore";
 import { db } from "../setting/firebase_setting.js";
 let isfirst = true;
-let currentSnapshotUnsubscribe = null;
+
 // 채팅방 참가시 실행되는 함수
 const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
   if (!chatRoomId) {

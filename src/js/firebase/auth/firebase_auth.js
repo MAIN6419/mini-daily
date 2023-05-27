@@ -1,7 +1,6 @@
-import { v4 as uuidv4 } from "https://jspm.dev/uuid";
+import {v4 as uuidv4} from 'uuid';
 import {
   arrayRemove,
-  getFirestore,
   collection,
   getDocs,
   query,
@@ -11,13 +10,14 @@ import {
   updateDoc,
   getDoc,
   onSnapshot,
-} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
+} from "firebase/firestore";
+
 import {
   uploadBytes,
   getDownloadURL,
   ref as storageRef,
   deleteObject,
-} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-storage.js";
+} from "firebase/storage";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -31,7 +31,7 @@ import {
   EmailAuthProvider,
   reauthenticateWithCredential,
   updatePassword,
-} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
+} from "firebase/auth";
 import { db, storage, app } from "../setting/firebase_setting.js";
 
 let baseUrl = "";
@@ -40,14 +40,19 @@ if (host.includes("github.io")) {
   baseUrl = "/mini-diary";
 }
 
-async function getAuthImg(auth) {
-  const userRef = doc(db, "user", auth);
-  const res = await getDoc(userRef);
-  const datas = res.data();
-  return datas.profileImgUrl;
-}
 const userData = JSON.parse(sessionStorage.getItem("userData"));
 const auth = getAuth();
+let currentUser;
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    console.log("유저상태 변경");
+    // await updateDoc(userDocRef, { islogin: false });
+  } else {
+    currentUser = user;
+  }
+});
+
 
 
 // 유저 정보를 가져오는 함수
@@ -59,22 +64,6 @@ const FetchUserData = async (nickname) => {
     const datas = res.docs.map((el) => el.data());
     return datas[0];
   } catch (error) {
-    throw error;
-  }
-};
-
-// 유저 프로필 이미지 변경 함수
-const updateProfileImg = async (url) => {
-  try {
-    if (!auth.currentUser) return;
-    await updateProfile(auth.currentUser, {
-      photoURL: url,
-    });
-    const updateUser = doc(db, `user/${userData.nickname}`);
-    await updateDoc(updateUser, { profileImgUrl: url });
-
-  } catch (error) {
-    alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
     throw error;
   }
 };
@@ -133,7 +122,18 @@ const login = async (email, password) => {
     }
     // 로그인이 확인 처리
     await updateDoc(userDocRef, { islogin: true });
-    location.replace(`${baseUrl}/src/template/home.html`);
+
+    //불러온 데이터 세션 스토리지에 저장
+    sessionStorage.setItem(
+      "userData",
+      JSON.stringify({
+        nickname: datas[0].nickname,
+        introduce: datas[0].introduce,
+        profileImgURL: datas[0].profileImgUrl,
+        fortune: datas[0].fortune,
+      })
+    );
+    location.replace(`home.html`);
   } catch (error) {
     if (error.message.includes("auth/invalid-email")) {
       alert("유효하지 않은 이메일 형식 입니다!");
@@ -161,7 +161,7 @@ const logout = async () => {
       const urlParams = new URLSearchParams(window.location.search);
       // 현재 채팅창의 querystring Id값을 가져옴
       const chatRoomId = urlParams.get("id");
-      const userDocRef = doc(db, "user", userData.nickname);
+      const userDocRef = doc(db, "user", currentUser.displayName);
       // 로그아웃
       await signOut(auth);
       // 채팅방 퇴장 처리
@@ -173,7 +173,7 @@ const logout = async () => {
         // 채팅방 데이터를 구해줌
         const chatRoomRef = doc(db, `chatRoom/${chatRoomId}`);
         await updateDoc(chatRoomRef, {
-          users: arrayRemove(userData.nickname), // users 배열에서 userNickname 제거
+          users: arrayRemove(currentUser.displayName), // users 배열에서 userNickname 제거
         });
       }
 
@@ -237,13 +237,13 @@ async function changeUserPassword(currentPassword, newPassword) {
 }
 
 // sessionStorage에 저장된 user정보를 가져옴
-function getSessionUser () {
+function getSessionUser() {
   for (const key of Object.keys(sessionStorage)) {
     if (key.includes("firebase:authUser:")) {
       return JSON.parse(sessionStorage.getItem(key));
     }
   }
-};
+}
 
 // 회원가입을 위한 함수
 // 인자로 닉네임 이메일 비밀번호를 받는다.
@@ -342,13 +342,36 @@ const changePassword = async (email, phone) => {
 // 자기소개 변경 함수
 async function editIntroduce(introduce) {
   try {
-    const userRef = doc(db, `user/${userData.nickname}`);
+    const userRef = doc(db, `user/${currentUser.displayName}`);
     await updateDoc(userRef, { introduce });
   } catch (error) {
     alert("알 수 없는 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
     throw error;
   }
 }
+
+// 유저 이미지 Url를 가져오는 함수
+async function getAuthImg(auth) {
+  const userRef = doc(db, "user", auth);
+  const res = await getDoc(userRef);
+  const datas = res.data();
+  return datas.profileImgUrl;
+}
+
+// 유저 프로필 이미지 변경 함수
+const updateProfileImg = async (url) => {
+  try {
+    if (!auth.currentUser) return;
+    await updateProfile(auth.currentUser, {
+      photoURL: url,
+    });
+    const updateUser = doc(db, `user/${currentUser.displayName}`);
+    await updateDoc(updateUser, { profileImgUrl: url });
+  } catch (error) {
+    alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+    throw error;
+  }
+};
 
 // 유저 프로필 변경 적용 함수
 const applyProfileImg = async (file) => {
@@ -361,7 +384,7 @@ const applyProfileImg = async (file) => {
       );
       const uploadfileUrl = await getDownloadURL(res.ref);
       await updateProfileImg(uploadfileUrl);
-      const user = await FetchUserData(userData.nickname);
+      const user = await FetchUserData(currentUser.displayName);
       if (user.profileImgFileName) {
         await deleteObject(
           storageRef(
@@ -371,7 +394,7 @@ const applyProfileImg = async (file) => {
         );
       }
 
-      const updateUser = doc(db, `user/${userData.nickname}`);
+      const updateUser = doc(db, `user/${currentUser.displayName}`);
       await updateDoc(updateUser, { profileImgFileName: fileName });
       userData.profileImgURL = uploadfileUrl;
       sessionStorage.setItem("userData", JSON.stringify(userData));
@@ -383,7 +406,6 @@ const applyProfileImg = async (file) => {
     }
   }
 };
-
 
 export {
   FetchUserData,
@@ -400,4 +422,5 @@ export {
   editIntroduce,
   applyProfileImg,
   getAuthImg,
+  currentUser,
 };

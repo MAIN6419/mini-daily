@@ -2,7 +2,8 @@
 
 import { updateTime } from "./clock.js";
 import { calendar } from "./calendar.js";
-import { checkLogin, logout } from "./firebase.js";
+import { checkLogin, logout } from "../firebase/auth/firebase_auth.js";
+
 export let userData;
 
 const host = window.location.host;
@@ -13,7 +14,7 @@ if (host.includes("github.io")) {
 }
 
 if(!sessionStorage.getItem("userData")) {
-  location.replace(`${baseUrl}/`);
+  location.replace(`${baseUrl}/dist/`);
   alert("로그인 후 이용가능합니다!");
 }
 else{
@@ -156,12 +157,12 @@ async function loadTemplate() {
   `;
   const links = document.querySelector(".links");
   links.innerHTML = `
-    <a class="home-link"href="${baseUrl}/src/template/home.html">홈</a>
-    <a class="allDiary-link"href="${baseUrl}/src/template/allDiary.html">전체글</a>
-    <a class="diary-link" href="${baseUrl}/src/template/diaryList.html">마이다이어리</a>
-    <a class="write-link" href="${baseUrl}/src/template/write.html">글작성</a>
-    <a class="chattingRoom-link" href="${baseUrl}/src/template/chattingRoom.html">채팅방</a>
-    <a class="fortune-link" href="${baseUrl}/src/template/fortune.html">운세보기</a>
-    <a class="mypage-link" href="${baseUrl}/src/template/mypage.html">마이페이지</a>
+    <a class="home-link"href="home.html">홈</a>
+    <a class="allDiary-link"href="allDiary.html">전체글</a>
+    <a class="diary-link" href="myDiary.html">마이다이어리</a>
+    <a class="write-link" href="write.html">글작성</a>
+    <a class="chattingRoom-link" href="chattingRoom.html">채팅방</a>
+    <a class="fortune-link" href="fortune.html">운세보기</a>
+    <a class="mypage-link" href="mypage.html">마이페이지</a>
   `;
 }

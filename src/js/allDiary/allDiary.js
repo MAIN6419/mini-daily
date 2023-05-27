@@ -1,5 +1,5 @@
 "use strict";
-import _ from "https://cdn.skypack.dev/lodash-es";
+import _ from "lodash";
 
 import { getCreatedAt } from "../commons/libray.js";
 import {
@@ -10,9 +10,15 @@ import {
   where,
   startAfter,
   limit,
-} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
+} from "firebase/firestore";
 import { db } from "../firebase/setting/firebase_setting.js";
 import { getAuthImg } from "../firebase/auth/firebase_auth.js";
+import "../../css/commons.css";
+import "../../css/main.css";
+import "../../css/allDiary.css";
+import "../../img/loading.gif";
+import "../../img/no-image.png";
+import "../../img/heart.png";
 
 const $allDiaryList = document.querySelector(".allDiary-lists");
 let lastpage;
@@ -114,7 +120,7 @@ async function renderAllDiary(data) {
 
     const img = document.createElement("img");
     img.classList.add("diary-img");
-    img.src = diary.imgURL[0] || "../img/no-image.png";
+    img.src = diary.imgURL[0] || "../../img/no-image.png";
     img.alt = "다이어리 이미지";
     anchor.appendChild(img);
 
@@ -136,7 +142,7 @@ async function renderAllDiary(data) {
 
     const profileImg = document.createElement("img");
     profileImg.classList.add("diary-profileImg");
-    profileImg.src = (await getAuthImg(diary.auth)) || "../img/profile.png";
+    profileImg.src = (await getAuthImg(diary.auth)) || "../../img/profile.png";
     profileImg.alt = "";
     bottomDiv.appendChild(profileImg);
 
@@ -160,7 +166,7 @@ async function renderAllDiary(data) {
 
     const empathyImg = document.createElement("img");
     empathyImg.setAttribute("class", "empathy-img");
-    empathyImg.setAttribute("src", "../img/heart.png");
+    empathyImg.setAttribute("src", "../../img/heart.png");
     empathyImg.setAttribute("alt", "공감 아이콘");
     empathy.insertAdjacentElement("afterbegin", empathyImg);
 

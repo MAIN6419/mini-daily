@@ -9,9 +9,10 @@ import {
   deleteDoc,
   getDoc,
   increment,
-} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
-import { db, currentUser } from "../setting/firebase_setting";
-import { getKST } from "../../commons/libray";
+} from "firebase/firestore";
+import { db } from "../setting/firebase_setting.js";
+import { getKST } from "../../commons/libray.js";
+import { currentUser } from "../auth/firebase_auth.js";
 
 // 댓글 작성 함수
 async function writeComment(commentData) {

@@ -1,5 +1,6 @@
 import { findEmail, changePassword } from "../firebase/auth/firebase_auth.js";
-
+import "../../css/main.css";
+import "../../css/findAccount.css";
 
 const $emailFormBtn = document.querySelector(".btn-emailForm");
 const $pwFormBtn = document.querySelector(".btn-pwForm");
@@ -129,7 +130,7 @@ const findEmailEvent = () => {
           toggleResult(`찾으시는 이메일은 ${res} 입니다.`, $findResult)
           $findEmailBtn.removeEventListener("click", findEmailEvent);
           $findEmailBtn.addEventListener("click", () =>
-            location.replace("../../")
+            location.replace("/")
           );
           $findEmailBtn.textContent = "로그인하러 가기";
         } else {

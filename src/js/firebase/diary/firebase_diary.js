@@ -1,31 +1,34 @@
 import {
   arrayRemove,
+  arrayUnion,
+  getFirestore,
   collection,
   getDocs,
   query,
   orderBy,
   where,
   doc,
+  setDoc,
   updateDoc,
   deleteDoc,
   limit,
   getDoc,
   increment,
-  setDoc,
-} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
+} from "firebase/firestore";
 import {
+  uploadBytes,
+  getDownloadURL,
   ref as storageRef,
   deleteObject,
-} from "https://www.gstatic.com/firebasejs/9.21.0/firebase-storage.js";
+} from "firebase/storage";
 import { db,  storage } from "../setting/firebase_setting.js";
-import { v4 as uuidv4 } from "https://jspm.dev/uuid";
+import {v4 as uuidv4} from 'uuid';
 import { getKST } from "../../commons/libray.js";
-import { getSessionUser } from "../auth/firebase_auth.js";
-const userData = getSessionUser();
+import { currentUser } from "../auth/firebase_auth.js";
 
 async function writeDiary(newDiary) {
   try {
-    const userRef = doc(db, "user", userData.displayName);
+    const userRef = doc(db, "user", currentUser.displayName);
     let userDoc = await getDoc(userRef);
     let data = userDoc.data();
     let maxDiaryPoint = data.maxDiaryPoint;
@@ -175,16 +178,50 @@ async function deleteDiary(id) {
     const diaryDoc = await getDoc(diaryRef);
     const data = diaryDoc.data();
     if (new Date(data.createdAt).getDate() === new Date().getDate()) {
-      await updateDoc(doc(db, "user", userData.displayName), {
+      await updateDoc(doc(db, "user", currentUser.displayName), {
         lastDiaryDate: null,
       });
     }
     await deleteDoc(diaryRef);
 
-    await updateDoc(doc(db, "user", userData.displayName), {
+    await updateDoc(doc(db, "user", currentUser.displayName), {
       diaryCount: increment(-1),
     });
   } catch (error) {
+    throw error;
+  }
+}
+
+async function deleteEditDiaryImg(filename) {
+  // 빈배열이 올 수 있기 때문에 filename이 있는 경우에만 이미지 삭제 처리
+  try {
+    if (filename) {
+      await deleteObject(
+        storageRef(storage, `images/diary/${String(filename)}`)
+      );
+    }
+  } catch (error) {
+    alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+    throw error;
+  }
+}
+
+async function updateEmpathy(id, count, auth) {
+  try {
+    const diary = doc(db, `diaryList/${id}`);
+    if (!diary) return;
+    const userRef = doc(db, `user/${currentUser.displayName}`);
+    const authRef = doc(db, `user/${auth}`);
+    await updateDoc(diary, { empathy: increment(count) });
+    if (count > 0) {
+      await updateDoc(userRef, { empathyList: arrayUnion(id) });
+      await updateDoc(authRef, { point: increment(1) });
+    } else {
+      await updateDoc(userRef, { empathyList: arrayRemove(id) });
+      await updateDoc(authRef, { point: increment(-1) });
+    }
+  } catch (error) {
+    alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
     throw error;
   }
 }
@@ -198,4 +235,6 @@ export {
   FetchDiary,
   editDiary,
   deleteDiary,
+  deleteEditDiaryImg,
+  updateEmpathy
 };

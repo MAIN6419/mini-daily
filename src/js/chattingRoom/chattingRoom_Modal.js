@@ -1,6 +1,15 @@
 import { createChattingRoom, checkJoinRoom } from "../firebase/chattingRoom/firebase_chattingRoom.js";
 
 const $sectionContents = document.querySelector(".section-contents");
+
+let baseUrl = "";
+const host = window.location.host;
+if (host.includes("github.io")) {
+  baseUrl = "/mini-diary";
+}
+
+// createRoom 모달창 
+
 const $createRoomModalBtn = $sectionContents.querySelector( ".btn-createRoomModal");
 const $createRoomModal = $sectionContents.querySelector(".createRoom-modal");
 const $createRoomModalDim = $createRoomModal.querySelector(".dim");
@@ -10,22 +19,7 @@ const $chkPriavte = $createRoomModal.querySelector("#checkbox-private");
 const $inputPassowrd = $createRoomModal.querySelector("#input-password");
 const $createRoomBtn = $sectionContents.querySelector(".btn-createRoom");
 const $createRoomCloseBtn = $createRoomModal.querySelector(".btn-close");
-const $loadingModal = $sectionContents.querySelector(".loading-modal");
 
-const $joinRoomModalBtn = $sectionContents.querySelector(".btn-joinRoomModal");
-const $joinRoomModal = $sectionContents.querySelector(".joinRoom-modal");
-const $joinRoomModalDim = $joinRoomModal.querySelector(".dim");
-const $inputRoomId = $joinRoomModal.querySelector("#input-roomId");
-const $joinRoomCloseBtn = $joinRoomModal.querySelector(".btn-close");
-const $joinRoomBtn = $joinRoomModal.querySelector(".btn-join");
-
-let baseUrl = "";
-const host = window.location.host;
-if (host.includes("github.io")) {
-  baseUrl = "/mini-diary";
-}
-
-// createRoom 모달창 이벤트
 $createRoomBtn.addEventListener("click", (e) => {
   e.preventDefault();
   $createRoomModal.classList.add("active");
@@ -110,7 +104,15 @@ $chkPriavte.addEventListener("change", () => {
   $inputPassowrd.classList.toggle("active");
 });
 
-// joinRoom 모달창 이벤트
+// joinRoom 모달창 
+const $joinRoomModalBtn = $sectionContents.querySelector(".btn-joinRoomModal");
+const $joinRoomModal = $sectionContents.querySelector(".joinRoom-modal");
+const $joinRoomModalDim = $joinRoomModal.querySelector(".dim");
+const $inputRoomId = $joinRoomModal.querySelector("#input-roomId");
+const $joinRoomCloseBtn = $joinRoomModal.querySelector(".btn-close");
+const $joinRoomBtn = $joinRoomModal.querySelector(".btn-join");
+
+
 $joinRoomModalBtn.addEventListener("click", () => {
   $joinRoomModal.classList.add("active");
   $inputRoomId.focus();
