@@ -89,8 +89,8 @@ body {
   text-align: center;
 }
 .profile .profile-img {
-  width: 180px;
-  height: 180px;
+  width: 150px;
+  height: 150px;
   object-position: center;
   margin-bottom: 10px;
   border: 1px solid #999;
@@ -192,8 +192,8 @@ caption {
   top: 20px;
   left: 20px;
   border: none;
-  padding: 3px 3px 3px 23px;
-  background: url(../img/logout-icon.png) no-repeat left 3px center/ 18px;
+  padding-left: 20px;
+  background: url("../img/icon-sprite.png") no-repeat -161px -95px / 185px 139px;
   font-size: 14px;
   cursor: pointer;
 }

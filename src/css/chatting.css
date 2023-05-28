@@ -267,7 +267,7 @@
   color: crimson;
   font-size: 14px;
   padding-left: 21px;
-  background: url(../img/logout-icon.png) no-repeat left / 18px;
+  background: url("../img/icon-sprite.png") no-repeat -161px -95px / 185px 139px;
 }
 .userInfo-modal {
   position: absolute;

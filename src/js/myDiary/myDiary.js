@@ -1,7 +1,6 @@
 "use strict";
 import _ from "lodash";
 import { getCreatedAt } from "../commons/libray.js";
-import { userData } from "../commons/commons.js";
 import "../../css/commons.css";
 import "../../css/main.css";
 import "../../css/myDiary.css";
@@ -18,12 +17,14 @@ import {
 } from "firebase/firestore";
 import { FetchDiary } from "../firebase/diary/firebase_diary.js";
 import { db } from "../firebase/setting/firebase_setting.js";
+import { getSessionUser } from "../firebase/auth/firebase_auth.js";
 const $sectionContents = document.querySelector(".section-contents");
 const $diaryList = $sectionContents.querySelector(".diary-lists");
 
-
 const $inputSearch = $sectionContents.querySelector(".input-search");
 const $loadingModal = $sectionContents.querySelector(".loading-modal");
+
+const userData = getSessionUser();
 let lastpage;
 let hasNextpage = false;
 let keyword = "";
@@ -44,7 +45,7 @@ async function FetchDiarys() {
       dirayList,
       orderBy("title"),
       orderBy("createdAt", "desc"),
-      where("auth", "==", userData.nickname),
+      where("auth", "==", userData.displayName),
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
       startAfter(lastpage),
@@ -60,7 +61,7 @@ async function FetchDiarys() {
     const diaryList = collection(db, "diaryList");
     const q = query(
       diaryList,
-      where("auth", "==", userData.nickname),
+      where("auth", "==", userData.displayName),
       orderBy("createdAt", "desc"),
       limit(4)
     );
@@ -94,7 +95,7 @@ async function nextDiaryList() {
     const diaryList = collection(db, "diaryList");
     const q = query(
       diaryList,
-      where("auth", "==", userData.nickname),
+      where("auth", "==", userData.displayName),
       orderBy("createdAt", "desc"),
       startAfter(lastpage),
       limit(4)
@@ -162,7 +163,7 @@ const getThorttle = _.throttle(async (id) => {
 let slicedData;
 
 async function addItems() {
-  slicedData = await nextDiaryList(userData.nickname);
+  slicedData = await nextDiaryList(userData.displayName);
   if (slicedData.length === 0) return;
   renderDiaryList(slicedData);
   if (!hasNextpage) {

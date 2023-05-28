@@ -1,11 +1,12 @@
 "use strict";
-import { userData } from "../commons/commons.js";
+import {v4 as uuidv4} from 'uuid';
 import { writeDiary, uploadFile } from "../firebase/diary/firebase_diary.js";
 import "../../css/commons.css";
 import "../../css/main.css";
 import "../../css/write.css";
 import "../../img/imgUpload.png";
 import "../../img/loading.gif";
+import { getSessionUser } from "../firebase/auth/firebase_auth.js";
 const data = JSON.parse(localStorage.getItem("diary")) || [];
 
 const $inputTitle = document.querySelector("#input-title");
@@ -16,6 +17,8 @@ const $btnUpload = document.querySelectorAll(".btn-upload");
 const $previewImg = document.querySelectorAll(".preview-img");
 const $resetBtn = document.querySelectorAll(".btn-reset");
 const $loadingModal = document.querySelector(".loading-modal");
+
+const userData = getSessionUser();
 const uploadImg = ["", "", ""];
 let imgIdx = "0";
 
@@ -32,11 +35,11 @@ $submitBtn.addEventListener("click", async () => {
   if (confirm("정말 작성하시겠습니까?")) {
     $loadingModal.classList.add("active");
     const fileInfo = await uploadFile(uploadImg);
-    const id = uuid.v4();
+    const id = uuidv4();
     const newDiary = {
       id,
-      auth: userData.nickname,
-      profileImg: userData.profileImgURL,
+      auth: userData.displayName,
+      profileImg: userData.photoURL,
       title: $inputTitle.value,
       contents: $inputcontents.value,
       imgURL: fileInfo.url || [],
@@ -77,7 +80,7 @@ function previewImg(e) {
   uploadImg[imgIdx] = file;
 }
 function resetImg(idx) {
-  $previewImg[idx].setAttribute("src", "../../img/imgUpload.png");
+  $previewImg[idx].setAttribute("src", "./imgUpload.png");
   $previewImg[idx].style.width = "70px";
   $previewImg[idx].style.height = "70px";
   uploadImg[idx] = "";

@@ -22,9 +22,9 @@
   position: absolute;
   top: 50%;
   left: 15px;
-  transform: translateY(-50%);
+  transform: translateY(-45%);
   display: block;
-  background: url(/src/img/sprite.png) no-repeat -572px -353px / 620px 416px;
+  background: url("../img/icon-sprite.png") no-repeat  -128px -28px / 148px 111px;
   width: 20px;
   height: 20px;
 }
@@ -118,11 +118,16 @@
   text-align: right;
   font-size: 14px;
 }
-.empathy-img{
-  max-width: 24px;
+.diary-empathy::before{
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: url("../img/icon-sprite.png") no-repeat -126px -76px / 185px 139px;
   vertical-align: middle;
   margin-right: 3px;
 }
+
 .links .allDiary-link{
   background-color: #fff;
   font-weight: bold;

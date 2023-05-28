@@ -18,7 +18,6 @@ import "../../css/main.css";
 import "../../css/allDiary.css";
 import "../../img/loading.gif";
 import "../../img/no-image.png";
-import "../../img/heart.png";
 
 const $allDiaryList = document.querySelector(".allDiary-lists");
 let lastpage;
@@ -120,7 +119,7 @@ async function renderAllDiary(data) {
 
     const img = document.createElement("img");
     img.classList.add("diary-img");
-    img.src = diary.imgURL[0] || "../../img/no-image.png";
+    img.src = diary.imgURL[0] || "./img/no-image.png";
     img.alt = "다이어리 이미지";
     anchor.appendChild(img);
 
@@ -142,7 +141,7 @@ async function renderAllDiary(data) {
 
     const profileImg = document.createElement("img");
     profileImg.classList.add("diary-profileImg");
-    profileImg.src = (await getAuthImg(diary.auth)) || "../../img/profile.png";
+    profileImg.src = (await getAuthImg(diary.auth)) || "./img/profile.png";
     profileImg.alt = "";
     bottomDiv.appendChild(profileImg);
 
@@ -163,12 +162,6 @@ async function renderAllDiary(data) {
     empathy.setAttribute("class", "diary-empathy");
     empathy.textContent = `${diary.empathy}`;
     contentsDiv.appendChild(empathy);
-
-    const empathyImg = document.createElement("img");
-    empathyImg.setAttribute("class", "empathy-img");
-    empathyImg.setAttribute("src", "../../img/heart.png");
-    empathyImg.setAttribute("alt", "공감 아이콘");
-    empathy.insertAdjacentElement("afterbegin", empathyImg);
 
     anchor.appendChild(contentsDiv);
 

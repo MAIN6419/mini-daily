@@ -100,7 +100,7 @@
   transform: translate(-50%, -50%);
 }
 .btn-back::after {
-  background: url(../img/sprite.png) no-repeat -477px -304px / 620px 416px;
+  background: url("../img/icon-sprite.png") no-repeat -17px -75px / 185px 139px;
   width: 8px;
   height: 15px;
 }
@@ -118,14 +118,17 @@
   background: none;
   position: relative;
 }
+.diary-btns .btn-edit {
+  margin-right: 5px;
+}
 .btn-edit::after {
-  background: url(../img/sprite.png) no-repeat -475px -354px / 620px 416px;
+  background: url("../img/icon-sprite.png") no-repeat  -128px -42px / 185px 139px;
   width: 22px;
   height: 22px;
 }
 
 .btn-del::after {
-  background: url(../img/sprite.png) no-repeat -542px -352px / 620px 416px;
+  background: url("../img/icon-sprite.png") no-repeat -162px -5px / 185px 139px;
   width: 20px;
   height: 20px;
 }
@@ -149,7 +152,7 @@
   margin: 0 auto;
   cursor: pointer;
   margin-bottom: 5px;
-  background: url(../img/unheart.png) no-repeat center / contain;
+  background: url("../img/icon-sprite.png") no-repeat  -6px -112px / 185px 139px;
   border: none;
 }
 .empathy-count {
@@ -202,13 +205,13 @@
   position: absolute;
   top: 0;
   right: -25px;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   text-align: center;
   background: none;
   border: none;
   cursor: pointer;
-  background: url(../img/minus.png) no-repeat center / contain;
+  background: url("../img/icon-sprite.png") no-repeat -161px -65px / 185px 139px;
 }
 .upload-title {
   width: 100%;
@@ -230,7 +233,7 @@
   height: 70px;
 }
 .btn-editCompleted,
-.diary-form .btn-cancel {
+.edit-form .btn-cancel {
   padding: 10px 30px;
   font-size: 20px;
   border: none;
@@ -243,20 +246,28 @@
   background-color: gold;
   margin-right: 20px;
 }
+
 .btn-editCompleted:hover,
-.diary-form .btn-cancel:hover {
+.edit-form .btn-cancel:hover {
   box-shadow: 1px 1px 0px 1px #111;
   transform: translateY(5px);
 }
+
 .comment-title {
   margin-left: 20px;
   margin-bottom: 10px;
   font-size: 16px;
 }
-.comment-icon {
+.comment-title::before{
+  content: "";
+  display: inline-block;
   width: 24px;
-  vertical-align: middle;
+  height: 24px;
+  background: url("../img/icon-sprite.png") no-repeat -76px -114px / 185px 139px;
+  vertical-align: top;
+  margin-right: 3px;
 }
+
 .comment-form {
   width: 90%;
   margin: 0 auto;
@@ -297,13 +308,13 @@
   display: flex;
   align-items: center;
   margin-bottom: 15px;
+ 
 }
 .comment-profileImg {
   display: inline-block;
-  max-width: 40px;
+  width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid #bdbdbd;
   margin-right: 10px;
 }
 .comment-auth {
@@ -404,11 +415,11 @@
   position: absolute;
   z-index: 1;
   top: 10px;
-  left: -25px;
+  left: -30px;
   display: inline-block;
   width: 20px;
   height: 20px;
-  background: url(../img/reply-icon.png) no-repeat left / 20px;
+  background: url("../img/icon-sprite.png") no-repeat -108px -111px / 185px 139px;
 }
 .reply-lists .comment-item{
   border: none;

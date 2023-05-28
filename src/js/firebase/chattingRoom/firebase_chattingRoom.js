@@ -9,12 +9,6 @@ import {
 } from "firebase/firestore";
 import { db } from "../setting/firebase_setting.js";
 
-let baseUrl = "";
-const host = window.location.host;
-if (host.includes("github.io")) {
-  baseUrl = "/mini-diary";
-}
-
 async function createChattingRoom({
   id,
   title,
@@ -33,7 +27,7 @@ async function createChattingRoom({
     password,
     createdAt,
   });
-  location.href = `${baseUrl}/src/template/chatting.html?id=${id}`;
+  location.href = 'chatting.html?id=${id}';
 }
 
 async function fetchChattingRoom() {

@@ -1,11 +1,11 @@
-/*!********************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js!./src/css/main.css ***!
-  \********************************************************************/
+/*!************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[0].use[1]!./src/css/main.css ***!
+  \************************************************************************************************/
 body {
   width: 100vw;
   height: 100vh;
   /* 배경이미지 최적화하여 용량을 90% 줄임 */
-  background-image: url(../bedc68a755f83250e75f.png);
+  background-image: url(../img/bg.png);
 }
 
 .wrapper {
@@ -92,8 +92,8 @@ body {
   text-align: center;
 }
 .profile .profile-img {
-  width: 180px;
-  height: 180px;
+  width: 150px;
+  height: 150px;
   object-position: center;
   margin-bottom: 10px;
   border: 1px solid #999;
@@ -195,8 +195,8 @@ caption {
   top: 20px;
   left: 20px;
   border: none;
-  padding: 3px 3px 3px 23px;
-  background: url(../e276c36cb004c4c4dc2f.png) no-repeat left 3px center/ 18px;
+  padding-left: 20px;
+  background: url(../img/sprite-icons.png) no-repeat -161px -65px / 185px 139px;
   font-size: 14px;
   cursor: pointer;
 }
@@ -225,9 +225,9 @@ caption {
 }
 
 
-/*!***************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js!./src/css/findAccount.css ***!
-  \***************************************************************************/
+/*!*******************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[0].use[1]!./src/css/findAccount.css ***!
+  \*******************************************************************************************************/
 .findAccount-wrapper {
   display: flex;
   flex-direction: column;
@@ -356,3 +356,5 @@ caption {
   cursor: pointer;
 }
 
+
+/*# sourceMappingURL=findAccount.css.map*/

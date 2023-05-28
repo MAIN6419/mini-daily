@@ -81,13 +81,6 @@ $editCompletedBtn.addEventListener("click", async () => {
     };
     await editDiary(id, newData);
     $loadingModal.classList.remove("active");
-    // session storage 데이터 수정 preload를 위해
-    const newDiary = JSON.parse(sessionStorage.getItem("diaryData"));
-    newDiary.title = $inputTitle.value;
-    newDiary.contents = $inputContents.value;
-    newDiary.imgURL = fileInfo.url;
-    newDiary.imgFileName = fileInfo.fileName;
-    sessionStorage.setItem("diaryData", JSON.stringify(newDiary));
     // 이후 바뀐 데이터를 새로 받아오기 위해 새로고침
     location.reload();
   }
@@ -117,7 +110,7 @@ function previewImg(e) {
   uploadImg[imgIdx] = file;
 }
 function resetImg(idx) {
-  $previewImg[idx].setAttribute("src", "../img/imgUpload.png");
+  $previewImg[idx].setAttribute("src", "./img/imgUpload.png");
   $previewImg[idx].style.width = "70px";
   $previewImg[idx].style.height = "70px";
   uploadImg[idx] = "";

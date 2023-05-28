@@ -2,12 +2,6 @@ import { createChattingRoom, checkJoinRoom } from "../firebase/chattingRoom/fire
 
 const $sectionContents = document.querySelector(".section-contents");
 
-let baseUrl = "";
-const host = window.location.host;
-if (host.includes("github.io")) {
-  baseUrl = "/mini-diary";
-}
-
 // createRoom 모달창 
 
 const $createRoomModalBtn = $sectionContents.querySelector( ".btn-createRoomModal");
@@ -138,7 +132,7 @@ $joinRoomBtn.addEventListener("click", async (e) => {
     if (res.isprivate) {
       modalPrompt(res);
     } else {
-      location.href = `${baseUrl}/src/template/chatting.html?id=${res.id}`;
+      location.href = `chatting.html?id=${res.id}`;
     }
   } else {
     alert("존재하지 않는 채팅방입니다!");
@@ -204,7 +198,7 @@ function modalPrompt(roomData) {
       $passwordModalInput.value = "";
       return;
     }
-    location.href = `${baseUrl}/src/template/chatting.html?id=${roomData.id}`;
+    location.href = `chatting.html?id=${roomData.id}`;
     handleCancel();
   }
   function handleCancel() {

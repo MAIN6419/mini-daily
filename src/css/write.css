@@ -32,17 +32,17 @@
 .upload-imgBox{
   position: relative;
 }
-.btn-reset{
+.btn-reset {
   position: absolute;
-  top:0;
+  top: 0;
   right: -25px;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   text-align: center;
   background: none;
   border: none;
   cursor: pointer;
-  background: url(../img/minus.png) no-repeat center / contain;
+  background: url(../img/icon-sprite.png) no-repeat -161px -65px / 185px 139px;
 }
 .upload-title {
   font-size: 16px;

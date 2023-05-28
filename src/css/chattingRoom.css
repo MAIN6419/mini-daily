@@ -13,19 +13,20 @@
 }
 .btn-prev,
 .btn-next {
-  width: 30px;
-  height: 30px;
-  background: url("../img/prev-btn.png") no-repeat center / 24px;
+  width: 15px;
+  height: 24px;
+  background: url("../img/icon-sprite.png") no-repeat  -93px -66px / 185px 139px;
   border: none;
   cursor: pointer;
   transition: all 0.3s;
 }
+.btn-next{
+  background: url("../img/icon-sprite.png") no-repeat  -132px -6px / 185px 139px;
+  margin-left: 10px;
+}
 .btn-prev.inactive,
 .btn-next.inactive{
   opacity: 0.3;
-}
-.btn-next {
-  background: url("../img/next-btn.png") no-repeat center / 24px;
 }
 .btn-createRoomModal,
 .btn-joinRoomModal {
@@ -63,7 +64,7 @@
   left: 15px;
   transform: translateY(-50%);
   display: block;
-  background: url(/src/img/sprite.png) no-repeat -572px -353px / 620px 416px;
+  background: url("../img/sprite.png") no-repeat -572px -353px / 620px 416px;
   width: 20px;
   height: 20px;
 }

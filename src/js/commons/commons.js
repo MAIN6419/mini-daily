@@ -3,18 +3,13 @@
 import { updateTime } from "./clock.js";
 import { calendar } from "./calendar.js";
 import { checkLogin, logout } from "../firebase/auth/firebase_auth.js";
-
+import "../../img/icon-sprite.png";
+import "../../img/bg.png";
 export let userData;
 
-const host = window.location.host;
-
-let baseUrl = "";
-if (host.includes("github.io")) {
-  baseUrl = "/mini-diary";
-}
 
 if(!sessionStorage.getItem("userData")) {
-  location.replace(`${baseUrl}/dist/`);
+  location.replace(`/`);
   alert("로그인 후 이용가능합니다!");
 }
 else{
@@ -61,7 +56,7 @@ async function loadTemplate() {
             <h2 class="a11y-hidden">유저 프로필</h2>
             <img
               class="profile-img"
-              src=" ${userData.profileImgURL || baseUrl+'/src/img/profile.png'}"
+              src=" ${userData.profileImgURL || './img/profile.png'}"
               alt="유저 프로필 이미지"
             />
             <span class="profile-name">${userData.nickname}</span>

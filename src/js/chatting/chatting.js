@@ -1,12 +1,14 @@
 'use strict';
 import {v4 as uuidv4} from 'uuid';
-import { joinChatRoom, fetchChatting, addChatting, deleteChat } from '../firebase/chatting/firebase_chatting.js';
+import { joinChatRoom, fetchChatting, addChatting, deleteChat, exitChattingRoom } from '../firebase/chatting/firebase_chatting.js';
 import { getCreatedAt } from '../commons/libray.js';
-import { FetchUserData, currentUser } from '../firebase/auth/firebase_auth.js';
+import { FetchUserData, getSessionUser } from '../firebase/auth/firebase_auth.js';
 import "../../css/commons.css";
 import "../../css/main.css";
 import "../../css/chatting.css";
 import "../../img/loading.gif";
+
+
 
 const $sectionContents = document.querySelector(".section-contents");
 const $roomName = $sectionContents.querySelector(".room-name");
@@ -16,16 +18,21 @@ const $chattingBox = document.querySelector(".chatting-box");
 const $chattingForm = document.querySelector(".chatting-form");
 const $chattingInput = $chattingForm .querySelector("#input-chatting");
 const $sendBtn = $chattingForm.querySelector(".btn-send");
-const $closeBtn = $userInfoModal.querySelector(".btn-close");
 
 const $userInfoModal = $sectionContents.querySelector(".userInfo-modal");
 const $loadingModal = document.querySelector(".loading-modal");
+const $closeBtn = $userInfoModal.querySelector(".btn-close");
 
 const urlParams = new URLSearchParams(window.location.search);
 const chatRoomId = urlParams.get("id");
+const userData = getSessionUser();
+
+window.addEventListener("beforeunload", async () => {
+  await exitChattingRoom(chatRoomId, userData.displayName)
+});
 
 $loadingModal.classList.add("active");
-await joinChatRoom(chatRoomId, currentUser.displayName, rednerJoinUsers);
+await joinChatRoom(chatRoomId, userData.displayName, rednerJoinUsers);
 await fetchChatting($chattingBox, chatRoomId, renderChattingMsg);
 $loadingModal.classList.remove("active");
 
@@ -35,7 +42,7 @@ $chattingForm.addEventListener("submit", async (e) => {
   const newChat = {
     id: uuidv4(),
     message: $chattingInput.value.trim(),
-    user: currentUser.displayName,
+    user: userData.displayName,
     createdAt: new Date().getTime(),
     type: "added"
   }
@@ -60,10 +67,11 @@ async function renderChattingMsg(data, userInfo) {
 
   const messageBox = document.createElement("div");
   messageBox.classList.add("message-box");
+  messageBox.setAttribute("id", data.id);
 
   const messageImg = document.createElement("img");
   messageImg.classList.add("message-img");
-  messageImg.src = userInfo.profileImgUrl||"../img/profile.png";
+  messageImg.src = userInfo.profileImgUrl||"./img/profile.png";
   messageImg.alt = "유저 프로필";
 
   const userGrade = document.createElement('span');
@@ -98,12 +106,12 @@ async function renderChattingMsg(data, userInfo) {
   delBtn.innerText = "X";
   delBtn.addEventListener("click", async () => {
     if (confirm("정말 삭제하시겠습니까?")) {
-      deleteChat(chatRoomId, data.id);
+     await deleteChat(chatRoomId, data.id);
     }
   });
 
   // 작성자가 나인 경우
-  if (data.user === currentUser.displayName) {
+  if (data.user === userData.displayName) {
     messageBox.classList.add("sent");
   } else {
     // 작성자가 다른 경우
@@ -116,13 +124,13 @@ async function renderChattingMsg(data, userInfo) {
   messageBox.appendChild(userName)
   messageBox.appendChild(message);
   messageBox.appendChild(createdAt);
-  if (data.user === currentUser.displayName && data.type !== "delete") {
+  if (data.user === userData.displayName && data.type !== "delete") {
     messageBox.appendChild(delBtn);
   }
 
   // 채팅 리스트에 메시지 박스 추가
   $chattingBox.appendChild(messageBox);
-  // prevDate = currentDate;
+
 }
 
 async function rednerJoinUsers({users, limit, title, id}){
@@ -141,7 +149,7 @@ async function rednerJoinUsers({users, limit, title, id}){
   
     const profileImg = document.createElement('img');
     profileImg.classList.add('profile-img');
-    profileImg.src = userInfo.profileImgUrl||'../img/profile.png';
+    profileImg.src = userInfo.profileImgUrl||'./img/profile.png';
     profileImg.alt = '유저 프로필 이미지';
 
     const userGrade = document.createElement('span');

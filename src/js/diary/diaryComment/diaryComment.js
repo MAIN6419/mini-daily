@@ -1,7 +1,7 @@
 // 댓글 관련 함수 모듈
 import {v4 as uuidv4} from 'uuid';
 import { currentUser, getAuthImg  } from "../../firebase/auth/firebase_auth.js";
-import { deleteComment, writeComment, writeReplyComment } from "../../firebase/comment/firebase_comment.js";
+import { deleteComment, editComment, writeComment, writeReplyComment } from "../../firebase/comment/firebase_comment.js";
 import { getCreatedAt } from "../../commons/libray.js";
 import { addReplyComment, renderReplyComment } from "../diaryReplyComment/diaryReplyComment.js"; 
 import { firstComment, pageVarialbes } from "../diaryInfinityScroll/diaryInfinityScroll.js";
@@ -68,7 +68,7 @@ async function createCommentEl(item) {
       // comment-profileImg 요소 생성
       const profileImg = document.createElement("img");
       profileImg.classList.add("comment-profileImg");
-      profileImg.src = (await getAuthImg(item.auth)) || "../img/profile.png";
+      profileImg.src = (await getAuthImg(item.auth)) || "./img/profile.png";
       profileImg.alt = "유저 프로필";
   
       // comment-auth 요소 생성

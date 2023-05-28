@@ -2,13 +2,15 @@
 import { userData } from "../commons/commons.js";
 import { setFortune } from "../firebase/fortune/firebase_fortune.js";
 initFortune();
-setFortune
+setFortune;
 import "../../css/commons.css";
 import "../../css/main.css";
 import "../../css/fortune.css";
-
+import "../../img/fortune-bg.jpg";
+import "../../img/card-front.png";
+import "../../img/card-back.png";
 function fetchFortuneData() {
-  return fetch("../db/db.json")
+  return fetch("./db/db.json")
     .then((res) => res.json())
     .then((data) => data.fortuneData)
     .catch((error) => console.log(error));
@@ -22,7 +24,8 @@ async function initFortune() {
     const $prevBtn = $sectionContents.querySelector(".btn-prev");
     const $nextBtn = $sectionContents.querySelector(".btn-next");
     const $resetBtn = $sectionContents.querySelector(".btn-reset");
-    const $carouselWrapper = $sectionContents.querySelector(".carousel-wrapper");
+    const $carouselWrapper =
+      $sectionContents.querySelector(".carousel-wrapper");
     const $carousel = $carouselWrapper.querySelector(".carousel");
 
     const totalCard = 10;
@@ -55,40 +58,7 @@ async function initFortune() {
     // 생성된 카드들에 이벤트를 부여함
     $cardInner.forEach((el, idx) =>
       el.addEventListener("click", () => {
-        // 카드 클릭시 클래스에 active부여 => 카드의 classList에 active가 있으면 카드가 rotateY(180deg)가 되어 뒤집힘
-        el.classList.toggle("flipped");
-        if (el.classList.contains("flipped")) {
-          // 카드가 뒤집히고 나면
-          // 카드의 각도를 없애주고(중심(0deg)으로 이동시킴), 중심축과의 거리는 유지 시킴
-          $card[idx].style.transform = `translateZ(${colTz}px)`;
-          // 캐러셀의 각도 초기화
-          $carousel.style.transform = ``;
-          setTimeout(() => {
-            // 운세 결과가 한 글자씩 출력되도록 하는 함수
-            typing($fortuneResult[idx], fortuneData[randomData[idx]]);
-          }, 500);
-          // 선택한 카드 이외에 다른 카드들을 안보이게 감추고 모든 카드 클릭을 막음
-          $cardInner.forEach((v) => {
-            // 모든 카드들을 감추고 클릭을 막음
-            v.classList.remove("active");
-            // 현재 카드만 보이게함
-            if (v === el) v.style.opacity = "1";
-          });
-          // 회전 버튼들의 이벤트를 지우고, 숨김처리
-          $prevBtn.removeEventListener("click", clickPrevBtn);
-          $nextBtn.removeEventListener("click", clickNextBtn);
-          $description.classList.remove("active");
-          $fortuneTitle.classList.remove("active");
-          $prevBtn.classList.remove("active");
-          $nextBtn.classList.remove("active");
-          $carouselWrapper.style.perspectiveOrigin = "center";
-          // 현재 운세결과를 로컬스토리지에 저장
-          const newFortuneData = {
-            result: fortuneData[randomData[idx]],
-            createdAt: new Date().getTime(),
-          };
-          setFortune(userData.nickname, newFortuneData);
-        }
+        cardInnerEvent(el, idx, $card, $cardInner, $fortuneResult);
       })
     );
     // 각 버튼에 부여할 이벤트
@@ -97,6 +67,7 @@ async function initFortune() {
     // 각 버튼에 이벤트 부여
     $prevBtn.addEventListener("click", clickPrevBtn);
     $nextBtn.addEventListener("click", clickNextBtn);
+
     // 카드 요소를 생성하는 함수
     function settingCards() {
       // fragment 사용 브라우저 최적화
@@ -132,6 +103,46 @@ async function initFortune() {
       }
       $carousel.appendChild(frag);
     }
+
+    // cardInner 클릭 이벤트 함수
+    const cardInnerEvent = (el, idx, $card, $cardInner, $fortuneResult) => {
+      // 카드 클릭시 클래스에 active부여 => 카드의 classList에 active가 있으면 카드가 rotateY(180deg)가 되어 뒤집힘
+      el.classList.toggle("flipped");
+      if (el.classList.contains("flipped")) {
+        // 카드가 뒤집히고 나면
+        // 카드의 각도를 없애주고(중심(0deg)으로 이동시킴), 중심축과의 거리는 유지 시킴
+        $card[idx].style.transform = `translateZ(${colTz}px)`;
+        // 캐러셀의 각도 초기화
+        $carousel.style.transform = ``;
+        setTimeout(() => {
+          // 운세 결과가 한 글자씩 출력되도록 하는 함수
+          typing($fortuneResult[idx], fortuneData[randomData[idx]]);
+        }, 500);
+        // 선택한 카드 이외에 다른 카드들을 안보이게 감추고 모든 카드 클릭을 막음
+        $cardInner.forEach((v) => {
+          // 모든 카드들을 감추고 클릭을 막음
+          v.classList.remove("active");
+          // 현재 카드만 보이게함
+          v.style.pointerEvents = "none";
+          v.removeEventListener("click", cardInnerEvent);
+          if (v === el) v.style.opacity = "1";
+        });
+        // 회전 버튼들의 이벤트를 지우고, 숨김처리
+        $prevBtn.removeEventListener("click", clickPrevBtn);
+        $nextBtn.removeEventListener("click", clickNextBtn);
+        $description.classList.remove("active");
+        $fortuneTitle.classList.remove("active");
+        $prevBtn.classList.remove("active");
+        $nextBtn.classList.remove("active");
+        $carouselWrapper.style.perspectiveOrigin = "center";
+        // 현재 운세결과를 로컬스토리지에 저장
+        const newFortuneData = {
+          result: fortuneData[randomData[idx]],
+          createdAt: new Date().getTime(),
+        };
+        setFortune(userData.nickname, newFortuneData);
+      }
+    };
 
     // 초기 셀 각도 및 중심점에서 떨어진 거리 세팅
     function setCardAngle(card, cardInner) {
@@ -199,37 +210,14 @@ async function initFortune() {
       $nextBtn.addEventListener("click", clickNextBtn);
       $fortuneTitle.classList.add("active");
       $carouselWrapper.style.perspectiveOrigin = "center -50%";
-      $cardInner.forEach((el, idx) => {
-        // 기존 숨김 처리를 복구, 클릭 활성화는 위의 setCardAngle에서 해주었기 때문에 따로 해주지 않음
-        el.style.opacity = "1";
-        // cardInner에 클릭 이벤트 부여 => 위에서 나온것과 동일
-        el.addEventListener("click", () => {
-          el.classList.toggle("flipped");
-          if (el.classList.contains("flipped")) {
-            $card[idx].style.transform = `translateZ(${colTz}px)`;
-            $carousel.style.transform = ``;
-            setTimeout(() => {
-              typing($fortuneResult[idx], fortuneData[randomData[idx]]);
-            }, 500);
-            $cardInner.forEach((v) => {
-              v.style.pointerEvents = "none";
-              if (v !== el) v.style.opacity = "0";
-            });
-            $prevBtn.removeEventListener("click", clickPrevBtn);
-            $nextBtn.removeEventListener("click", clickNextBtn);
-            $prevBtn.classList.remove("active");
-            $nextBtn.classList.remove("active");
-            $fortuneTitle.classList.remove("active");
-            $description.classList.remove("active");
-            $carouselWrapper.style.perspectiveOrigin = "center";
-            const newFortuneData = {
-              result: fortuneData[randomData[idx]],
-              createdAt: new Date().getTime(),
-            };
-            setFortune(userData.nickname, newFortuneData);
-          }
-        });
-      });
+      $cardInner.forEach((el, idx) =>
+      el.addEventListener("click", () => {
+          // 기존 숨김 처리를 복구, 클릭 활성화는 위의 setCardAngle에서 해주었기 때문에 따로 해주지 않음
+          el.style.opacity = "1";
+          // cardInner에 클릭 이벤트 부여 => 위에서 나온것과 동일
+        cardInnerEvent(el, idx, $card, $cardInner, $fortuneResult);
+      })
+    );
     });
 
     // 운세 정보 데이터를 섞여주는 함수

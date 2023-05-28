@@ -32,13 +32,8 @@ import {
   reauthenticateWithCredential,
   updatePassword,
 } from "firebase/auth";
-import { db, storage, app } from "../setting/firebase_setting.js";
+import { db, storage } from "../setting/firebase_setting.js";
 
-let baseUrl = "";
-const host = window.location.host;
-if (host.includes("github.io")) {
-  baseUrl = "/mini-diary";
-}
 
 const userData = JSON.parse(sessionStorage.getItem("userData"));
 const auth = getAuth();
@@ -79,7 +74,7 @@ async function checkLogin(nickname) {
         await signOut(auth);
         sessionStorage.removeItem("userData");
         sessionStorage.removeItem("diaryData");
-        location.replace(`${baseUrl}/`);
+        location.replace('/');
       }
       if (data.point >= 100 && data.grade === "일반") {
         await updateDoc(doc.ref, { grade: "우수" });
@@ -278,7 +273,7 @@ const signup = async ({ nickname, email, phone, password }) => {
     });
 
     alert("회원가입이 완료되었습니다.");
-    location.replace(`${baseUrl}/`);
+    location.replace('/');
   } catch (error) {
     if (error.message.includes("email-already-in-use")) {
       alert("이미 사용중인 이메일 입니다!");

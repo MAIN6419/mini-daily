@@ -12,10 +12,12 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db } from "../setting/firebase_setting.js";
+import { currentUser } from "../auth/firebase_auth.js";
 let isfirst = true;
 
 // 채팅방 참가시 실행되는 함수
-const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
+const joinChatRoom = async (chatRoomId, nickname, renderJoinUser) => {
+
   if (!chatRoomId) {
     alert("잘못된 경로입니다!");
     return location.replace("chattingRoom.html");
@@ -37,7 +39,7 @@ const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
     }
 
     await updateDoc(chatRoomRef, {
-      users: arrayUnion(userNickname),
+      users: arrayUnion(nickname),
     });
 
     currentSnapshotUnsubscribe = onSnapshot(chatRoomRef, async (snapshot) => {
@@ -56,13 +58,6 @@ const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
       }
     });
 
-    window.addEventListener("beforeunload", async (event) => {
-      if (!isfirst) {
-        await updateDoc(chatRoomRef, {
-          users: arrayRemove(userNickname),
-        });
-      }
-    });
   } catch (error) {
     if (error.message.includes("No document to update")) {
       alert("삭제되거나 존재하지 않는 채팅방입니다!");
@@ -71,7 +66,13 @@ const joinChatRoom = async (chatRoomId, userNickname, renderJoinUser) => {
   }
 };
 
-// 채팅방 데이터 불러오는 함수
+// 채팅방을 나가면 해당 채팅방의 인원을 감소시킴
+export async function exitChattingRoom(chatRoomId,nickname) {
+  const chatRoomRef = doc(db, "chatRoom", chatRoomId);
+  await updateDoc(chatRoomRef, {
+    users: arrayRemove(nickname),
+  });
+}
 async function fetchChatting($chattingBox, chatRoomId, renderChattingMsg) {
   const chatRef = collection(db, `chat${chatRoomId}`);
   const userRef = collection(db, "user");
@@ -80,18 +81,34 @@ async function fetchChatting($chattingBox, chatRoomId, renderChattingMsg) {
 
   const q = query(chatRef, orderBy("createdAt", "asc"));
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-    querySnapshot.docChanges().forEach(async (change) => {
+    querySnapshot.docChanges().forEach((change) => {
+      const data = change.doc.data();
+      const userInfo = res.find((el) => el.nickname === data.user);
+
       if (change.type === "added") {
-        const data = change.doc.data();
-        const userInfo = res.find((el) => el.nickname === data.user);
-        await renderChattingMsg(data, userInfo);
+        renderChattingMsg(data, userInfo);
+      } else if (change.type === "modified") {
+        const $messageBox = document.getElementById(`${change.doc.id}`);
+        const $message = $messageBox.querySelector(".message");
+        const $deleteButton = $messageBox.querySelector(".btn-del");
+
+        if ($message) {
+          $message.textContent = "삭제된 메세지 입니다.";
+        }
+        // 삭제 버튼이 있는 사용자(채팅 작성자) 삭제버튼을 제거
+        if ($deleteButton) {
+          $deleteButton.remove();
+        }
       }
     });
+
     $chattingBox.scrollTop = $chattingBox.scrollHeight;
   });
 
-  return unsubscribe; // 이벤트 리스너 해제를 위해 unsubscribe 함수 반환
+  return unsubscribe;
 }
+
+
 
 // 채팅 추가 함수
 async function addChatting(chatRoomId, newChat) {

@@ -1,4 +1,4 @@
-import { userData } from "../commons/commons.js";
+
 import "../../css/commons.css";
 import "../../css/main.css";
 import "../../css/mypage.css";
@@ -9,6 +9,7 @@ import {
   changeUserPassword,
   currentUser,
   editIntroduce,
+  getSessionUser,
 } from "../firebase/auth/firebase_auth.js";
 
 const $sectionContents = document.querySelector(".section-contents");
@@ -39,6 +40,7 @@ const $userDiary = $sectionContents.querySelector(".user-diary");
 const $userComment = $sectionContents.querySelector(".user-Comment");
 const $loadingModal = document.querySelector(".loading-modal");
 
+const userData = getSessionUser();
 let tempUrl;
 let uploadFile;
 const host = window.location.host;
@@ -47,17 +49,22 @@ if (host.includes("github.io")) {
   baseUrl = "/mini-diary";
 }
 
-const userInfo = await FetchUserData(userData.nickname);
-$userEmail.textContent = `이메일 : ${userInfo.email} `;
-$userNickname.textContent = `닉네임 : ${userInfo.nickname}`;
-$userGrade.textContent = `등급 : ${userInfo.grade}`;
-$userPoint.textContent = `등업 포인트 : ${userInfo.point}점`;
-$profileImg.setAttribute(
-  "src",
-  currentUser.photoURL || `${baseUrl}/src/img/profile.png`
-);
-$userDiary.textContent = `다이어리 : ${userInfo.diaryCount}개`;
-$userComment.textContent = `댓글 : ${userInfo.commentCount}개`;
+(async function renderMypage() {
+  $loadingModal.classList.add("active");
+  const userInfo = await FetchUserData(userData.displayName);
+  $userEmail.textContent = `이메일 : ${userInfo.email} `;
+  $userNickname.textContent = `닉네임 : ${userInfo.nickname}`;
+  $userGrade.textContent = `등급 : ${userInfo.grade}`;
+  $userPoint.textContent = `등업 포인트 : ${userInfo.point}점`;
+  $profileImg.setAttribute(
+    "src",
+    currentUser.photoURL || `${baseUrl}/src/img/profile.png`
+  );
+  $userDiary.textContent = `다이어리 : ${userInfo.diaryCount}개`;
+  $userComment.textContent = `댓글 : ${userInfo.commentCount}개`;
+  $loadingModal.classList.remove("active");
+
+})();
 
 const $passwordModal = $sectionContents.querySelector(".password-modal");
 const $changePasswordBtn = $sectionContents.querySelector(
@@ -77,7 +84,7 @@ $changeProfileImgBtn.addEventListener("click", () => {
 $profileImgModal.addEventListener("click", (e) => {
   if (e.target === $profileImgModal || e.target === $profileImgCancleBtn) {
     $profileImgModal.classList.remove("active");
-    $customInput.style.backgroundImage = `url(../img/imgUpload.png)`;
+    $customInput.style.backgroundImage = `url(./img/imgUpload.png)`;
     $customInput.style.backgroundSize = "120px";
   }
 });
@@ -161,6 +168,7 @@ $introduceSubmitBtn.addEventListener("click", async (e) => {
   if (confirm("정말 수정하시겠습니까?")) {
     // 데이터 전송로직
     await editIntroduce($inputIntroduce.value);
+    const userData = JSON.parse(sessionStorage.getItem("userData"));
     userData.introduce = $inputIntroduce.value;
     sessionStorage.setItem("userData", JSON.stringify(userData));
     alert("수정이 완료되었습니다.");

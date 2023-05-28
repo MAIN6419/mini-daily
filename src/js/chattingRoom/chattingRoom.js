@@ -10,18 +10,14 @@ import "../../css/main.css";
 import "../../css/chattingRoom.css";
 import "../../img/loading.gif";
 
+
 const $sectionContents = document.querySelector(".section-contents");
 const $roomList = $sectionContents.querySelector(".room-list");
 const $loadingModal = $sectionContents.querySelector(".loading-modal");
 const $pageNum = $sectionContents.querySelector(".page-num");
 
 let keyword = "";
-let baseUrl = "";
 
-const host = window.location.host;
-if (host.includes("github.io")) {
-  baseUrl = "/mini-diary";
-}
 
 async function renderChattingRooms(data) {
   if (!data.length) {
@@ -55,7 +51,7 @@ async function renderChattingRooms(data) {
     roomLi.className = item.isprivate ? "room private" : "room";
 
     const roomLink = document.createElement("a");
-    roomLink.href = `${baseUrl}/src/template/chatting.html?id=${item.id}`;
+    roomLink.href = `chatting.html?id=${item.id}`;
 
     const roomTitle = document.createElement("h3");
     roomTitle.classList.add("room-title");
@@ -94,7 +90,7 @@ async function renderChattingRooms(data) {
         e.preventDefault();
         modalPrompt(item);
       } else {
-        location.href = `${baseUrl}/src/template/chatting.html?id=${item.id}`;
+        location.href = `chatting.html?id=${item.id}`;
       }
     });
     $loadingModal.classList.remove("active");

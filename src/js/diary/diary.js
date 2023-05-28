@@ -16,17 +16,14 @@ import { uploadImg } from "./diaryEdit/diaryEdit.js";
 import "../../css/commons.css";
 import "../../css/main.css";
 import "../../css/diary.css";
-import "../../img/imgUpload.png";
-import "../../img/comment-icon.png";  
-import "../../img/sprite.png";
-import "../../img/unheart.png";
+import "../../img/imgUpload.png"; 
+import "../../img/placeholderImg.png";
+
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
 
 const $sectionContents = document.querySelector(".section-contents");
 const $diaryWrapper = $sectionContents.querySelector(".diary-wrapper");
-const $editBtn = $diaryWrapper.querySelector(".btn-edit");
-const $deleteBtn = $diaryWrapper.querySelector(".btn-del");
 const $empathyBtn = $diaryWrapper.querySelector(".btn-empathy");
 const $editForm = $sectionContents.querySelector(".edit-form");
 const $loadingModal = $sectionContents.querySelector(".loading-modal");
@@ -54,8 +51,10 @@ if (previousPageUrl.includes("myDiary")) {
 // 게시글 데이터 가져오기
 const fetchData = async () => {
   $loadingModal.classList.add("active");
+  $sectionContents.style.overflow= "hidden";
   return await FetchDiary(id).then((res) => {
     $loadingModal.classList.remove("active");
+    $sectionContents.style.overflow= "auto";
     return res;
   });
 };
@@ -78,7 +77,7 @@ async function renderdiary() {
   const $empathyCount = $diaryWrapper.querySelector(".empathy-count");
   const $empathyBox = $diaryWrapper.querySelector(".empathy-box");
   const $authGrade = $sectionContents.querySelector(".auth-grade");
-
+  const $diaryBtns = $sectionContents.querySelector(".diary-btns")
   if (data.length === 0) {
     $diaryTitle.textContent = "존재하지 않는 게시물";
     alert("현재 삭제되었거나 존재하지 않는 게시물 입니다!");
@@ -87,10 +86,57 @@ async function renderdiary() {
   }
   // 만약 작성자와 현재 로그인한 유저가 같지 않다면
   // 수정과 삭제버튼 없애기
-  if (currentUser.displayName !== data.auth) {
-    $editBtn.remove();
-    $deleteBtn.remove();
+  if (currentUser.displayName === data.auth){
+    const editBtn = document.createElement("button");
+    editBtn.setAttribute("type","button");
+    editBtn.setAttribute("class", "btn-edit");
+    const editBtnText = document.createElement("span");
+    editBtnText.setAttribute("class", "a11y-hidden");
+    editBtnText.textContent = "수정";
+    editBtn.appendChild(editBtnText);
+    $diaryBtns.appendChild(editBtn);
+  
+    const delBtn = document.createElement("button");
+    delBtn.setAttribute("type","button");
+    delBtn.setAttribute("class", "btn-del");
+    const delBtnText = document.createElement("span");
+    delBtnText.setAttribute("class", "a11y-hidden");
+    delBtnText.textContent = "삭제";
+    delBtn.appendChild(delBtnText);
+    $diaryBtns.appendChild(delBtn);
+  
+    editBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+    
+      const $inputTitle = $editForm.querySelector("#input-title");
+      const $inputContents = $editForm.querySelector("#input-contents");
+      const $previewImg = $sectionContents.querySelectorAll(".preview-img");
+    
+      $editForm.classList.toggle("active");
+      $diaryWrapper.classList.toggle("inactive");
+      $inputTitle.value = data.title;
+      $inputContents.value = data.contents;
+      $previewImg.forEach((el, idx) => {
+        if (data.imgURL[idx]) {
+          el.setAttribute("src", data.imgURL[idx]);
+        }
+      });
+    });
+
+    delBtn.addEventListener("click", async () => {
+      if (confirm("정말 삭제하시겠습니까?")) {
+        $loadingModal.classList.add("active");
+        await deleteDiary(id);
+        previousPageUrl.includes("myDiary")
+          ? (location.href = "myDiary.html")
+          : (location.href = "allDiary.html");
+        alert("삭제가 완료되었습니다.");
+        $loadingModal.classList.remove("active");
+      }
+    });
   }
+  
+
   const auth = await FetchUserData(data.auth);
   if (auth.grade === "우수") {
     $authGrade.classList.add("good");
@@ -132,39 +178,13 @@ async function renderdiary() {
   $empathyCount.textContent = `공감 ${data.empathy}`;
   const user = await FetchUserData(currentUser.displayName);
   if (user.empathyList.includes(id)) {
-    $empathyBtn.style.backgroundImage = "url(./img/heart.png)";
+    $empathyBtn.style.background = "url(./img/icon-sprite.png) no-repeat -6px -112px / 190px 139px";
   }
 }
 
-$editBtn.addEventListener("click", async (e) => {
-  e.preventDefault();
 
-  const $inputTitle = $editForm.querySelector("#input-title");
-  const $inputContents = $editForm.querySelector("#input-contents");
-  const $previewImg = $sectionContents.querySelectorAll(".preview-img");
-
-  $editForm.classList.toggle("active");
-  $diaryWrapper.classList.toggle("inactive");
-  $inputTitle.value = data.title;
-  $inputContents.value = data.contents;
-  $previewImg.forEach((el, idx) => {
-    if (data.imgURL[idx]) {
-      el.setAttribute("src", data.imgURL[idx]);
-    }
-  });
-});
-$deleteBtn.addEventListener("click", async () => {
-  if (confirm("정말 삭제하시겠습니까?")) {
-    $loadingModal.classList.add("active");
-    await deleteDiary(id);
-    previousPageUrl.includes("myDiary")
-      ? (location.href = "myDiary.html")
-      : (location.href = "allDiary.html");
-    alert("삭제가 완료되었습니다.");
-    $loadingModal.classList.remove("active");
-  }
-});
 $empathyBtn.addEventListener("click", async () => {
+  const $empathyCount = $diaryWrapper.querySelector(".empathy-count");
   const checkdiary = await FetchDiary(id);
   if (!checkdiary) {
     alert("현재 삭제되었거나 존재하지 않는 게시글 입니다.");
@@ -180,13 +200,13 @@ $empathyBtn.addEventListener("click", async () => {
     data.empathy -= 1;
     // sessionStorage.setItem("diaryData", JSON.stringify(data));
     $empathyCount.textContent = `공감 ${data.empathy}`;
-    $empathyBtn.style.backgroundImage = "url(./img/unheart.png)";
+    $empathyBtn.style.background = "url(./img/icon-sprite.png) no-repeat -6px -112px / 185px 139px";
   } else {
     updateEmpathy(id, 1, data.auth);
     data.empathy += 1;
     // sessionStorage.setItem("diaryData", JSON.stringify(data));
     $empathyCount.textContent = `공감 ${data.empathy}`;
-    $empathyBtn.style.backgroundImage = "url(./img/heart.png)";
+    $empathyBtn.style.background = "url(./img/icon-sprite.png) no-repeat -126px -78px / 185px 139px";
   }
 });
 

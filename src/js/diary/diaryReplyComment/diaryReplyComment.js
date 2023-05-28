@@ -29,7 +29,7 @@ async function createReplyCommentEl(item) {
 
   const profileImg = document.createElement("img");
   profileImg.classList.add("comment-profileImg");
-  profileImg.src = (await getAuthImg(item.auth)) || "../img/profile.png";
+  profileImg.src = (await getAuthImg(item.auth)) || "./img/profile.png";
   profileImg.alt = "유저 프로필";
 
   const authSpan = document.createElement("span");

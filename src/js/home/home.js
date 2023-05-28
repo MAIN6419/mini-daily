@@ -1,9 +1,8 @@
 "use strict";
 import _ from 'lodash';
 import { getCreatedAt } from "../commons/libray.js";
-import { userData } from "../commons/commons.js";
 import { FetchDiary, fetchBestDiarys, fetchRecentDiary } from '../firebase/diary/firebase_diary.js';
-import { FetchUserData, getAuthImg } from '../firebase/auth/firebase_auth.js';
+import { FetchUserData, getAuthImg, getSessionUser } from '../firebase/auth/firebase_auth.js';
 import { setFortune } from '../firebase/fortune/firebase_fortune.js';
 import "../../css/commons.css";
 import "../../css/main.css";
@@ -12,8 +11,9 @@ const $sectionContents = document.querySelector(".section-contents");
 const $recentDiaryLists = $sectionContents.querySelector(".recent-diaryLists");
 const $fortuneContents = $sectionContents.querySelector(".fortune-cotents");
 const $diaryLists = $sectionContents.querySelector(".diary-lists")
-const $loadingModal = $sectionContents
+const userData =  getSessionUser();
 const fortune = await fetchFortuneData();
+
 
 rederRecentDiary();
 renderFortune();
@@ -61,7 +61,7 @@ function renderFortune() {
 
 async function fetchFortuneData() {
   // 운세 데이터 불러오기
-   let fortune =  (await FetchUserData(userData.nickname)).fortune; 
+   let fortune =  (await FetchUserData(userData.displayName)).fortune; 
   // 하루가 지나면 운세보기 초기화
   if (fortune) {
     const fortuneCreatedAt = new Date(fortune.createdAt);
@@ -69,7 +69,7 @@ async function fetchFortuneData() {
     // 운세 데이터가 만들어진 날짜와 현재 날짜를 비교
     // 날짜 차이가 난다면 하루가 지난것 이므로 운세 데이터를 삭제
     if (currentDate.getDate() !== fortuneCreatedAt.getDate()) {
-      setFortune(userData.nickname, "");
+      setFortune(userData.displayName, "");
       // 운세 데이터 초기화
       fortune = "";
     }
@@ -91,7 +91,7 @@ async function renderBestDiary() {
 
     const img = document.createElement('img');
     img.classList.add('diary-img');
-    img.src = diary.imgURL[0] || '../../img/no-image.png';
+    img.src = diary.imgURL[0] || './img/no-image.png';
     img.alt = '다이어리 이미지';
     anchor.appendChild(img);
 
@@ -113,7 +113,7 @@ async function renderBestDiary() {
 
     const profileImg = document.createElement('img');
     profileImg.classList.add('diary-profileImg');
-    profileImg.src = await getAuthImg(diary.auth)||'../../img/profile.png';
+    profileImg.src = await getAuthImg(diary.auth)||'./img/profile.png';
     profileImg.alt = '';
     bottomDiv.appendChild(profileImg);
 
@@ -137,12 +137,6 @@ async function renderBestDiary() {
     empathy.setAttribute("class", "diary-empathy");
     empathy.textContent = `${diary.empathy}`
     contentsDiv.appendChild(empathy);
-
-    const empathyImg = document.createElement("img");
-    empathyImg.setAttribute("class", "empathy-img");
-    empathyImg.setAttribute("src", "../../img/heart.png");
-    empathyImg.setAttribute("alt", "공감 아이콘");
-    empathy.insertAdjacentElement("afterbegin",empathyImg);
 
     $diaryLists.appendChild(listItem);
   }
