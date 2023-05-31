@@ -5,8 +5,8 @@ import {
   goToPrevPage,
   variables,
 } from "./chattingRoom_pageNation.js";
-import "../../css/commons.css";
-import "../../css/main.css";
+
+
 import "../../css/chattingRoom.css";
 import "../../img/loading.gif";
 

@@ -3,12 +3,7 @@ import {v4 as uuidv4} from 'uuid';
 import { joinChatRoom, fetchChatting, addChatting, deleteChat, exitChattingRoom } from '../firebase/chatting/firebase_chatting.js';
 import { getCreatedAt } from '../commons/libray.js';
 import { FetchUserData, getSessionUser } from '../firebase/auth/firebase_auth.js';
-import "../../css/commons.css";
-import "../../css/main.css";
 import "../../css/chatting.css";
-import "../../img/loading.gif";
-
-
 
 const $sectionContents = document.querySelector(".section-contents");
 const $roomName = $sectionContents.querySelector(".room-name");

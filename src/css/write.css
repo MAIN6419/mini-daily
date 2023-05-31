@@ -2,6 +2,12 @@
   position: relative;
   padding: 20px 40px;
 }
+.today-date{
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  min-height: 16px;
+}
 #input-title {
   width: 100%;
   padding: 10px 15px;
@@ -13,7 +19,7 @@
 #input-contents {
   width: 100%;
   padding: 10px 15px;
-  height: 350px;
+  height: 450px;
   box-sizing: border-box;
   resize: none;
   line-height: 1.5;
@@ -21,15 +27,71 @@
   border: 2px solid #bdbdbd;
   margin-bottom: 20px;
 }
+
+.mood-box{
+  margin-bottom: 20px;
+}
+.mood-title{
+  margin-bottom: 10px;
+}
+.mood-list{
+  display: flex;
+  gap: 30px;
+}
+.mood-tag{
+  display: block;
+  text-align: center;
+  margin-bottom: 5px;
+}
+.mood-box label{
+  position: relative;
+  display: inline-block;
+  border: 2px solid #bdbdbd;
+  border-radius: 10px;
+  width: 100px;
+  height: 100px;
+  box-sizing: border-box;
+  padding: 20px;
+  cursor: pointer;
+}
+.mood-box label:hover{
+  border-color: rgb(252, 28, 252);
+  border-width: 3px;
+}
+.label-happy {
+  background: url(../img/mood-happy.png) no-repeat center / 80px yellowgreen;
+}
+.label-good {
+  background: url(../img/mood-good.png) no-repeat center / 80px gold;
+}
+.label-sad {
+  background: url(../img/mood-sad.png) no-repeat center / 100px skyblue;
+}
+.label-gloomy {
+  background: url(../img/mood-glommy.png) no-repeat center / 80px royalblue;
+}
+.label-angry {
+  background: url(../img/mood-angry.png) no-repeat center / 80px tomato;
+}
+
+.mood-box input:checked + label {
+  border-color:black;
+}
+.mood-box input:checked ~ .mood-tag {
+  color: dodgerblue
+}
+.mood-box input:focus + label {
+  border: 3px solid rgb(252, 28, 252);
+}
 #input-upload {
   display: none;
 }
 .upload-wrapper {
   display: flex;
   gap: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
-.upload-imgBox{
+.upload-imgBox {
   position: relative;
 }
 .btn-reset {
@@ -45,8 +107,6 @@
   background: url(../img/icon-sprite.png) no-repeat -161px -65px / 185px 139px;
 }
 .upload-title {
-  font-size: 16px;
-  font-weight: 500;
   margin-bottom: 10px;
 }
 .btn-upload {

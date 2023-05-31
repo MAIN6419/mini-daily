@@ -1,7 +1,6 @@
 .section-contents {
   position: relative;
   background-color: antiquewhite;
-  height: 660px;
   overflow-y: scroll;
 }
 .page-btns {
@@ -9,7 +8,7 @@
   align-items: center;
   justify-content: right;
   gap: 5px;
-  margin-bottom: 10px;
+  margin: 30px 0 15px 0;
 }
 .btn-prev,
 .btn-next {
@@ -57,14 +56,14 @@
   background-color: white;
   position: relative;
 }
-.search-bar::before {
+.search-bar::before{
   content: "";
   position: absolute;
   top: 50%;
   left: 15px;
-  transform: translateY(-50%);
+  transform: translateY(-45%);
   display: block;
-  background: url("../img/sprite.png") no-repeat -572px -353px / 620px 416px;
+  background: url("../img/icon-sprite.png") no-repeat  -128px -28px / 148px 111px;
   width: 20px;
   height: 20px;
 }
@@ -78,7 +77,7 @@
 .room-list {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 20px;
   place-content: center;
   margin: 0 auto;
@@ -90,7 +89,7 @@
   border-radius: 10px;
   box-sizing: border-box;
   background-color: #fff;
-  height: 150px;
+  height: 170px;
 }
 .room:hover {
   background-color: #f2f2f2;

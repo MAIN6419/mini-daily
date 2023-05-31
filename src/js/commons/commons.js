@@ -1,28 +1,36 @@
 "use strict";
-
+import * as DOMPurify from "dompurify";
 import { updateTime } from "./clock.js";
 import { calendar } from "./calendar.js";
 import { checkLogin, logout } from "../firebase/auth/firebase_auth.js";
+import "../../css/main.css";
+import "../../css/reset.css";
 import "../../img/icon-sprite.png";
 import "../../img/bg.png";
+import "../../img/location.png";
+import "../../img/btn-reload.png";
+import "../../img/weather-loading.gif";
+import "../../img/sunraise-bg.jpg";
+import "../../img/btn-reload-black.png";
+import "../../img/sunset-bg.png";
+import "../../img/profile.png";
+import { getKST } from "./libray.js";
+import { askForCoords } from "./weather.js";
 export let userData;
-
-
-if(!sessionStorage.getItem("userData")) {
+if (!sessionStorage.getItem("userData")) {
   location.replace(`/`);
   alert("로그인 후 이용가능합니다!");
-}
-else{
+} else {
   userData = JSON.parse(sessionStorage.getItem("userData"));
 }
-  await checkLogin(userData.nickname);
+await checkLogin(userData.nickname);
 
 (async function () {
   await loadTemplate();
   const $logoutBtn = document.querySelector(".btn-logout");
-  $logoutBtn.addEventListener("click", ()=>{
+  $logoutBtn.addEventListener("click", () => {
     logout();
-  })
+  });
   // clock
   updateTime();
   setInterval(updateTime, 1000);
@@ -41,31 +49,72 @@ else{
       }
     })
   );
+  const $weatherReloadBtn = document.querySelector(".weather .btn-reload");
+  $weatherReloadBtn.addEventListener("click", reloadWeather);
 })();
 
-
-
 async function loadTemplate() {
+  if (!localStorage.getItem("weather")) {
+    try {
+      await askForCoords();
+    } catch (error) {
+      console.error(
+        "위치 정보 동의를 받지 않아 날씨 정보를 가져올 수 없습니다.",
+        error
+      );
+    }
+  }
   const sectionProfile = document.querySelector(".section-profile");
+  const weatherInfo = JSON.parse(localStorage.getItem("weather")) || "";
   sectionProfile.innerHTML = `
           <article class="clock">
             <h2 class="a11y-hidden">clock</h2>
-            <span class="time"></span>
+            <time class="time" datatime="2023"></time>
           </article>
           <article class="profile">
             <h2 class="a11y-hidden">유저 프로필</h2>
             <img
               class="profile-img"
-              src=" ${userData.profileImgURL || './img/profile.png'}"
+              src=" ${userData.profileImgURL || "./img/no-image.png"}"
               alt="유저 프로필 이미지"
             />
             <span class="profile-name">${userData.nickname}</span>
+            <h3 class="introduce-title">자기소개</h3>
             <div class="introduce-box">
               <p class="profile-introduce">
-                ${userData.introduce}
+                ${DOMPurify.sanitize(userData.introduce)}
               </p>
             </div>
           </article>
+          <article class="weather ${
+            getKST().getTime() >= weatherInfo.sunset ? "sunset" : ""
+          }">
+          <h2 class="a11y-hidden">현재 날씨</h2>
+          <div class="weather-info">
+          <figure>
+          <img class="weather-icon" src="http://openweathermap.org/img/w/${
+            weatherInfo.icon
+          }.png" alt="날씨 아이콘">
+          <span class="weather-text">${weatherInfo.weatherText}</span>
+          </figure>
+          <span class="weather-temp">${weatherInfo.temp}&#8451;</span>
+          <span class="weather-humidity">습도 ${weatherInfo.humidity}%</span>
+          </div>
+          <div class="wether-reload">
+          <button class="btn-reload" type="button">
+          <span class="a11y-hidden">
+            날씨 정보 새로고침 버튼
+          </span>
+          </button>
+          <span class="weather-time">${weatherInfo.time}</span>
+          </div>
+        <span class="weather-location">${weatherInfo.place}</span>
+        <article class="weather-loading">
+          <h2 class="a11y-hidden">날씨 로딩창</h2>
+          <img src="../img/weather-loading.gif" alt="로딩중 이미지" />
+          <span>Loading...</span>
+        </article>
+        </article>
           <article class="calendar">
             <h2 class="a11y-hidden">달력</h2>
             <table>
@@ -149,7 +198,11 @@ async function loadTemplate() {
             </button>
           </article>
           <button class="btn-logout" type="button">logout</button>
+
   `;
+  if (!weatherInfo)
+    document.querySelector(".weather").innerHTML =
+      "위치정보 수집에 동의하지 않아 현재 날씨 정보를 받아올 수 없습니다!";
   const links = document.querySelector(".links");
   links.innerHTML = `
     <a class="home-link"href="home.html">홈</a>
@@ -160,4 +213,34 @@ async function loadTemplate() {
     <a class="fortune-link" href="fortune.html">운세보기</a>
     <a class="mypage-link" href="mypage.html">마이페이지</a>
   `;
+}
+
+async function reloadWeather() {
+  const $weatherLoading = document.querySelector(".weather-loading");
+  $weatherLoading.classList.add("active");
+
+  try {
+    await askForCoords();
+
+    const weatherInfo = JSON.parse(localStorage.getItem("weather"));
+    const $weather = document.querySelector(".weather");
+    const $weatherIcon = $weather.querySelector(".weather-icon");
+    const $weatherHumidity = $weather.querySelector(".weather-humidity");
+    const $weatherTime = $weather.querySelector(".weather-time");
+    const isSunset = getKST().getTime() >= weatherInfo.sunset;
+
+    if (isSunset) $weather.classList.add("sunset");
+    $weatherIcon.setAttribute(
+      "src",
+      `http://openweathermap.org/img/w/${weatherInfo.icon}.png`
+    );
+    $weatherHumidity.textContent = `습도 ${weatherInfo.humidity}%`;
+    $weatherTime.textContent = weatherInfo.time;
+  } catch (error) {
+    console.error("날씨 정보를 다시 불러오는 중에 오류가 발생했습니다.", error);
+    document.querySelector(".weather").innerHTML =
+      "위치정보 수집에 동의하지 않아 현재 날씨 정보를 받아올 수 없습니다!";
+  } finally {
+    $weatherLoading.classList.remove("active");
+  }
 }

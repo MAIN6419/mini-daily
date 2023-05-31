@@ -2,7 +2,7 @@
 import {v4 as uuidv4} from 'uuid';
 import { currentUser, getAuthImg  } from "../../firebase/auth/firebase_auth.js";
 import { deleteComment, editComment, writeComment, writeReplyComment } from "../../firebase/comment/firebase_comment.js";
-import { getCreatedAt } from "../../commons/libray.js";
+import { getCreatedAt, getKST } from "../../commons/libray.js";
 import { addReplyComment, renderReplyComment } from "../diaryReplyComment/diaryReplyComment.js"; 
 import { firstComment, pageVarialbes } from "../diaryInfinityScroll/diaryInfinityScroll.js";
 
@@ -29,7 +29,7 @@ async function submitComment(e) {
       profileImg: currentUser.photoURL,
       content: $commentInput.value,
       commentId: uuidv4(),
-      createdAt: new Date().getTime(),
+      createdAt: getKST().getTime(),
     };
     await writeComment(newComment);
     $commentInput.value = "";
@@ -193,6 +193,8 @@ async function createCommentEl(item) {
       editBtn.addEventListener("click", async () => {
         contents.classList.remove("active");
         editForm.classList.add("active");
+        replyForm.classList.remove("active");
+        replyTextarea.value = '';
       });
   
       editCancelBtn.addEventListener("click", () => {
@@ -261,7 +263,7 @@ async function createCommentEl(item) {
           const newReply = {
             commentId: uuidv4(),
             content: replyTextarea.value,
-            createdAt: new Date().getTime(),
+            createdAt: getKST().getTime(),
             auth: currentUser.displayName,
             profileImg: currentUser.photoURL,
             parentCommentId: item.commentId,

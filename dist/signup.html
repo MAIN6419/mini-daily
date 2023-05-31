@@ -7,10 +7,10 @@
     <meta property="og:title" content="미니 다이어리">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://main6419.github.io/mini-diary/">
-    <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/free-board-dd96c.appspot.com/o/images%2Fog.png?alt=media&token=59d9191f-6cd6-4818-b1ee-cc450c0c968e">
+    <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/free-board-dd96c.appspot.com/o/images%2Fog.png?alt=media&amp;token=59d9191f-6cd6-4818-b1ee-cc450c0c968e">
     <meta name="description" content="미니 다이어리 사이트">
     <title>mini-diary</title>
-  <link rel="icon" href="favicon.png"><link rel="icon" href="favicon/favicon/favicon.png"><script defer src="commons.bundle.js"></script><script defer src="signup.bundle.js"></script><link href="css/signup.css" rel="stylesheet"></head>
+  <link rel="icon" href="favicon.png"><link rel="icon" href="favicon/img/favicon.png"><script defer src="main.bundle.js"></script><script defer src="signup.bundle.js"></script><link href="css/main.css" rel="stylesheet"><link href="css/signup.css" rel="stylesheet"></head>
   <body>
     <section class="signup-wrapper"> 
       <h1 class="a11y-hidden">회원가입</h1>  
@@ -18,7 +18,7 @@
         <h2>회원가입</h2>  
         <div>
           <label for="input-nickname">닉네임</label>
-          <input id="input-nickname" type="text" placeholder="닉네임">
+          <input id="input-nickname" type="text" placeholder="닉네임" maxlength="12">
           <p class="input-msg">닉네임은 4~12자 입니다.</p>
         </div>
         <div>
@@ -33,12 +33,12 @@
         </div>
         <div>
           <label for="input-password">비밀번호</label>
-          <input id="input-password" type="password" placeholder="비밀번호">
+          <input id="input-password" type="password" placeholder="비밀번호" maxlength="16">
           <p class="input-msg"></p>
         </div>
         <div>
           <label for="input-passwordChk">비밀번호 확인</label>
-          <input id="input-passwordChk" type="password" placeholder="비밀번호 확인">
+          <input id="input-passwordChk" type="password" placeholder="비밀번호 확인" maxlength="16">
           <p class="input-msg"></p>
         </div>
         <button class="btn-signup" type="button">가입하기</button>
@@ -49,6 +49,5 @@
       <img src="./img/loading.gif" alt="로딩중 이미지">
       <span>Loading...</span>
     </article>
-   
   </body>
 </html>

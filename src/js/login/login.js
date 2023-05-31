@@ -1,14 +1,12 @@
 import { login } from "../firebase/auth/firebase_auth.js";
+
 import "../../css/login.css";
-import "../../css/commons.css";
-import "../../img/loading.gif";
 
 const $loginForm = document.querySelector(".login-form");
 const $inputEmail = $loginForm.querySelector("#input-email");
 const $inputPw = $loginForm.querySelector("#input-password");
 const $loginBtn = $loginForm.querySelector(".btn-login");
 const $loadingModal = document.querySelector(".loading-modal");
-const $signUpLink = document.querySelector(".signup-link");
 if (sessionStorage.getItem("userData")){
   alert("이미 로그인 되어있습니다!");
   location.href = 'home.html';
@@ -20,22 +18,7 @@ $inputEmail.addEventListener("input", (e) => {
 $inputPw.addEventListener("input", (e) => {
   e.target.value = e.target.value.trim();
 });
-$inputEmail.addEventListener("keydown", (e) => {
-  if(e.keyCode===9&&e.shiftKey){
-    e.preventDefault();
-    $signUpLink.focus();
-  }
-});
-$signUpLink.addEventListener("keydown",(e)=>{
-  if(e.keyCode===9){
-    e.preventDefault();
-    $inputEmail.focus();
-  }
-  if(e.keyCode===9&&e.shiftKey){
-    e.preventDefault();
-    $loginBtn.focus();
-  }
-})
+
 $loginBtn.addEventListener("click", async (e) => {
   e.preventDefault();
   if (!$inputEmail.value) {

@@ -9,13 +9,11 @@
     <meta property="og:url" content="https://main6419.github.io/mini-diary/" />
     <meta
       property="og:image"
-      content="https://firebasestorage.googleapis.com/v0/b/free-board-dd96c.appspot.com/o/images%2Fog.png?alt=media&token=59d9191f-6cd6-4818-b1ee-cc450c0c968e"
+      content="https://firebasestorage.googleapis.com/v0/b/free-board-dd96c.appspot.com/o/images%2Fog.png?alt=media&amp;token=59d9191f-6cd6-4818-b1ee-cc450c0c968e"
     />
     <meta name="description" content="미니 다이어리 사이트" />
     <title>Mini Diary</title>
-
-    
-  <link rel="icon" href="favicon.png"><link rel="icon" href="favicon/favicon/favicon.png"><script defer src="commons.bundle.js"></script><script defer src="home.bundle.js"></script><link href="css/home.css" rel="stylesheet"></head>
+  <link rel="icon" href="favicon.png"><link rel="icon" href="favicon/img/favicon.png"><script defer src="commons.bundle.js"></script><script defer src="main.bundle.js"></script><script defer src="home.bundle.js"></script><link href="css/commons.css" rel="stylesheet"><link href="css/main.css" rel="stylesheet"><link href="css/home.css" rel="stylesheet"></head>
   <body>
     <h1 class="a11y-hidden">Mini Diary</h1>
     <div class="wrapper">
@@ -26,6 +24,11 @@
         </section>
         <section class="section-contents">
           <h2 class="a11y-hidden">홈</h2>
+          <div class="banner">
+            <span class="banner-title">MINI DIARY</span>
+            <span class="banner-subtitle">오늘의 <strong>감정</strong>을 함께 공유해 보아요.</span>
+          </div>
+
           <div class="list-box">
             <div class="recent-diaryBox">
               <h2>최신 다이어리</h2>
@@ -48,12 +51,16 @@
               <!-- 전체 다이어리 리스트 -->
             </ul>
           </section>
+          <article class="loading-modal">
+            <h2 class="a11y-hidden">로딩화면</h2>
+            <img src="./img/loading.gif" alt="로딩중 이미지" />
+            <span>Loading...</span>
+          </article>
         </section>
         <div class="links">
           <!-- link -->
         </div>
       </div>
     </div>
-   
   </body>
 </html>

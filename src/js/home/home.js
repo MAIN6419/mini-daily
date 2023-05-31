@@ -1,23 +1,25 @@
 "use strict";
 import _ from 'lodash';
 import { getCreatedAt } from "../commons/libray.js";
-import { FetchDiary, fetchBestDiarys, fetchRecentDiary } from '../firebase/diary/firebase_diary.js';
+import { fetchBestDiarys, fetchRecentDiary } from '../firebase/diary/firebase_diary.js';
 import { FetchUserData, getAuthImg, getSessionUser } from '../firebase/auth/firebase_auth.js';
 import { setFortune } from '../firebase/fortune/firebase_fortune.js';
-import "../../css/commons.css";
-import "../../css/main.css";
+
+
 import "../../css/home.css";
+import "../../img/banner.png";
 const $sectionContents = document.querySelector(".section-contents");
 const $recentDiaryLists = $sectionContents.querySelector(".recent-diaryLists");
 const $fortuneContents = $sectionContents.querySelector(".fortune-cotents");
-const $diaryLists = $sectionContents.querySelector(".diary-lists")
+const $diaryLists = $sectionContents.querySelector(".diary-lists");
 const userData =  getSessionUser();
+const $loadingModal = $sectionContents.querySelector(".loading-modal");
+$loadingModal.classList.add("active");
 const fortune = await fetchFortuneData();
-
-
-rederRecentDiary();
-renderFortune();
-renderBestDiary();
+await rederRecentDiary();
+await renderFortune();
+await renderBestDiary();
+$loadingModal.classList.remove("active");
 
 async function rederRecentDiary() {
   const data = await fetchRecentDiary();
@@ -83,7 +85,6 @@ async function renderBestDiary() {
   for(const diary of data) {
     const listItem = document.createElement('li');
     listItem.classList.add('diary');
-    listItem.addEventListener("mouseover", ()=> getThorttle(diary.id))
 
     const anchor = document.createElement('a');
     anchor.href = `diary.html?id=${diary.id}`;
@@ -113,7 +114,7 @@ async function renderBestDiary() {
 
     const profileImg = document.createElement('img');
     profileImg.classList.add('diary-profileImg');
-    profileImg.src = await getAuthImg(diary.auth)||'./img/profile.png';
+    profileImg.src = './img/placeholderImg.png';
     profileImg.alt = '';
     bottomDiv.appendChild(profileImg);
 
@@ -131,20 +132,20 @@ async function renderBestDiary() {
     contentsDiv.appendChild(bottomDiv);
     anchor.appendChild(contentsDiv);
 
-    
-
     const empathy = document.createElement("span");
     empathy.setAttribute("class", "diary-empathy");
     empathy.textContent = `${diary.empathy}`
     contentsDiv.appendChild(empathy);
 
     $diaryLists.appendChild(listItem);
+    fetchAuthImg(profileImg, diary)
   }
   $diaryLists.appendChild(frag);
 }
 
-const getThorttle = _.throttle( async (id)=>{
-  const diaryData = await FetchDiary(id)
-  sessionStorage.setItem("diaryData", JSON.stringify(diaryData))
-}, 500);
+// 다이어리 작성자 이미지를 불러오는 함수 => placeholderImg 교체
+async function fetchAuthImg(profileImg, data) {
+  profileImg.src = await getAuthImg(data.auth);
+}
+
 

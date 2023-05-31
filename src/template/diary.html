@@ -9,11 +9,10 @@
     <meta property="og:url" content="https://main6419.github.io/mini-diary/" />
     <meta
       property="og:image"
-      content="https://firebasestorage.googleapis.com/v0/b/free-board-dd96c.appspot.com/o/images%2Fog.png?alt=media&token=59d9191f-6cd6-4818-b1ee-cc450c0c968e"
+      content="https://firebasestorage.googleapis.com/v0/b/free-board-dd96c.appspot.com/o/images%2Fog.png?alt=media&amp;token=59d9191f-6cd6-4818-b1ee-cc450c0c968e"
     />
     <meta name="description" content="미니 다이어리 사이트" />
     <title>Mini Diary</title>
-
   </head>
   <body>
     <h1 class="a11y-hidden">Mini diary</h1>
@@ -29,7 +28,7 @@
             <h3 class="diary-title"></h3>
             <div class="diary-info">
               <div class="auth-info">
-                <img class="diary-profileImg" src="" alt="유저 프로필 이미지" />
+                <img class="diary-profileImg" src="#" alt="유저 프로필 이미지" />
                 <span class="auth-grade">일반</span>
                 <span class="diary-auth"></span>
                 <time class="diary-createdAt" datetime="2023"></time>
@@ -37,7 +36,7 @@
               <div class="diary-contents">
                 <p class="diary-text"></p>
               </div>
-
+              <div class="mood-box"></div>
               <div class="empathy-box">
                 <button class="btn-empathy">
                   <span class="a11y-hidden">공감하트</span>
@@ -46,17 +45,91 @@
               </div>
             </div>
 
-            <div class="diary-btns">
-            </div>
+            <div class="diary-btns"></div>
             <button class="btn-back">
               <span class="a11y-hidden">이전 페이지로 돌아가기 버튼</span>
             </button>
           </div>
           <form class="edit-form">
+            <time class="diary-date" datetime="2023"></time>
             <label for="input-title" class="a11y-hidden">제목</label>
             <input id="input-title" type="text" placeholder="오늘의 다이어리" />
             <label for="input-title" class="a11y-hidden">내용</label>
-            <textarea id="input-contents" placeholder="오늘은 어떤일이 있었나요? 다른사람과 이야기를 나누어 보아요."></textarea>
+            <textarea
+              id="input-contents"
+              placeholder="오늘은 어떤일이 있었나요? 다른사람과 이야기를 나누어 보아요."
+              maxlength="1000"
+            ></textarea>
+            <div class="mood-box">
+              <h3 class="mood-title">오늘의 기분은 어때요?</h3>
+              <ul class="mood-list">
+                <li class="mood-item">
+                  <input
+                    type="radio"
+                    class="a11y-hidden"
+                    name="mood"
+                    value="happy"
+                    id="mood-happy"
+                  />
+                  <label class="label-happy" for="mood-happy">
+                    <span class="a11y-hidden">기쁨</span>
+                  </label>
+                  <span class="mood-tag">기쁨</span>
+                </li>
+                <li class="mood-item">
+                  <input
+                    type="radio"
+                    class="a11y-hidden"
+                    name="mood"
+                    value="good"
+                    id="mood-good"
+                  />
+                  <label class="label-good" for="mood-good">
+                    <span class="a11y-hidden">좋음</span>
+                  </label>
+                  <span class="mood-tag">좋음</span>
+                </li>
+                <li class="mood-item">
+                  <input
+                    type="radio"
+                    class="a11y-hidden"
+                    name="mood"
+                    value="sad"
+                    id="mood-sad"
+                  />
+                  <label class="label-sad" for="mood-sad">
+                    <span class="a11y-hidden">슬픔</span>
+                  </label>
+                  <span class="mood-tag">슬픔</span>
+                </li>
+                <li class="mood-item">
+                  <input
+                    type="radio"
+                    class="a11y-hidden"
+                    name="mood"
+                    value="gloomy"
+                    id="mood-gloomy"
+                  />
+                  <label class="label-gloomy" for="mood-gloomy">
+                    <span class="a11y-hidden">우울</span>
+                  </label>
+                  <span class="mood-tag">우울</span>
+                </li>
+                <li class="mood-item">
+                  <input
+                    type="radio"
+                    class="a11y-hidden"
+                    name="mood"
+                    value="angry"
+                    id="mood-angry"
+                  />
+                  <label class="label-angry" for="mood-angry">
+                    <span class="a11y-hidden">화남</span>
+                  </label>
+                  <span class="mood-tag">화남</span>
+                </li>
+              </ul>
+            </div>
             <h2 class="upload-title">이미지 업로드</h2>
             <label for="input-upload" class="a11y-hidden"
               >이미지 업로드 버튼</label
@@ -105,14 +178,16 @@
               <button type="button" class="btn-cancel">취소하기</button>
             </div>
           </form>
-          <h2 class="comment-title">댓글</h2>
-          <form class="comment-form">
-            <label for="input-comment">내용</label>
-            <textarea id="input-comment"></textarea>
-            <button class="btn-submit">댓글달기</button>
-          </form>
-          <ul class="comment-lists">
-          </ul>
+          <article class="article-comment">
+            <h2 class="comment-title">댓글</h2>
+            <form class="comment-form">
+              <label for="input-comment">내용</label>
+              <textarea id="input-comment" maxlength="150"></textarea>
+              <button class="btn-submit">댓글달기</button>
+            </form>
+            <ul class="comment-lists"></ul>
+          </article>
+
           <article class="loading-modal">
             <h2 class="a11y-hidden">로딩화면</h2>
             <img src="./img/loading.gif" alt="로딩중 이미지" />
@@ -124,6 +199,6 @@
         </div>
       </div>
     </div>
-
+    
   </body>
 </html>

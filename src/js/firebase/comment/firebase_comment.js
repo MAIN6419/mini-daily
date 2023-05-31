@@ -22,9 +22,9 @@ async function writeComment(commentData) {
     let data = userDoc.data();
     let maxCommentPoint = data.maxCommentPoint;
     const resetCommentPoint =
-      new Date(data.lastCommentDate).getFullYear() !== getKST().getFullYear() &&
-      new Date(data.lastCommentDate).getMonth() !== getKST().getMonth() &&
-      new Date(data.lastCommentDate).getDate() !== getKST().getDate();
+      new Date(data.lastDiaryDate).getFullYear() !== getKST().getFullYear() ||
+      new Date(data.lastDiaryDate).getMonth() !== getKST().getMonth() ||
+      new Date(data.lastDiaryDate).getDate() !== getKST().getDate();
 
     if (resetCommentPoint) {
       await updateDoc(userRef, {

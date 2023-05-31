@@ -40,12 +40,9 @@ const auth = getAuth();
 let currentUser;
 
 onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    console.log("유저상태 변경");
-    // await updateDoc(userDocRef, { islogin: false });
-  } else {
+  if (user) {
     currentUser = user;
-  }
+  } 
 });
 
 
@@ -173,7 +170,6 @@ const logout = async () => {
       }
 
       // 유저 DB 로그아웃 변경
-      // 위에 한번 다른 값으로 바꿔주지 않으면 이거 그냥 안바뀌고 그냥 넘어감
       await updateDoc(userDocRef, { islogin: true });
       await updateDoc(userDocRef, { islogin: false });
       location.replace("/");
@@ -346,11 +342,21 @@ async function editIntroduce(introduce) {
 }
 
 // 유저 이미지 Url를 가져오는 함수
+const cachedImages = {};
+
 async function getAuthImg(auth) {
+  if (cachedImages[auth]) {
+    return cachedImages[auth];
+  }
+
   const userRef = doc(db, "user", auth);
   const res = await getDoc(userRef);
   const datas = res.data();
-  return datas.profileImgUrl;
+  const imgUrl = datas.profileImgUrl;
+
+  // 이미지 URL을 캐싱
+  cachedImages[auth] = imgUrl;
+  return imgUrl;
 }
 
 // 유저 프로필 이미지 변경 함수
@@ -380,6 +386,7 @@ const applyProfileImg = async (file) => {
       const uploadfileUrl = await getDownloadURL(res.ref);
       await updateProfileImg(uploadfileUrl);
       const user = await FetchUserData(currentUser.displayName);
+      console.log('a:',user.profileImgFileName)
       if (user.profileImgFileName) {
         await deleteObject(
           storageRef(

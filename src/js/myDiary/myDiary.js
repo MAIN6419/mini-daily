@@ -1,10 +1,9 @@
 "use strict";
 import _ from "lodash";
 import { getCreatedAt } from "../commons/libray.js";
-import "../../css/commons.css";
-import "../../css/main.css";
+
+
 import "../../css/myDiary.css";
-import "../../img/loading.gif";
 
 import {
   collection,

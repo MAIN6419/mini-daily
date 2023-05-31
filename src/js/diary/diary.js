@@ -10,15 +10,18 @@ import {
   updateEmpathy,
 } from "../firebase/diary/firebase_diary.js";
 
-
 import { submitComment } from "./diaryComment/diaryComment.js";
 import { uploadImg } from "./diaryEdit/diaryEdit.js";
-import "../../css/commons.css";
-import "../../css/main.css";
-import "../../css/diary.css";
-import "../../img/imgUpload.png"; 
-import "../../img/placeholderImg.png";
 
+
+import "../../css/diary.css";
+import "../../img/imgUpload.png";
+import "../../img/placeholderImg.png";
+import "../../img/mood-happy.png";
+import "../../img/mood-good.png";
+import "../../img/mood-sad.png";
+import "../../img/mood-glommy.png";
+import "../../img/mood-angry.png";
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
 
@@ -51,10 +54,10 @@ if (previousPageUrl.includes("myDiary")) {
 // 게시글 데이터 가져오기
 const fetchData = async () => {
   $loadingModal.classList.add("active");
-  $sectionContents.style.overflow= "hidden";
+  $sectionContents.style.overflow = "hidden";
   return await FetchDiary(id).then((res) => {
     $loadingModal.classList.remove("active");
-    $sectionContents.style.overflow= "auto";
+    $sectionContents.style.overflow = "auto";
     return res;
   });
 };
@@ -70,6 +73,7 @@ async function renderdiary() {
 
   const $diaryTitle = $diaryWrapper.querySelector(".diary-title");
   const $diaryText = $diaryWrapper.querySelector(".diary-text");
+  const $diaryMood = $diaryWrapper.querySelector(".mood-box");
   const $diaryCreatedAt = $diaryWrapper.querySelector(".diary-createdAt");
   const $authInfo = $diaryWrapper.querySelector(".auth-info");
   const $diaryAuth = $diaryWrapper.querySelector(".diary-auth");
@@ -77,7 +81,7 @@ async function renderdiary() {
   const $empathyCount = $diaryWrapper.querySelector(".empathy-count");
   const $empathyBox = $diaryWrapper.querySelector(".empathy-box");
   const $authGrade = $sectionContents.querySelector(".auth-grade");
-  const $diaryBtns = $sectionContents.querySelector(".diary-btns")
+  const $diaryBtns = $sectionContents.querySelector(".diary-btns");
   if (data.length === 0) {
     $diaryTitle.textContent = "존재하지 않는 게시물";
     alert("현재 삭제되었거나 존재하지 않는 게시물 입니다!");
@@ -86,36 +90,50 @@ async function renderdiary() {
   }
   // 만약 작성자와 현재 로그인한 유저가 같지 않다면
   // 수정과 삭제버튼 없애기
-  if (currentUser.displayName === data.auth){
+  if (currentUser.displayName === data.auth) {
     const editBtn = document.createElement("button");
-    editBtn.setAttribute("type","button");
+    editBtn.setAttribute("type", "button");
     editBtn.setAttribute("class", "btn-edit");
     const editBtnText = document.createElement("span");
     editBtnText.setAttribute("class", "a11y-hidden");
     editBtnText.textContent = "수정";
     editBtn.appendChild(editBtnText);
     $diaryBtns.appendChild(editBtn);
-  
+
     const delBtn = document.createElement("button");
-    delBtn.setAttribute("type","button");
+    delBtn.setAttribute("type", "button");
     delBtn.setAttribute("class", "btn-del");
     const delBtnText = document.createElement("span");
     delBtnText.setAttribute("class", "a11y-hidden");
     delBtnText.textContent = "삭제";
     delBtn.appendChild(delBtnText);
     $diaryBtns.appendChild(delBtn);
-  
+
     editBtn.addEventListener("click", async (e) => {
       e.preventDefault();
-    
+      const $articleComment = $sectionContents.querySelector(".article-comment");
+      const $diaryDate = $editForm.querySelector(".diary-date");
       const $inputTitle = $editForm.querySelector("#input-title");
       const $inputContents = $editForm.querySelector("#input-contents");
+      const $moodList = $editForm.querySelectorAll("input[name='mood']");
       const $previewImg = $sectionContents.querySelectorAll(".preview-img");
-    
+      $articleComment.classList.add("inactive");
       $editForm.classList.toggle("active");
       $diaryWrapper.classList.toggle("inactive");
+      const diaryCreatedAt = new Date(data.createdAt);
+      const year = diaryCreatedAt.getFullYear();
+      const month = '0' + (diaryCreatedAt.getMonth() + 1);
+      const date = '0' + diaryCreatedAt.getDate();
+      const day = ["일","월","화","수","목","금","토"][diaryCreatedAt.getDay()];
+      $diaryDate.textContent = `${year}.${month.slice(-2)}.${date.slice(-2)}.(${day})`;
       $inputTitle.value = data.title;
       $inputContents.value = data.contents;
+      $moodList.forEach((el) => {
+        if (el.value === data.mood) {
+          el.checked = true;
+          return;
+        }
+      });
       $previewImg.forEach((el, idx) => {
         if (data.imgURL[idx]) {
           el.setAttribute("src", data.imgURL[idx]);
@@ -135,7 +153,6 @@ async function renderdiary() {
       }
     });
   }
-  
 
   const auth = await FetchUserData(data.auth);
   if (auth.grade === "우수") {
@@ -173,15 +190,17 @@ async function renderdiary() {
     $postImg.setAttribute("alt", "포스트 이미지");
     $diaryText.insertAdjacentElement("beforebegin", $postImg);
   });
+  $diaryMood.classList.add(data.mood);
+
   $empathyBox.classList.add("active");
   $diaryText.textContent = data.contents;
   $empathyCount.textContent = `공감 ${data.empathy}`;
   const user = await FetchUserData(currentUser.displayName);
   if (user.empathyList.includes(id)) {
-    $empathyBtn.style.background = "url(./img/icon-sprite.png) no-repeat -6px -112px / 190px 139px";
+    $empathyBtn.style.background =
+      "url(./img/icon-sprite.png) no-repeat -6px -112px / 190px 139px";
   }
 }
-
 
 $empathyBtn.addEventListener("click", async () => {
   const $empathyCount = $diaryWrapper.querySelector(".empathy-count");
@@ -200,13 +219,15 @@ $empathyBtn.addEventListener("click", async () => {
     data.empathy -= 1;
     // sessionStorage.setItem("diaryData", JSON.stringify(data));
     $empathyCount.textContent = `공감 ${data.empathy}`;
-    $empathyBtn.style.background = "url(./img/icon-sprite.png) no-repeat -6px -112px / 185px 139px";
+    $empathyBtn.style.background =
+      "url(./img/icon-sprite.png) no-repeat -6px -112px / 185px 139px";
   } else {
     updateEmpathy(id, 1, data.auth);
     data.empathy += 1;
     // sessionStorage.setItem("diaryData", JSON.stringify(data));
     $empathyCount.textContent = `공감 ${data.empathy}`;
-    $empathyBtn.style.background = "url(./img/icon-sprite.png) no-repeat -126px -78px / 185px 139px";
+    $empathyBtn.style.background =
+      "url(./img/icon-sprite.png) no-repeat -126px -78px / 185px 139px";
   }
 });
 

@@ -1,5 +1,4 @@
 "use strict";
-
 export function getCreatedAt(unixTime) {
   const date = new Date(parseInt(unixTime));
   const year = date.getFullYear();

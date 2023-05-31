@@ -9,7 +9,7 @@
     <meta property="og:url" content="https://main6419.github.io/mini-diary/" />
     <meta
       property="og:image"
-      content="https://firebasestorage.googleapis.com/v0/b/free-board-dd96c.appspot.com/o/images%2Fog.png?alt=media&token=59d9191f-6cd6-4818-b1ee-cc450c0c968e"
+      content="https://firebasestorage.googleapis.com/v0/b/free-board-dd96c.appspot.com/o/images%2Fog.png?alt=media&amp;token=59d9191f-6cd6-4818-b1ee-cc450c0c968e"
     />
     <meta name="description" content="미니 다이어리 사이트" />
     <title>Mini Diary</title>
@@ -26,8 +26,9 @@
         <section class="section-contents">
           <button class="btn-createRoomModal">채팅방 생성</button>
           <button class="btn-joinRoomModal">채팅방 참여</button>
+          <h2 class="a11y-hidden">채팅방</h2>
           <article class="search-bar">
-            <h2 class="a11y-hidden">검색창</h2>
+            <h3 class="a11y-hidden">검색창</h3>
               <label for="input-search" class="a11y-hidden">다이어리 제목 검색창</label>
               <input type="text" id="input-search" class="input-search" placeholder="방이름 검색">
           </article>
@@ -37,11 +38,8 @@
               <button class="btn-prev"><span class="a11y-hidden">이전</span></button>
               <button class="btn-next"><span class="a11y-hidden">다음</span></button>
             </div>
-          </div>
-         
-          <h2 class="a11y-hidden">채팅방</h2>
+          </div>         
           <ul class="room-list"></ul>
-
           <article class="createRoom-modal">
             <div class="dim"></div>
             <h2 class="a11y-hidden">채팅방 생성</h2>
@@ -97,11 +95,11 @@
             <span>채팅방 불러오는중...</span>
           </article>
         </section>
-        </section>
         <div class="links">
           <!-- links -->
         </div>
       </div>
     </div>
+    
   </body>
 </html>

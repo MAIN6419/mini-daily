@@ -35,15 +35,15 @@ async function fetchFirstPage() {
       orderBy("title"),
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
-      limit(9)
+      limit(16)
     );
     return new Promise((resolve, reject) => {
       variables.currentSnapshotUnsubscribe = onSnapshot(q, async (snapshot) => {
         try {
-          const data = snapshot.docs.map((el) => el.data()).slice(0, 9);
+          const data = snapshot.docs.map((el) => el.data());
           const res = await getDocs(chattingRoomRef);
-          variables.totalPage = Math.ceil(res.docs.length / 9);
-          variables.hasNextPage = snapshot.docs.length === 9;
+          variables.totalPage = Math.ceil(res.docs.length / 16);
+          variables.hasNextPage = snapshot.docs.length === 16;
           resolve(data);
           renderChattingRooms(data);
         } catch (error) {
@@ -52,17 +52,17 @@ async function fetchFirstPage() {
       });
     });
   } else {
-    const q = query(chattingRoomRef, orderBy("createdAt", "desc"), limit(9));
+    const q = query(chattingRoomRef, orderBy("createdAt", "desc"), limit(16));
     return new Promise((resolve, reject) => {
       variables.currentSnapshotUnsubscribe = onSnapshot(q, async (snapshot) => {
         try {
           // 현재 최신 전체 데이터 수를 불러옴
           const res = await getDocs(chattingRoomRef);
-          variables.totalPage = Math.ceil(res.docs.length / 9);
-          const data = snapshot.docs.map((el) => el.data()).slice(0, 9);
+          variables.totalPage = Math.ceil(res.docs.length / 16);
+          const data = snapshot.docs.map((el) => el.data());
           variables.prevFirstPage = snapshot.docs[0];
           variables.nextFirstPage = snapshot.docs[snapshot.docs.length - 1];
-          variables.hasNextPage = snapshot.docs.length === 9;
+          variables.hasNextPage = snapshot.docs.length === 16;
           resolve(data);
           renderChattingRooms(data);
         } catch (error) {
@@ -84,14 +84,14 @@ async function fetchPage(type) {
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
       type === "prev" ? endBefore(variables.prevFirstPage) : startAfter(variables.nextFirstPage),
-      limit(9)
+      limit(16)
     );
   } else {
     q = query(
       chattingRoomRef,
       orderBy("createdAt", "desc"),
       type === "prev" ? endBefore(variables.prevFirstPage) : startAfter(variables.nextFirstPage),
-      type === "prev" ? limitToLast(9) : limit(9)
+      type === "prev" ? limitToLast(16) : limit(16)
     );
   }
 
@@ -100,7 +100,7 @@ async function fetchPage(type) {
     variables.currentSnapshotUnsubscribe = onSnapshot(q, async (snapshot) => {
       try {
         const res = await getDocs(chattingRoomRef);
-        variables.totalPage = Math.ceil(res.docs.length / 9);
+        variables.totalPage = Math.ceil(res.docs.length / 16);
         const data = snapshot.docs.map((el) => el.data());
         // 마지막 페이지 첫번째 데이터가 삭제될 경우 예외 처리
         // 데이터가 있을 경우에만 페이지를 저장
@@ -109,7 +109,7 @@ async function fetchPage(type) {
           variables.nextFirstPage = snapshot.docs[snapshot.docs.length - 1];
         }
 
-        variables.hasNextPage = snapshot.docs.length === 9;
+        variables.hasNextPage = snapshot.docs.length === 16;
         resolve(data);
         renderChattingRooms(data);
       } catch (error) {

@@ -33,10 +33,9 @@ async function writeDiary(newDiary) {
     let data = userDoc.data();
     let maxDiaryPoint = data.maxDiaryPoint;
     const resetDiaryPoint =
-      new Date(data.lastDiaryDate).getFullYear() !== getKST().getFullYear() &&
-      new Date(data.lastDiaryDate).getMonth() !== getKST().getMonth() &&
+      new Date(data.lastDiaryDate).getFullYear() !== getKST().getFullYear() ||
+      new Date(data.lastDiaryDate).getMonth() !== getKST().getMonth() ||
       new Date(data.lastDiaryDate).getDate() !== getKST().getDate();
-
     // data.lastDiaryDate && 추가한 이유는 삭제시 lastDiaryDate null로 초기화 하기 때문
     // null값이면 삭제로 간주하여 maxDiaryPoint를 초기화 하지 않음
     // 하루가 지났을 경우에만 maxDiaryPoint를 초기화
@@ -123,7 +122,7 @@ async function fetchAllDiarys() {
 async function fetchBestDiarys() {
   try {
     const diaryList = collection(db, "diaryList");
-    const q = query(diaryList, orderBy("empathy", "desc"), limit(3));
+    const q = query(diaryList, orderBy("empathy", "desc"), limit(4));
     const res = await getDocs(q);
     const datas = res.docs.map((el) => el.data());
     return datas;
@@ -145,10 +144,10 @@ async function FetchDiary(id) {
   }
 }
 
-async function editDiary(id, { title, contents, imgURL, imgFileName }) {
+async function editDiary(id, newData) {
   try {
     const updateDiary = doc(db, `diaryList/${id}`);
-    await updateDoc(updateDiary, { title, contents, imgURL, imgFileName });
+    await updateDoc(updateDiary, {...newData});
     alert("수정이 완료되었습니다.");
   } catch (error) {
     throw error;

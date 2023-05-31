@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require("webpack");
 // html 번들링 플러그인
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 // css파일 추출 플러그인
@@ -8,6 +9,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 // favicon 번들링 플러그인
 const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 const { SourceMapDevToolPlugin } = require("webpack");
+
 module.exports = {
   experiments: {
     topLevelAwait: true,
@@ -15,9 +17,14 @@ module.exports = {
   mode: "production",
   entry: {
     commons: "./src/js/commons/commons.js",
+    reset: "./src/css/reset.css",
+    main: "./src/css/main.css",
     allDiary: "./src/js/allDiary/allDiary.js",
     chatting: "./src/js/chatting/chatting.js",
-    chattingRoom: "./src/js/chattingRoom/chattingRoom.js",
+    chattingRoom: [
+      "./src/js/chattingRoom/chattingRoom.js",
+      "./src/js/chattingRoom/chattingRoom_modal.js",
+    ],
     diary: "./src/js/diary/diary.js",
     findAccount: "./src/js/findAccount/findAccount.js",
     fortune: "./src/js/fortune/fortune.js",
@@ -62,86 +69,82 @@ module.exports = {
       },
       {
         test: /\.m?js$/,
-        enforce: 'pre',
-        use: ['source-map-loader'],
-      }
+        exclude: /reset/,
+        enforce: "pre",
+        use: ["source-map-loader"],
+      },
     ],
   },
   plugins: [
+    new webpack.DefinePlugin({
+      "process.env": {
+        FIREBASE_API_KEY: JSON.stringify(process.env.FIREBASE_API_KEY),
+      },
+    }),
     new HtmlWebpackPlugin({
       template: "index.html",
       filename: "index.html",
-      favicon: './src/img/favicon.png',
-      chunks: ["login"],
+      chunks: ["reset","login"],
+      inject: "head", // CSS 파일을 <head> 태그 안에 삽입
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/allDiary.html",
       filename: "allDiary.html",
-      favicon: './src/img/favicon.png',
-      chunks: ["commons", "main", "allDiary"],
+      chunks: ["reset", "commons", "main", "allDiary"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/chatting.html",
       filename: "chatting.html",
-      favicon: './src/img/favicon.png',
-      chunks: ["commons", "main", "chatting"],
+      chunks: ["reset", "commons", "main", "chatting"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/chattingRoom.html",
       filename: "chattingRoom.html",
-      favicon: './src/img/favicon.png',
-      chunks: ["commons", "main", "chattingRoom"],
+      chunks: ["reset", "commons", "main", "chattingRoom"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/diary.html",
       filename: "diary.html",
-      favicon: './src/img/favicon.png',
-      chunks: ["commons", "main", "diary"],
+      chunks: ["reset", "commons", "main", "diary"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/findAccount.html",
       filename: "findAccount.html",
-      favicon: './src/img/favicon.png',
-      chunks: ["commons", "main", "findAccount"],
+      chunks: ["reset", "findAccount"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/fortune.html",
       filename: "fortune.html",
-      favicon: './src/img/favicon.png',
-      chunks: ["commons", "main", "fortune"],
+      chunks: ["reset", "commons", "main", "fortune"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/home.html",
       filename: "home.html",
-      favicon: './src/img/favicon.png',
-      chunks: ["commons", "main", "home"],
+      chunks: ["reset", "commons", "main", "home"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/myDiary.html",
       filename: "myDiary.html",
-      favicon: './src/img/favicon.png',
-      chunks: ["commons", "main", "myDiary"],
+      chunks: ["reset", "commons", "main", "myDiary"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/mypage.html",
       filename: "mypage.html",
-      favicon: './src/img/favicon.png',
-      chunks: ["commons", "main", "mypage"],
+      chunks: ["reset", "reset", "commons", "main", "mypage"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/signup.html",
       filename: "signup.html",
-      favicon: './src/img/favicon.png',
-      chunks: ["commons", "main", "signup"],
+      chunks: ["reset", "signup"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/write.html",
       filename: "write.html",
-      favicon: './src/img/favicon.png',
-      chunks: ["commons", "main", "write"],
+      chunks: ["reset", "commons", "main", "write"],
     }),
     new MiniCssExtractPlugin({
       filename: "css/[name].css",
+      chunkFilename: "css/[name].css",
     }),
     new CopyWebpackPlugin({
       patterns: [
@@ -153,9 +156,8 @@ module.exports = {
     }),
     new FaviconsWebpackPlugin({
       logo: "./src/img/favicon.png", // 파비콘 이미지 파일 경로
-      outputPath: "./dist/img/favicon", // 생성된 파비콘 파일의 출력 경로
-      publicPath: "./favicon", // HTML에서 파비콘 파일에 접근할 때 사용할 경로
-      prefix: "favicon/", // 생성된 파비콘 파일의 이름 앞에 추가될 경로 또는 폴더명
+      outputPath: "./img/", // 생성된 파비콘 파일의 출력 경로
+      prefix: "./img/", // 생성된 파비콘 파일의 이름 앞에 추가될 경로 또는 폴더명
       favicons: {
         // 생성될 파비콘 이미지와 관련된 옵션
         appName: "My App", // 앱 이름
@@ -165,7 +167,7 @@ module.exports = {
       },
     }),
     new SourceMapDevToolPlugin({
-      filename: "[file].map"
+      filename: "[file].map",
     }),
   ],
 };

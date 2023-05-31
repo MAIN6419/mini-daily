@@ -13,10 +13,9 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase/setting/firebase_setting.js";
 import { getAuthImg } from "../firebase/auth/firebase_auth.js";
-import "../../css/commons.css";
-import "../../css/main.css";
+
+
 import "../../css/allDiary.css";
-import "../../img/loading.gif";
 import "../../img/no-image.png";
 
 const $allDiaryList = document.querySelector(".allDiary-lists");
@@ -48,20 +47,20 @@ async function FetchDiarys() {
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
       startAfter(lastpage),
-      limit(6)
+      limit(8)
     );
     const res = await getDocs(q);
     const datas = res.docs.map((el) => el.data());
     lastpage = res.docs[res.docs.length - 1];
-    hasNextpage = res.docs.length === 6;
+    hasNextpage = res.docs.length === 8;
     $allDiaryList.innerHTML = "";
     return datas;
   } else {
     const diaryList = collection(db, "diaryList");
-    const q = query(diaryList, orderBy("createdAt", "desc"), limit(6));
+    const q = query(diaryList, orderBy("createdAt", "desc"), limit(8));
     const res = await getDocs(q);
     lastpage = res.docs[res.docs.length - 1];
-    hasNextpage = res.docs.length === 6;
+    hasNextpage = res.docs.length === 8;
     const datas = res.docs.map((el) => el.data());
     return datas;
   }
@@ -77,14 +76,13 @@ async function nextDiaryList() {
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
       startAfter(lastpage),
-      limit(6)
+      limit(8)
     );
     const res = await getDocs(q);
     const datas = res.docs.map((el) => el.data());
 
     lastpage = res.docs[res.docs.length - 1];
-    hasNextpage = res.docs.length === 6;
-    console.log(hasNextpage);
+    hasNextpage = res.docs.length === 8;
     return datas;
   } else {
     const diaryList = collection(db, "diaryList");
@@ -92,12 +90,12 @@ async function nextDiaryList() {
       diaryList,
       orderBy("createdAt", "desc"),
       startAfter(lastpage),
-      limit(6)
+      limit(8)
     );
     const res = await getDocs(q);
     lastpage = res.docs[res.docs.length - 1];
     const datas = res.docs.map((el) => el.data());
-    hasNextpage = res.docs.length === 6;
+    hasNextpage = res.docs.length === 8;
     return datas;
   }
 }
@@ -141,7 +139,8 @@ async function renderAllDiary(data) {
 
     const profileImg = document.createElement("img");
     profileImg.classList.add("diary-profileImg");
-    profileImg.src = (await getAuthImg(diary.auth)) || "./img/profile.png";
+    // 초기 유저 이미지의 경우 임시 이미지 사용 => 렌더링이 완료된후 유저 이미지를 불러옴
+    profileImg.src = "./img/placeholderImg.png";
     profileImg.alt = "";
     bottomDiv.appendChild(profileImg);
 
@@ -166,6 +165,7 @@ async function renderAllDiary(data) {
     anchor.appendChild(contentsDiv);
 
     frag.appendChild(listItem);
+    fetchAuthImg(profileImg, diary);
   }
 
   $allDiaryList.appendChild(frag);
@@ -173,12 +173,10 @@ async function renderAllDiary(data) {
   isfirstLoding = true;
 }
 
-// // 게시글 preload 과부하 방지
-// const getThorttle = _.throttle( async (id)=>{
-//   const diaryData = await FetchDiary(id)
-//   sessionStorage.setItem("diaryData", JSON.stringify(diaryData))
-// }, 500);
-
+// 다이어리 작성자 이미지를 불러오는 함수 => placeholderImg 교체
+ async function fetchAuthImg(profileImg, data) {
+  profileImg.src = await getAuthImg(data.auth);
+}
 // 스크롤이 빠르게 일어날시 마지막 데이터가 중복됨
 // 이 문제를 해결하기 위해 isloading 변수을 사용해 현재 로딩 중임을 체크하고 로딩중이 아닐때만 데이터가 추가 되도록 함
 let isLoading = false;

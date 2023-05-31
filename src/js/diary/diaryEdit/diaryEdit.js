@@ -7,31 +7,53 @@ import { data } from "../diary.js";
 
 const $sectionContents = document.querySelector(".section-contents");
 const $editForm = $sectionContents.querySelector(".edit-form");
-const $candelBtn = $editForm.querySelector(".btn-cancel");
+const $inputContents = $editForm.querySelector("#input-contents");
+const $cancelBtn = $editForm.querySelector(".btn-cancel");
 const $editCompletedBtn = $editForm.querySelector(".btn-editCompleted");
 const $inputUpload = $sectionContents.querySelector("#input-upload");
 const $uploadBtn = $sectionContents.querySelectorAll(".btn-upload");
 const $resetBtn = $sectionContents.querySelectorAll(".btn-reset");
 const $diaryWrapper = $sectionContents.querySelector(".diary-wrapper");
 const $previewImg = $sectionContents.querySelectorAll(".preview-img");
-
+const $articleComment = $sectionContents.querySelector(".article-comment")
 export const uploadImg = [];
 let imgIdx = "0";
 
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
 
-$candelBtn.addEventListener("click", () => {
+const $radioInputs = $editForm.querySelectorAll("input[name='mood']");
+$radioInputs.forEach((el, idx) => {
+    el.addEventListener("keydown", (e) => {
+      if(e.keyCode === 9 && e.shiftKey && idx===0){
+        e.preventDefault();
+        $inputContents.focus();
+      } else if (e.keyCode === 9 && e.shiftKey && idx !== 0) {
+        e.preventDefault();
+        $radioInputs[idx - 1].focus();
+      } else if (e.keyCode === 9 && idx!==4) {
+        e.preventDefault();
+        $radioInputs[idx + 1].focus();
+      }
+    });
+});
+$uploadBtn[0].addEventListener("keydown", (e)=>{
+  if (e.keyCode === 9 && e.shiftKey) {
+    e.preventDefault();
+    $radioInputs[4].focus();
+  } 
+})
+
+$cancelBtn.addEventListener("click", () => {
   $editForm.classList.toggle("active");
   $diaryWrapper.classList.toggle("inactive");
+  $articleComment.classList.remove("inactive");
 });
 
 $editCompletedBtn.addEventListener("click", async () => {
   const $inputTitle = $editForm.querySelector("#input-title");
-  const $inputContents = $editForm.querySelector("#input-contents");
-  const $diaryTitle = $diaryWrapper.querySelector(".diary-title");
-  const $diaryText = $diaryWrapper.querySelector(".diary-text");
-
+  const $mood = $editForm.querySelector("input[name='mood']:checked");
+  console.log($mood.value)
   if (!$inputTitle.value.trim()) {
     alert("제목을 입력해주세요!");
     return;
@@ -45,7 +67,8 @@ $editCompletedBtn.addEventListener("click", async () => {
     data.contents === $inputContents.value &&
     data.imgURL[0] === uploadImg[0] &&
     data.imgURL[1] === uploadImg[1] &&
-    data.imgURL[2] === uploadImg[2]
+    data.imgURL[2] === uploadImg[2] &&
+    data.mood === $mood.value
   ) {
     alert("수정한 내용이 없습니다!");
     return;
@@ -53,7 +76,6 @@ $editCompletedBtn.addEventListener("click", async () => {
 
   if (confirm("정말 수정하겠습니까?")) {
     const $loadingModal = $sectionContents.querySelector(".loading-modal");
-
     $loadingModal.classList.add("active");
     const fileInfo = { url: [], fileName: [] };
     for (const i in uploadImg) {
@@ -71,13 +93,12 @@ $editCompletedBtn.addEventListener("click", async () => {
         fileInfo.fileName.push(data.imgFileName[i]);
       }
     }
-    $diaryTitle.textContent = $inputTitle.value;
-    $diaryText.textContent = $inputContents.value;
     const newData = {
       title: $inputTitle.value,
       contents: $inputContents.value,
       imgURL: fileInfo.url || [],
       imgFileName: fileInfo.fileName || [],
+      mood: $mood.value,
     };
     await editDiary(id, newData);
     $loadingModal.classList.remove("active");
@@ -98,8 +119,6 @@ $resetBtn.forEach((el, idx) => {
 });
 
 function previewImg(e) {
-
-
   const file = e.currentTarget.files[0];
   const vaild = validataionImg(file);
   if (!vaild) return;

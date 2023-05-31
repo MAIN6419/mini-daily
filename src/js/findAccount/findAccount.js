@@ -1,5 +1,5 @@
 import { findEmail, changePassword } from "../firebase/auth/firebase_auth.js";
-import "../../css/main.css";
+
 import "../../css/findAccount.css";
 
 const $emailFormBtn = document.querySelector(".btn-emailForm");
@@ -20,8 +20,8 @@ const $inputEmailBox = $changePwForm.querySelector(".input-emailBox");
 const $inputEmail = $inputEmailBox.querySelector("#input-email");
 const $emailMsg = $inputEmailBox.querySelector("#input-email+.input-msg");
 const $pwInputPhoneBox = $changePwForm.querySelector(".input-phoneBox");
-const $pwInputPhone = $pwInputPhoneBox.querySelector("#input-phone");
-const $pwPhoneMsg = $pwInputPhoneBox.querySelector("#input-phone+.input-msg");
+const $pwInputPhone = $pwInputPhoneBox.querySelector("#input-phone2");
+const $pwPhoneMsg = $pwInputPhoneBox.querySelector("#input-phone2+.input-msg");
 const $changePwBtn = $changePwForm.querySelector(".btn-changePw");
 const $changeResult = $changePwForm.querySelector(".change-result");
 

@@ -1,8 +1,4 @@
-
-import "../../css/commons.css";
-import "../../css/main.css";
 import "../../css/mypage.css";
-import "../../img/loading.gif";
 import {
   FetchUserData,
   applyProfileImg,
@@ -11,7 +7,7 @@ import {
   editIntroduce,
   getSessionUser,
 } from "../firebase/auth/firebase_auth.js";
-
+import "../../img/profile.png";
 const $sectionContents = document.querySelector(".section-contents");
 const $changeIntroduceBtn = $sectionContents.querySelector(
   ".btn-changeIntroduce"
@@ -55,10 +51,10 @@ if (host.includes("github.io")) {
   $userEmail.textContent = `이메일 : ${userInfo.email} `;
   $userNickname.textContent = `닉네임 : ${userInfo.nickname}`;
   $userGrade.textContent = `등급 : ${userInfo.grade}`;
-  $userPoint.textContent = `등업 포인트 : ${userInfo.point}점`;
+  $userPoint.textContent = `포인트 : ${userInfo.point}점`;
   $profileImg.setAttribute(
     "src",
-    currentUser.photoURL || `${baseUrl}/src/img/profile.png`
+    userData.photoURL || `./img/no-image.png`
   );
   $userDiary.textContent = `다이어리 : ${userInfo.diaryCount}개`;
   $userComment.textContent = `댓글 : ${userInfo.commentCount}개`;
@@ -115,7 +111,8 @@ $inputProfileImg.addEventListener("change", (e) => {
   $customInput.style.backgroundSize = "contain";
 });
 
-$profileImgSubmitBtn.addEventListener("click", async () => {
+$profileImgSubmitBtn.addEventListener("click", async (e) => {
+  e.preventDefault();
   $loadingModal.classList.add("active");
   await applyProfileImg(uploadFile);
   $loadingModal.classList.remove("active");
@@ -123,8 +120,9 @@ $profileImgSubmitBtn.addEventListener("click", async () => {
 
 // 소개글 수정 모달창 관련
 $changeIntroduceBtn.addEventListener("click", () => {
-  $inputIntroduce.value = userInfo.introduce;
-  $textCounter.textContent = `${userInfo.introduce.length}/300`;
+  const introduce = JSON.parse(sessionStorage.getItem("userData")).introduce
+  $inputIntroduce.value = introduce;
+  $textCounter.textContent = `${introduce.length}/150`;
   $introduceModal.classList.add("active");
   $inputIntroduce.focus();
 });
@@ -145,7 +143,7 @@ $introduceCancleBtn.addEventListener("keydown", (e) => {
 });
 
 $inputIntroduce.addEventListener("input", (e) => {
-  $textCounter.textContent = `${e.target.value.length}/300`;
+  $textCounter.textContent = `${e.target.value.length}/150`;
 });
 
 $inputIntroduce.addEventListener("keydown", (e) => {
@@ -157,18 +155,18 @@ $inputIntroduce.addEventListener("keydown", (e) => {
 
 $introduceSubmitBtn.addEventListener("click", async (e) => {
   e.preventDefault();
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
   if (!$inputIntroduce.value.trim()) {
     alert("입력된 내용이 없습니다!");
     return;
   }
-  if ($inputIntroduce.value === userInfo.introduce) {
+  if ($inputIntroduce.value === userData.introduce) {
     alert("수정된 내용이 없습니다!");
     return;
   }
   if (confirm("정말 수정하시겠습니까?")) {
     // 데이터 전송로직
     await editIntroduce($inputIntroduce.value);
-    const userData = JSON.parse(sessionStorage.getItem("userData"));
     userData.introduce = $inputIntroduce.value;
     sessionStorage.setItem("userData", JSON.stringify(userData));
     alert("수정이 완료되었습니다.");

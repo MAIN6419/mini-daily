@@ -9,7 +9,7 @@
     <meta property="og:url" content="https://main6419.github.io/mini-diary/" />
     <meta
       property="og:image"
-      content="https://firebasestorage.googleapis.com/v0/b/free-board-dd96c.appspot.com/o/images%2Fog.png?alt=media&token=59d9191f-6cd6-4818-b1ee-cc450c0c968e"
+      content="https://firebasestorage.googleapis.com/v0/b/free-board-dd96c.appspot.com/o/images%2Fog.png?alt=media&amp;token=59d9191f-6cd6-4818-b1ee-cc450c0c968e"
     />
     <meta name="description" content="미니 다이어리 사이트" />
     <title>Mini Diary</title>
@@ -24,16 +24,58 @@
         </section>
         <section class="section-contents">
           <h2 class="a11y-hidden">다이어리 작성</h2>
-          <form class="post-form">
+          <time class="today-date" datetime="2023"></time>
+          <form class="diary-form">
             <label for="input-title" class="a11y-hidden">제목</label>
             <input id="input-title" type="text" placeholder="오늘의 다이어리" />
-            <label for="input-contents" class="a11y-hidden">제목</label>
+            <label for="input-contents" class="a11y-hidden">내용</label>
             <textarea id="input-contents" placeholder="오늘은 어떤일이 있었나요? 이야기를 공유해 보아요."></textarea>
+            <div class="mood-box">
+              <h3 class="mood-title">오늘의 기분은 어때요?</h3>
+              <ul class="mood-list">
+                <li class="mood-item">
+                    <input type="radio" class="a11y-hidden" name="mood" value="happy" id="mood-happy">
+                    <label class="label-happy" for="mood-happy">
+                      <span class="a11y-hidden">기쁨</span> 
+                    </label>
+                    <span class="mood-tag">기쁨</span>
+                  </li>
+                  <li class="mood-item">
+                  <input type="radio" class="a11y-hidden" name="mood" value="good" id="mood-good">
+                  <label class="label-good" for="mood-good">
+                    <span class="a11y-hidden">좋음</span> 
+                  </label>
+                  <span class="mood-tag">좋음</span>
+                </li>
+                <li class="mood-item">
+                  <input type="radio" class="a11y-hidden" name="mood" value="sad" id="mood-sad">
+                  <label class="label-sad" for="mood-sad">
+                    <span class="a11y-hidden">슬픔</span> 
+                  </label>
+                  <span class="mood-tag">슬픔</span>
+                </li>
+                <li class="mood-item">
+                  <input type="radio" class="a11y-hidden" name="mood" value="gloomy" id="mood-gloomy">
+                  <label class="label-gloomy" for="mood-gloomy">
+                    <span class="a11y-hidden">우울</span> 
+                  </label>
+                  <span class="mood-tag">우울</span>
+                </li>
+                <li class="mood-item">
+                  <input type="radio" class="a11y-hidden" name="mood" value="angry" id="mood-angry">
+                  <label class="label-angry" for="mood-angry">
+                    <span class="a11y-hidden">화남</span> 
+                  </label>
+                  <span class="mood-tag">화남</span>
+                </li>
+              </ul>    
+
+            </div>
             <label for="input-upload" class="a11y-hidden"
               >이미지 업로드 버튼</label
             >
             <input type="file" multiple id="input-upload" />
-            <h2 class="upload-title">이미지 업로드</h2>
+            <h3 class="upload-title">이미지 업로드 (용량: 5KB 이하, 형식: png,jpg,webp)</h3>
             <div class="upload-wrapper">
               <div class="upload-imgBox">
                 <button class="btn-upload" type="button">

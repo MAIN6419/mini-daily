@@ -2,6 +2,7 @@
   position: relative;
 }
 .title {
+  font-size: 25px;
   text-align: center;
   margin: 20px 0 30px 0;
 }
@@ -9,7 +10,7 @@
   display: flex;
   align-items: center;
   width: calc(100% - 60px);
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
   border: 2px solid #bdbdbd;
   border-radius: 5px;
@@ -44,6 +45,7 @@
 .profileImg-box img {
   width: 130px;
   height: 130px;
+  object-fit: cover;
   border-radius: 50%;
   border: 1px solid #bdbdbd;
   margin-bottom: 18px;
@@ -229,7 +231,7 @@
 .password-form {
   background-color: #f2f2f2;
 }
-.password-form .form-header{
+.password-form .form-header {
   text-align: center;
   padding: 10px 0px;
   border-bottom: 1px solid black;
@@ -242,14 +244,14 @@
   width: 400px;
   border: 1px solid black;
 }
-.password-form input{
-  width:  70%;
+.password-form input {
+  width: 70%;
   margin: 0 auto;
   border: 2px solid #bdbdbd;
   padding: 16px 10px;
   margin-bottom: 10px;
 }
-.password-form .form-btns{
+.password-form .form-btns {
   display: flex;
   width: 100%;
   margin: 20px 0;
@@ -257,7 +259,7 @@
   justify-content: center;
 }
 .password-form .btn-submit,
-.password-form .btn-cancle{
+.password-form .btn-cancle {
   width: 150px;
   padding: 10px 0px;
   display: block;
@@ -268,11 +270,11 @@
   font-weight: bold;
   cursor: pointer;
 }
-.password-form .btn-submit{
+.password-form .btn-submit {
   background-color: dodgerblue;
   color: #fff;
 }
-.password-form .btn-cancle{
+.password-form .btn-cancle {
   background-color: #fff;
 }
 

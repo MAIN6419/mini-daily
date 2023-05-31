@@ -76,7 +76,8 @@
 }
 #input-nickname,
 #input-email,
-#input-phone{
+#input-phone,
+#input-phone2{
   width: 100%;
   border: 2px solid #bdbdbd;
   box-sizing: border-box;

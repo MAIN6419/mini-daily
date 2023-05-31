@@ -2,6 +2,8 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { config } from "../../../apikey";
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -9,7 +11,7 @@ import { getStorage } from "firebase/storage";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDnaqMLR9z8naAC0J06ptfd6HQb1jSnSbY",
+  apiKey: config.FIREBASE_API_KEY,
   authDomain: "mini-diary-65ff3.firebaseapp.com",
   projectId: "mini-diary-65ff3",
   storageBucket: "mini-diary-65ff3.appspot.com",
