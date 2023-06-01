@@ -55,24 +55,26 @@
   cursor: pointer;
 }
 .mood-box label:hover{
-  border-color: rgb(252, 28, 252);
+  border-color: black;
   border-width: 3px;
 }
 .label-happy {
-  background: url(../img/mood-happy.png) no-repeat center / 80px yellowgreen;
+  background: url("../img/icon-sprite.png") no-repeat -226px -5px / 330px 298.5px yellowgreen;
 }
-.label-good {
-  background: url(../img/mood-good.png) no-repeat center / 80px gold;
+.label-good  {
+  background: url("../img/icon-sprite.png") no-repeat -115px -109.5px / 330px 298.5px gold;
 }
-.label-sad {
-  background: url(../img/mood-sad.png) no-repeat center / 100px skyblue;
+.label-sad  {
+  background: url("../img/icon-sprite.png") no-repeat -5px -5px / 330px 298.5px skyblue;
 }
-.label-gloomy {
-  background: url(../img/mood-glommy.png) no-repeat center / 80px royalblue;
+.label-gloomy  {
+  background: url("../img/icon-sprite.png") no-repeat -5px -104.5px / 330px  298.5px royalblue;
 }
-.label-angry {
-  background: url(../img/mood-angry.png) no-repeat center / 80px tomato;
+.label-angry  {
+  background: url("../img/icon-sprite.png") no-repeat -115px -0px / 330px 298.5px tomato;
 }
+
+
 
 .mood-box input:checked + label {
   border-color:black;
@@ -81,7 +83,7 @@
   color: dodgerblue
 }
 .mood-box input:focus + label {
-  border: 3px solid rgb(252, 28, 252);
+  border: 3px solid black;
 }
 #input-upload {
   display: none;
@@ -104,7 +106,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  background: url(../img/icon-sprite.png) no-repeat -161px -65px / 185px 139px;
+  background: url("../img/icon-sprite.png") no-repeat -66px -273.5px / 330px 298.5px;
 }
 .upload-title {
   margin-bottom: 10px;

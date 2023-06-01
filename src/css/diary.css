@@ -101,7 +101,7 @@
   transform: translate(-50%, -50%);
 }
 .btn-back::after {
-  background: url("../img/icon-sprite.png") no-repeat -17px -75px / 185px 139px;
+  background: url("../img/icon-sprite.png") no-repeat -297px -119px / 330px 298.5px;
   width: 8px;
   height: 15px;
 }
@@ -123,13 +123,13 @@
   margin-right: 5px;
 }
 .btn-edit::after {
-  background: url("../img/icon-sprite.png") no-repeat  -128px -42px / 185px 139px;
+  background: url("../img/icon-sprite.png") no-repeat -138px -215px / 330px 298.5px;
   width: 22px;
   height: 22px;
 }
 
 .btn-del::after {
-  background: url("../img/icon-sprite.png") no-repeat -162px -5px / 185px 139px;
+  background: url("../img/icon-sprite.png") no-repeat -37px -273.5px / 330px 298.5px;
   width: 20px;
   height: 20px;
 }
@@ -146,23 +146,26 @@
 }
 .diary-wrapper .mood-box.happy {
   display: block;
-  background: url(../img/mood-happy.png) no-repeat center / 80px yellowgreen;
+  background: url("../img/icon-sprite.png") no-repeat -226px -5px / 330px 298.5px yellowgreen;
 }
 .diary-wrapper .mood-box.good {
   display: block;
-  background: url(../img/mood-good.png) no-repeat center / 80px gold;
+  width: 100px;
+  height: 100px;
+  background: url("../img/icon-sprite.png") no-repeat -115px -104.5px / 330px 298.5px gold;
+  
 }
 .diary-wrapper .mood-box.sad {
   display: block;
-  background: url(../img/mood-sad.png) no-repeat center right 3px/ 100px skyblue;
+  background: url("../img/icon-sprite.png") no-repeat -5px -5px / 330px 298.5px skyblue;
 }
 .diary-wrapper .mood-box.gloomy {
   display: block;
-  background: url(../img/mood-glommy.png) no-repeat center / 80px royalblue;
+  background: url("../img/icon-sprite.png") no-repeat -5px -109.5px / 330px  298.5px royalblue;
 }
 .diary-wrapper .mood-box.angry {
   display: block;
-  background: url(../img/mood-angry.png) no-repeat center / 80px crimson;
+  background: url("../img/icon-sprite.png") no-repeat -115px 0px / 330px 298.5px tomato;
 }
 .empathy-box {
   border-radius: 5px;
@@ -176,14 +179,14 @@
   display: block;
 }
 .btn-empathy {
-  width: 24px;
-  height: 24px;
+  width: 21px;
+  height: 19px;
   border-radius: 5px;
   display: block;
   margin: 0 auto;
   cursor: pointer;
   margin-bottom: 5px;
-  background: url("../img/icon-sprite.png") no-repeat  -6px -112px / 185px 139px;
+  background: url("../img/icon-sprite.png") no-repeat  -205px -216px / 330px 298.5px;
   border: none;
 }
 .empathy-count {
@@ -243,38 +246,39 @@
 }
 .edit-form .mood-box label{
   position: relative;
+  overflow: hidden;
   display: inline-block;
   border: 2px solid #bdbdbd;
   border-radius: 10px;
   width: 100px;
   height: 100px;
   box-sizing: border-box;
-  padding: 20px;
+
   cursor: pointer;
 }
 .edit-form .mood-box label:hover{
-  border-color: rgb(252, 28, 252);
+  border-color: black;
   border-width: 3px;
 }
 .edit-form .mood-box input:focus + label {
-  border: 3px solid rgb(252, 28, 252);
-}
-.label-happy {
-  background: url(../img/mood-happy.png) no-repeat center / 80px yellowgreen;
-}
-.label-good {
-  background: url(../img/mood-good.png) no-repeat center / 80px gold;
-}
-.label-sad {
-  background: url(../img/mood-sad.png) no-repeat center / 100px skyblue;
-}
-.label-gloomy {
-  background: url(../img/mood-glommy.png) no-repeat center / 80px royalblue;
-}
-.label-angry {
-  background: url(../img/mood-angry.png) no-repeat center / 80px crimson;
+  border: 3px solid black;
 }
 
+.label-happy {
+  background: url("../img/icon-sprite.png") no-repeat -226px -5px / 330px 298.5px yellowgreen;
+}
+.label-good  {
+  background: url("../img/icon-sprite.png") no-repeat -115px -109.5px / 330px 298.5px gold;
+}
+.label-sad  {
+  background: url("../img/icon-sprite.png") no-repeat -5px -5px / 330px 298.5px skyblue;
+}
+.label-gloomy  {
+  background: url("../img/icon-sprite.png") no-repeat -5px -104.5px / 330px  298.5px royalblue;
+}
+.label-angry  {
+  background: url("../img/icon-sprite.png") no-repeat -115px -0px / 330px 298.5px tomato;
+}
 .mood-box input:checked + label {
   border-color:black;
   border-width: 3px;
@@ -304,7 +308,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  background: url("../img/icon-sprite.png") no-repeat -161px -65px / 185px 139px;
+  background: url("../img/icon-sprite.png") no-repeat -66px -273.5px / 330px 298.5px;
 }
 .upload-title {
   width: 100%;
@@ -349,7 +353,7 @@
   display: none;
 }
 .comment-title {
-  margin-left: 20px;
+  margin-left: 60px;
   margin-bottom: 10px;
   font-size: 16px;
 }
@@ -358,7 +362,7 @@
   display: inline-block;
   width: 24px;
   height: 24px;
-  background: url("../img/icon-sprite.png") no-repeat -76px -114px / 185px 139px;
+  background: url("../img/icon-sprite.png") no-repeat -275px -217.5px / 330px 298.5px;
   vertical-align: top;
   margin-right: 3px;
 }
@@ -514,7 +518,7 @@
   display: inline-block;
   width: 20px;
   height: 20px;
-  background: url("../img/icon-sprite.png") no-repeat -108px -111px / 185px 139px;
+  background: url("../img/icon-sprite.png") no-repeat -306px -170px / 330px 298px;
 }
 .reply-lists .comment-item{
   border: none;

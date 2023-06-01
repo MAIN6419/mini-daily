@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase/setting/firebase_setting.js";
 import { keyword, renderChattingRooms } from "./chattingRoom.js";
+
 const $sectionContents = document.querySelector(".section-contents");
 const $loadingModal = $sectionContents.querySelector(".loading-modal");
 const $pageNum = $sectionContents.querySelector(".page-num");

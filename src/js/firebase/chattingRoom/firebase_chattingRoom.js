@@ -27,7 +27,7 @@ async function createChattingRoom({
     password,
     createdAt,
   });
-  location.href = 'chatting.html?id=${id}';
+  location.href = `chatting.html?id=${id}`;
 }
 
 async function fetchChattingRoom() {

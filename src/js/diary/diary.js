@@ -17,11 +17,7 @@ import { uploadImg } from "./diaryEdit/diaryEdit.js";
 import "../../css/diary.css";
 import "../../img/imgUpload.png";
 import "../../img/placeholderImg.png";
-import "../../img/mood-happy.png";
-import "../../img/mood-good.png";
-import "../../img/mood-sad.png";
-import "../../img/mood-glommy.png";
-import "../../img/mood-angry.png";
+
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
 
@@ -198,7 +194,7 @@ async function renderdiary() {
   const user = await FetchUserData(currentUser.displayName);
   if (user.empathyList.includes(id)) {
     $empathyBtn.style.background =
-      "url(./img/icon-sprite.png) no-repeat -6px -112px / 190px 139px";
+      " url(../img/icon-sprite.png)no-repeat -239px -216px / 330px 298.5px";
   }
 }
 
@@ -220,14 +216,14 @@ $empathyBtn.addEventListener("click", async () => {
     // sessionStorage.setItem("diaryData", JSON.stringify(data));
     $empathyCount.textContent = `공감 ${data.empathy}`;
     $empathyBtn.style.background =
-      "url(./img/icon-sprite.png) no-repeat -6px -112px / 185px 139px";
+      " url(../img/icon-sprite.png) no-repeat -205px -216px / 330px 298.5px"
   } else {
     updateEmpathy(id, 1, data.auth);
     data.empathy += 1;
     // sessionStorage.setItem("diaryData", JSON.stringify(data));
     $empathyCount.textContent = `공감 ${data.empathy}`;
     $empathyBtn.style.background =
-      "url(./img/icon-sprite.png) no-repeat -126px -78px / 185px 139px";
+      "url(../img/icon-sprite.png)no-repeat -239px -216px / 330px 298.5px";
   }
 });
 

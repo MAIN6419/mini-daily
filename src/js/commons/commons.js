@@ -7,13 +7,10 @@ import "../../css/main.css";
 import "../../css/reset.css";
 import "../../img/icon-sprite.png";
 import "../../img/bg.png";
-import "../../img/location.png";
-import "../../img/btn-reload.png";
 import "../../img/weather-loading.gif";
-import "../../img/sunraise-bg.jpg";
-import "../../img/btn-reload-black.png";
 import "../../img/sunset-bg.png";
 import "../../img/profile.png";
+
 import { getKST } from "./libray.js";
 import { askForCoords } from "./weather.js";
 export let userData;
@@ -66,6 +63,7 @@ async function loadTemplate() {
   }
   const sectionProfile = document.querySelector(".section-profile");
   const weatherInfo = JSON.parse(localStorage.getItem("weather")) || "";
+  const isSunset = getKST().getTime() >= weatherInfo.sunset;
   sectionProfile.innerHTML = `
           <article class="clock">
             <h2 class="a11y-hidden">clock</h2>
@@ -86,9 +84,7 @@ async function loadTemplate() {
               </p>
             </div>
           </article>
-          <article class="weather ${
-            getKST().getTime() >= weatherInfo.sunset ? "sunset" : ""
-          }">
+          <article class="weather ${isSunset ? "sunset" : ""}">
           <h2 class="a11y-hidden">현재 날씨</h2>
           <div class="weather-info">
           <figure>

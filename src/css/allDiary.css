@@ -23,11 +23,11 @@
   position: absolute;
   top: 50%;
   left: 15px;
-  transform: translateY(-45%);
+  transform: translateY(-50%);
   display: block;
-  background: url("../img/icon-sprite.png") no-repeat  -128px -28px / 148px 111px;
-  width: 20px;
-  height: 20px;
+  background: url("../img/icon-sprite.png") no-repeat  -4px -218.8px / 264px 238.8px;
+  width: 16px;
+  height: 16px;
 }
 .input-search{
   width: 100%;
@@ -134,9 +134,9 @@
   display: inline-block;
   width: 24px;
   height: 24px;
-  background: url("../img/icon-sprite.png") no-repeat -126px -76px / 185px 139px;
+  background: url("../img/icon-sprite.png") no-repeat -238px -213.5px / 330px 298.5px;
   vertical-align: middle;
-  margin-right: 3px;
+  margin-right: 5px;
 }
 
 .links .allDiary-link{

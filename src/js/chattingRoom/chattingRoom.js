@@ -9,7 +9,7 @@ import {
 
 import "../../css/chattingRoom.css";
 import "../../img/loading.gif";
-
+import { modalPrompt } from "./chattingRoom_modal.js";
 
 const $sectionContents = document.querySelector(".section-contents");
 const $roomList = $sectionContents.querySelector(".room-list");

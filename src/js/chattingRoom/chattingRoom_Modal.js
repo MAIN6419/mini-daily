@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";;
 import { createChattingRoom, checkJoinRoom } from "../firebase/chattingRoom/firebase_chattingRoom.js";
 
 const $sectionContents = document.querySelector(".section-contents");
@@ -35,7 +36,7 @@ $createRoomBtn.addEventListener("click", (e) => {
     }
   }
   const newRoom = {
-    id: uuid.v4(),
+    id: uuidv4(),
     title: $inputTitle.value,
     limit: parseInt($inputLimit.value),
     isprivate: $chkPriavte.checked,
@@ -182,7 +183,7 @@ $passwordModalCancleBtn.addEventListener("keydown", (e) => {
   }
 });
 
-function modalPrompt(roomData) {
+export function modalPrompt(roomData) {
   $passwordModal.classList.add("active");
   $passwordModalInput.focus();
 

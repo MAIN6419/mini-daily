@@ -42,7 +42,7 @@ export async function getWeather(lat, lon) {
     const place = json.name; // 사용자 위치
     const humidity = json.main.humidity;
     const icon = json.weather[0].icon;
-    const sunraise = json.sys.sunraise;
+    const sunraise = json.sys.sunraise * 1000;
     const sunset = json.sys.sunset * 1000;
     const time = getCustomTime();
 

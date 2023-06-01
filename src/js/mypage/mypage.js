@@ -188,7 +188,8 @@ $passwordModal.addEventListener("click", (e) => {
   }
 });
 
-$passwordSubmitBtn.addEventListener("click", async () => {
+$passwordSubmitBtn.addEventListener("click", async (e) => {
+  e.preventDefault();
   if (!$inputCurrentPw.value) {
     alert("현재 비밀번호를 입력해주세요!");
     return;
