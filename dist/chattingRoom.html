@@ -14,7 +14,7 @@
     <meta name="description" content="미니 다이어리 사이트" />
     <title>Mini Diary</title>
     
-  <link rel="icon" href="favicon.png"><link rel="icon" href="favicon/img/favicon.png"><script defer src="commons.bundle.js"></script><script defer src="main.bundle.js"></script><script defer src="chattingRoom.bundle.js"></script><link href="css/commons.css" rel="stylesheet"><link href="css/main.css" rel="stylesheet"><link href="css/chattingRoom.css" rel="stylesheet"></head>
+  <link rel="icon" href="img/favicon.png"><script defer src="commons.bundle.js"></script><script defer src="reset.bundle.js"></script><script defer src="main.bundle.js"></script><script defer src="chattingRoom.bundle.js"></script><link href="css/commons.css" rel="stylesheet"><link href="css/reset.css" rel="stylesheet"><link href="css/main.css" rel="stylesheet"><link href="css/chattingRoom.css" rel="stylesheet"></head>
   <body>
     <h1 class="a11y-hidden">Mini diary</h1>
     <div class="wrapper">
@@ -63,7 +63,7 @@
                 <input id="input-password" type="password" placeholder="암호" maxlength="12"  autocomplete="off" />
               </div>
               <button class="btn-createRoom" type="submit">생성하기</button>
-              <button class="btn-close" type="button">X</button>
+              <button class="btn-close" type="button"><span class="a11y-hidden">닫기</span></button>
             </form>
           </article>
           <article class="joinRoom-modal">

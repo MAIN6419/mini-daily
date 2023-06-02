@@ -11,7 +11,6 @@ import "../../img/weather-loading.gif";
 import "../../img/sunset-bg.png";
 import "../../img/profile.png";
 
-import { getKST } from "./libray.js";
 import { askForCoords } from "./weather.js";
 export let userData;
 if (!sessionStorage.getItem("userData")) {
@@ -63,7 +62,9 @@ async function loadTemplate() {
   }
   const sectionProfile = document.querySelector(".section-profile");
   const weatherInfo = JSON.parse(localStorage.getItem("weather")) || "";
-  const isSunset = getKST().getTime() >= weatherInfo.sunset;
+  const isSunset =
+    weatherInfo.currentTime >= weatherInfo.sunset ||
+    weatherInfo.currentTime < weatherInfo.sunrise;
   sectionProfile.innerHTML = `
           <article class="clock">
             <h2 class="a11y-hidden">clock</h2>
@@ -102,7 +103,7 @@ async function loadTemplate() {
             날씨 정보 새로고침 버튼
           </span>
           </button>
-          <span class="weather-time">${weatherInfo.time}</span>
+          <span class="weather-time">${weatherInfo.reloadTime}</span>
           </div>
         <span class="weather-location">${weatherInfo.place}</span>
         <article class="weather-loading">
@@ -223,15 +224,17 @@ async function reloadWeather() {
     const $weatherIcon = $weather.querySelector(".weather-icon");
     const $weatherHumidity = $weather.querySelector(".weather-humidity");
     const $weatherTime = $weather.querySelector(".weather-time");
-    const isSunset = getKST().getTime() >= weatherInfo.sunset;
-
+    const isSunset =
+      weatherInfo.currentTime >= weatherInfo.sunset ||
+      weatherInfo.currentTime < weatherInfo.sunrise;
+    console.log(weatherInfo.currentTime, weatherInfo.sunrise);
     if (isSunset) $weather.classList.add("sunset");
     $weatherIcon.setAttribute(
       "src",
       `http://openweathermap.org/img/w/${weatherInfo.icon}.png`
     );
     $weatherHumidity.textContent = `습도 ${weatherInfo.humidity}%`;
-    $weatherTime.textContent = weatherInfo.time;
+    $weatherTime.textContent = weatherInfo.reloadTime;
   } catch (error) {
     console.error("날씨 정보를 다시 불러오는 중에 오류가 발생했습니다.", error);
     document.querySelector(".weather").innerHTML =

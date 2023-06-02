@@ -21,10 +21,8 @@ module.exports = {
     main: "./src/css/main.css",
     allDiary: "./src/js/allDiary/allDiary.js",
     chatting: "./src/js/chatting/chatting.js",
-    chattingRoom: [
-      "./src/js/chattingRoom/chattingRoom.js",
-      "./src/js/chattingRoom/chattingRoom_modal.js",
-    ],
+    chattingRoom:  "./src/js/chattingRoom/chattingRoom.js",
+    chattingRoom_modal: "./src/js/chattingRoom/chattingRoom_modal.js",
     diary: "./src/js/diary/diary.js",
     findAccount: "./src/js/findAccount/findAccount.js",
     fortune: "./src/js/fortune/fortune.js",
@@ -100,7 +98,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/template/chattingRoom.html",
       filename: "chattingRoom.html",
-      chunks: ["reset", "commons", "main", "chattingRoom"],
+      chunks: ["reset", "commons", "main", "chattingRoom", "chattingRoom_modal"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/diary.html",

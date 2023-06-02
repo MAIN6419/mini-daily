@@ -10,86 +10,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/img/imgUpload.png":
-/*!*******************************!*\
-  !*** ./src/img/imgUpload.png ***!
-  \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + \"img/imgUpload.png\");\n\n//# sourceURL=webpack://test/./src/img/imgUpload.png?");
-
-/***/ }),
-
-/***/ "./src/img/loading.gif":
-/*!*****************************!*\
-  !*** ./src/img/loading.gif ***!
-  \*****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + \"img/loading.gif\");\n\n//# sourceURL=webpack://test/./src/img/loading.gif?");
-
-/***/ }),
-
-/***/ "./src/img/mood-angry.png":
-/*!********************************!*\
-  !*** ./src/img/mood-angry.png ***!
-  \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + \"img/mood-angry.png\");\n\n//# sourceURL=webpack://test/./src/img/mood-angry.png?");
-
-/***/ }),
-
-/***/ "./src/img/mood-glommy.png":
-/*!*********************************!*\
-  !*** ./src/img/mood-glommy.png ***!
-  \*********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + \"img/mood-glommy.png\");\n\n//# sourceURL=webpack://test/./src/img/mood-glommy.png?");
-
-/***/ }),
-
-/***/ "./src/img/mood-good.png":
-/*!*******************************!*\
-  !*** ./src/img/mood-good.png ***!
-  \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + \"img/mood-good.png\");\n\n//# sourceURL=webpack://test/./src/img/mood-good.png?");
-
-/***/ }),
-
-/***/ "./src/img/mood-happy.png":
-/*!********************************!*\
-  !*** ./src/img/mood-happy.png ***!
-  \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + \"img/mood-happy.png\");\n\n//# sourceURL=webpack://test/./src/img/mood-happy.png?");
-
-/***/ }),
-
-/***/ "./src/img/mood-sad.png":
-/*!******************************!*\
-  !*** ./src/img/mood-sad.png ***!
-  \******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + \"img/mood-sad.png\");\n\n//# sourceURL=webpack://test/./src/img/mood-sad.png?");
-
-/***/ }),
-
-/***/ "./src/css/main.css":
-/*!**************************!*\
-  !*** ./src/css/main.css ***!
-  \**************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n\n\n//# sourceURL=webpack://test/./src/css/main.css?");
-
-/***/ }),
-
 /***/ "./src/css/write.css":
 /*!***************************!*\
   !*** ./src/css/write.css ***!
@@ -216,7 +136,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \***********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"config\": () => (/* binding */ config)\n/* harmony export */ });\nconst config = {\r\n  FIREBASE_API_KEY: \"AIzaSyDnaqMLR9z8naAC0J06ptfd6HQb1jSnSbY\",\r\n  OPENWEATHERMAP_API_KEY: \"6a7b6cf2d97ad4f53a1a72c9627306d8\"\r\n}\n\n//# sourceURL=webpack://test/./src/apikey.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"config\": () => (/* binding */ config)\n/* harmony export */ });\nconst config = {FIREBASE_API_KEY:'AIzaSyDnaqMLR9z8naAC0J06ptfd6HQb1jSnSbY', OPENWEATHERMAP_API_KEY: '6a7b6cf2d97ad4f53a1a72c9627306d8'};\n\n\n//# sourceURL=webpack://test/./src/apikey.js?");
 
 /***/ }),
 
@@ -266,7 +186,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \*******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! uuid */ \"./node_modules/uuid/dist/esm-browser/v4.js\");\n/* harmony import */ var _firebase_diary_firebase_diary_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../firebase/diary/firebase_diary.js */ \"./src/js/firebase/diary/firebase_diary.js\");\n/* harmony import */ var _css_main_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../css/main.css */ \"./src/css/main.css\");\n/* harmony import */ var _css_write_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../css/write.css */ \"./src/css/write.css\");\n/* harmony import */ var _img_imgUpload_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../img/imgUpload.png */ \"./src/img/imgUpload.png\");\n/* harmony import */ var _img_loading_gif__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../img/loading.gif */ \"./src/img/loading.gif\");\n/* harmony import */ var _img_mood_happy_png__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../img/mood-happy.png */ \"./src/img/mood-happy.png\");\n/* harmony import */ var _img_mood_good_png__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../img/mood-good.png */ \"./src/img/mood-good.png\");\n/* harmony import */ var _img_mood_sad_png__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../img/mood-sad.png */ \"./src/img/mood-sad.png\");\n/* harmony import */ var _img_mood_glommy_png__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../img/mood-glommy.png */ \"./src/img/mood-glommy.png\");\n/* harmony import */ var _img_mood_angry_png__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../img/mood-angry.png */ \"./src/img/mood-angry.png\");\n/* harmony import */ var _firebase_auth_firebase_auth_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../firebase/auth/firebase_auth.js */ \"./src/js/firebase/auth/firebase_auth.js\");\n/* harmony import */ var _commons_libray_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../commons/libray.js */ \"./src/js/commons/libray.js\");\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nconst data = JSON.parse(localStorage.getItem(\"diary\")) || [];\r\n\r\nconst $sectionContents = document.querySelector(\".section-contents\");\r\nconst $diaryForm = $sectionContents.querySelector(\".diary-form\");\r\nconst $inputTitle = $diaryForm.querySelector(\"#input-title\");\r\nconst $inputcontents = $diaryForm.querySelector(\"#input-contents\");\r\nconst $submitBtn = $diaryForm.querySelector(\".btn-submit\");\r\nconst $inputUpload = $diaryForm.querySelector(\"#input-upload\");\r\nconst $uploadBtn = $diaryForm.querySelectorAll(\".btn-upload\");\r\nconst $previewImg = $diaryForm.querySelectorAll(\".preview-img\");\r\nconst $resetBtn = $diaryForm.querySelectorAll(\".btn-reset\");\r\nconst $loadingModal = $sectionContents.querySelector(\".loading-modal\");\r\nconst $radioInputs = $diaryForm.querySelectorAll(\"input[name='mood']\");\r\n\r\n$radioInputs.forEach((el, idx) => {\r\n    el.addEventListener(\"keydown\", (e) => {\r\n      if(e.keyCode === 9 && e.shiftKey && idx===0){\r\n        e.preventDefault();\r\n        $inputcontents.focus();\r\n      } else if (e.keyCode === 9 && e.shiftKey && idx !== 0) {\r\n        e.preventDefault();\r\n        $radioInputs[idx - 1].focus();\r\n      } else if (e.keyCode === 9 && idx!==4) {\r\n        e.preventDefault();\r\n        $radioInputs[idx + 1].focus();\r\n      }\r\n    });\r\n});\r\n$uploadBtn[0].addEventListener(\"keydown\", (e)=>{\r\n  if (e.keyCode === 9 && e.shiftKey) {\r\n    e.preventDefault();\r\n    $radioInputs[4].focus();\r\n  } \r\n})\r\nconst userData = (0,_firebase_auth_firebase_auth_js__WEBPACK_IMPORTED_MODULE_10__.getSessionUser)();\r\nconst uploadImg = [\"\", \"\", \"\"];\r\nlet imgIdx = \"0\";\r\n(function setTodayDate() {\r\n  const $todayDate = document.querySelector(\".today-date\");\r\n  const year = (0,_commons_libray_js__WEBPACK_IMPORTED_MODULE_11__.getKST)().getFullYear();\r\n  const month = `0${(0,_commons_libray_js__WEBPACK_IMPORTED_MODULE_11__.getKST)().getMonth() + 1}`;\r\n  const date = `0${(0,_commons_libray_js__WEBPACK_IMPORTED_MODULE_11__.getKST)().getDate()}`;\r\n  const day = [\"일\", \"월\", \"화\", \"수\", \"목\", \"금\", \"토\"][(0,_commons_libray_js__WEBPACK_IMPORTED_MODULE_11__.getKST)().getDay()];\r\n  $todayDate.textContent = `${year}.${month.slice(-2)}.${date.slice(\r\n    -2\r\n  )}.(${day})`;\r\n  $todayDate.setAttribute(\"datetime\", (0,_commons_libray_js__WEBPACK_IMPORTED_MODULE_11__.getKST)());\r\n})();\r\n$submitBtn.addEventListener(\"click\", async () => {\r\n  const $mood = $diaryForm.querySelector('input[name=\"mood\"]:checked');\r\n  // 유효성 검사\r\n  if (!$inputTitle.value.trim()) {\r\n    alert(\"제목을 입력해주세요!\");\r\n    return;\r\n  }\r\n  if (!$inputcontents.value.trim()) {\r\n    alert(\"내용을 입력해주세요!\");\r\n    return;\r\n  }\r\n  if (!$mood) {\r\n    alert(\"오늘의 기분을 선택해주세요!\");\r\n    return;\r\n  }\r\n  if (confirm(\"정말 작성하시겠습니까?\")) {\r\n    $loadingModal.classList.add(\"active\");\r\n    const fileInfo = await (0,_firebase_diary_firebase_diary_js__WEBPACK_IMPORTED_MODULE_0__.uploadFile)(uploadImg);\r\n    const id = (0,uuid__WEBPACK_IMPORTED_MODULE_12__[\"default\"])();\r\n    const newDiary = {\r\n      id,\r\n      auth: userData.displayName,\r\n      profileImg: userData.photoURL,\r\n      title: $inputTitle.value,\r\n      contents: $inputcontents.value,\r\n      mood: $mood.value,\r\n      imgURL: fileInfo.url || [],\r\n      imgFileName: fileInfo.fileName || [],\r\n      createdAt: (0,_commons_libray_js__WEBPACK_IMPORTED_MODULE_11__.getKST)().getTime(),\r\n      empathy: 0,\r\n      accuse: 0,\r\n    };\r\n\r\n    await (0,_firebase_diary_firebase_diary_js__WEBPACK_IMPORTED_MODULE_0__.writeDiary)(newDiary);\r\n    sessionStorage.setItem(\"diaryData\", JSON.stringify(newDiary));\r\n    $inputTitle.value = \"\";\r\n    $inputcontents.value = \"\";\r\n    uploadImg.splice(0);\r\n    $loadingModal.classList.remove(\"active\");\r\n  }\r\n});\r\n\r\n$uploadBtn.forEach((el, idx) => {\r\n  el.addEventListener(\"click\", () => {\r\n    $inputUpload.click();\r\n    imgIdx = idx;\r\n  });\r\n});\r\n\r\n$resetBtn.forEach((el, idx) => {\r\n  el.addEventListener(\"click\", () => resetImg(idx));\r\n});\r\n\r\nfunction previewImg(e) {\r\n  const file = e.currentTarget.files[0];\r\n  const vaild = validataionImg(file);\r\n  if (!vaild) return;\r\n  const imageSrc = URL.createObjectURL(file);\r\n  $previewImg[imgIdx].setAttribute(\"src\", imageSrc);\r\n  uploadImg[imgIdx] = file;\r\n}\r\nfunction resetImg(idx) {\r\n  $previewImg[idx].setAttribute(\"src\", \"../img/imgUpload.png\");\r\n  uploadImg[idx] = \"\";\r\n}\r\n$inputUpload.addEventListener(\"change\", (e) => previewImg(e));\r\nfunction validataionImg(file) {\r\n  if (!file.size) {\r\n    alert(\"파일이 없습니다!\");\r\n    return;\r\n  }\r\n  if (file.size > 5 * 1024 * 1024) {\r\n    alert(\"파일의 크기를 초과하였습니다.(최대 5MB)\");\r\n    return;\r\n  }\r\n  if (\r\n    !file.name.includes(\"png\") &&\r\n    !file.name.includes(\"jpg\") &&\r\n    !file.name.includes(\"webp\") &&\r\n    !file.name.includes(\"avif\")\r\n  ) {\r\n    alert(\"이미지 형식을 확인해주세요.(지원형식 : png, jpg, webp, avif)\");\r\n    return;\r\n  }\r\n  return true;\r\n}\r\n\n\n//# sourceURL=webpack://test/./src/js/write/write.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! uuid */ \"./node_modules/uuid/dist/esm-browser/v4.js\");\n/* harmony import */ var _firebase_diary_firebase_diary_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../firebase/diary/firebase_diary.js */ \"./src/js/firebase/diary/firebase_diary.js\");\n/* harmony import */ var _css_write_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../css/write.css */ \"./src/css/write.css\");\n/* harmony import */ var _firebase_auth_firebase_auth_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../firebase/auth/firebase_auth.js */ \"./src/js/firebase/auth/firebase_auth.js\");\n/* harmony import */ var _commons_libray_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../commons/libray.js */ \"./src/js/commons/libray.js\");\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nconst data = JSON.parse(localStorage.getItem(\"diary\")) || [];\r\n\r\nconst $sectionContents = document.querySelector(\".section-contents\");\r\nconst $diaryForm = $sectionContents.querySelector(\".diary-form\");\r\nconst $inputTitle = $diaryForm.querySelector(\"#input-title\");\r\nconst $inputcontents = $diaryForm.querySelector(\"#input-contents\");\r\nconst $submitBtn = $diaryForm.querySelector(\".btn-submit\");\r\nconst $inputUpload = $diaryForm.querySelector(\"#input-upload\");\r\nconst $uploadBtn = $diaryForm.querySelectorAll(\".btn-upload\");\r\nconst $previewImg = $diaryForm.querySelectorAll(\".preview-img\");\r\nconst $resetBtn = $diaryForm.querySelectorAll(\".btn-reset\");\r\nconst $loadingModal = $sectionContents.querySelector(\".loading-modal\");\r\nconst $radioInputs = $diaryForm.querySelectorAll(\"input[name='mood']\");\r\n\r\n$radioInputs.forEach((el, idx) => {\r\n    el.addEventListener(\"keydown\", (e) => {\r\n      if(e.keyCode === 9 && e.shiftKey && idx===0){\r\n        e.preventDefault();\r\n        $inputcontents.focus();\r\n      } else if (e.keyCode === 9 && e.shiftKey && idx !== 0) {\r\n        e.preventDefault();\r\n        $radioInputs[idx - 1].focus();\r\n      } else if (e.keyCode === 9 && idx!==4) {\r\n        e.preventDefault();\r\n        $radioInputs[idx + 1].focus();\r\n      }\r\n    });\r\n});\r\n$uploadBtn[0].addEventListener(\"keydown\", (e)=>{\r\n  if (e.keyCode === 9 && e.shiftKey) {\r\n    e.preventDefault();\r\n    $radioInputs[4].focus();\r\n  } \r\n})\r\nconst userData = (0,_firebase_auth_firebase_auth_js__WEBPACK_IMPORTED_MODULE_2__.getSessionUser)();\r\nconst uploadImg = [\"\", \"\", \"\"];\r\nlet imgIdx = \"0\";\r\n(function setTodayDate() {\r\n  const $todayDate = document.querySelector(\".today-date\");\r\n  const year = (0,_commons_libray_js__WEBPACK_IMPORTED_MODULE_3__.getKST)().getFullYear();\r\n  const month = `0${(0,_commons_libray_js__WEBPACK_IMPORTED_MODULE_3__.getKST)().getMonth() + 1}`;\r\n  const date = `0${(0,_commons_libray_js__WEBPACK_IMPORTED_MODULE_3__.getKST)().getDate()}`;\r\n  const day = [\"일\", \"월\", \"화\", \"수\", \"목\", \"금\", \"토\"][(0,_commons_libray_js__WEBPACK_IMPORTED_MODULE_3__.getKST)().getDay()];\r\n  $todayDate.textContent = `${year}.${month.slice(-2)}.${date.slice(\r\n    -2\r\n  )}.(${day})`;\r\n  $todayDate.setAttribute(\"datetime\", (0,_commons_libray_js__WEBPACK_IMPORTED_MODULE_3__.getKST)());\r\n})();\r\n$submitBtn.addEventListener(\"click\", async () => {\r\n  const $mood = $diaryForm.querySelector('input[name=\"mood\"]:checked');\r\n  // 유효성 검사\r\n  if (!$inputTitle.value.trim()) {\r\n    alert(\"제목을 입력해주세요!\");\r\n    return;\r\n  }\r\n  if (!$inputcontents.value.trim()) {\r\n    alert(\"내용을 입력해주세요!\");\r\n    return;\r\n  }\r\n  if (!$mood) {\r\n    alert(\"오늘의 기분을 선택해주세요!\");\r\n    return;\r\n  }\r\n  if (confirm(\"정말 작성하시겠습니까?\")) {\r\n    $loadingModal.classList.add(\"active\");\r\n    const fileInfo = await (0,_firebase_diary_firebase_diary_js__WEBPACK_IMPORTED_MODULE_0__.uploadFile)(uploadImg);\r\n    const id = (0,uuid__WEBPACK_IMPORTED_MODULE_4__[\"default\"])();\r\n    const newDiary = {\r\n      id,\r\n      auth: userData.displayName,\r\n      profileImg: userData.photoURL,\r\n      title: $inputTitle.value,\r\n      contents: $inputcontents.value,\r\n      mood: $mood.value,\r\n      imgURL: fileInfo.url || [],\r\n      imgFileName: fileInfo.fileName || [],\r\n      createdAt: (0,_commons_libray_js__WEBPACK_IMPORTED_MODULE_3__.getKST)().getTime(),\r\n      empathy: 0,\r\n      accuse: 0,\r\n    };\r\n\r\n    await (0,_firebase_diary_firebase_diary_js__WEBPACK_IMPORTED_MODULE_0__.writeDiary)(newDiary);\r\n    sessionStorage.setItem(\"diaryData\", JSON.stringify(newDiary));\r\n    $inputTitle.value = \"\";\r\n    $inputcontents.value = \"\";\r\n    uploadImg.splice(0);\r\n    $loadingModal.classList.remove(\"active\");\r\n  }\r\n});\r\n\r\n$uploadBtn.forEach((el, idx) => {\r\n  el.addEventListener(\"click\", () => {\r\n    $inputUpload.click();\r\n    imgIdx = idx;\r\n  });\r\n});\r\n\r\n$resetBtn.forEach((el, idx) => {\r\n  el.addEventListener(\"click\", () => resetImg(idx));\r\n});\r\n\r\nfunction previewImg(e) {\r\n  const file = e.currentTarget.files[0];\r\n  const vaild = validataionImg(file);\r\n  if (!vaild) return;\r\n  const imageSrc = URL.createObjectURL(file);\r\n  $previewImg[imgIdx].setAttribute(\"src\", imageSrc);\r\n  uploadImg[imgIdx] = file;\r\n}\r\nfunction resetImg(idx) {\r\n  $previewImg[idx].setAttribute(\"src\", \"../img/imgUpload.png\");\r\n  uploadImg[idx] = \"\";\r\n}\r\n$inputUpload.addEventListener(\"change\", (e) => previewImg(e));\r\nfunction validataionImg(file) {\r\n  if (!file.size) {\r\n    alert(\"파일이 없습니다!\");\r\n    return;\r\n  }\r\n  if (file.size > 5 * 1024 * 1024) {\r\n    alert(\"파일의 크기를 초과하였습니다.(최대 5MB)\");\r\n    return;\r\n  }\r\n  if (\r\n    !file.name.includes(\"png\") &&\r\n    !file.name.includes(\"jpg\") &&\r\n    !file.name.includes(\"webp\") &&\r\n    !file.name.includes(\"avif\")\r\n  ) {\r\n    alert(\"이미지 형식을 확인해주세요.(지원형식 : png, jpg, webp, avif)\");\r\n    return;\r\n  }\r\n  return true;\r\n}\r\n\n\n//# sourceURL=webpack://test/./src/js/write/write.js?");
 
 /***/ }),
 
@@ -435,29 +355,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/publicPath */
-/******/ 	(() => {
-/******/ 		var scriptUrl;
-/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
-/******/ 		var document = __webpack_require__.g.document;
-/******/ 		if (!scriptUrl && document) {
-/******/ 			if (document.currentScript)
-/******/ 				scriptUrl = document.currentScript.src;
-/******/ 			if (!scriptUrl) {
-/******/ 				var scripts = document.getElementsByTagName("script");
-/******/ 				if(scripts.length) {
-/******/ 					var i = scripts.length - 1;
-/******/ 					while (i > -1 && !scriptUrl) scriptUrl = scripts[i--].src;
-/******/ 				}
-/******/ 			}
-/******/ 		}
-/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
-/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
-/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
-/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
-/******/ 		__webpack_require__.p = scriptUrl;
 /******/ 	})();
 /******/ 	
 /************************************************************************/

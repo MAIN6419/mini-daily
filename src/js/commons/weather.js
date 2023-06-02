@@ -42,10 +42,10 @@ export async function getWeather(lat, lon) {
     const place = json.name; // 사용자 위치
     const humidity = json.main.humidity;
     const icon = json.weather[0].icon;
-    const sunraise = json.sys.sunraise * 1000;
+    const sunrise = json.sys.sunrise * 1000;
     const sunset = json.sys.sunset * 1000;
-    const time = getCustomTime();
-
+    const reloadTime = getCustomTime();
+    const currentTime = getKST().getTime();
     let weatherText = json.weather[0].main;
     if (weatherText === "Clear") {
       weatherText = "맑음";
@@ -66,10 +66,11 @@ export async function getWeather(lat, lon) {
       place,
       humidity,
       icon,
-      time,
-      sunraise,
+      reloadTime,
+      sunrise,
       sunset,
       weatherText: weatherText,
+      currentTime
     };
     localStorage.setItem("weather", JSON.stringify(weatherInfo));
     return weatherInfo;

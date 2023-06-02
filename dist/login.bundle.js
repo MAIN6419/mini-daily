@@ -10,16 +10,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/img/loading.gif":
-/*!*****************************!*\
-  !*** ./src/img/loading.gif ***!
-  \*****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + \"img/loading.gif\");\n\n//# sourceURL=webpack://test/./src/img/loading.gif?");
-
-/***/ }),
-
 /***/ "./src/css/login.css":
 /*!***************************!*\
   !*** ./src/css/login.css ***!
@@ -27,16 +17,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n\n\n//# sourceURL=webpack://test/./src/css/login.css?");
-
-/***/ }),
-
-/***/ "./src/css/reset.css":
-/*!***************************!*\
-  !*** ./src/css/reset.css ***!
-  \***************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n\n\n//# sourceURL=webpack://test/./src/css/reset.css?");
 
 /***/ }),
 
@@ -156,7 +136,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \***********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"config\": () => (/* binding */ config)\n/* harmony export */ });\nconst config = {\r\n  FIREBASE_API_KEY: \"AIzaSyDnaqMLR9z8naAC0J06ptfd6HQb1jSnSbY\",\r\n  OPENWEATHERMAP_API_KEY: \"6a7b6cf2d97ad4f53a1a72c9627306d8\"\r\n}\n\n//# sourceURL=webpack://test/./src/apikey.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"config\": () => (/* binding */ config)\n/* harmony export */ });\nconst config = {FIREBASE_API_KEY:'AIzaSyDnaqMLR9z8naAC0J06ptfd6HQb1jSnSbY', OPENWEATHERMAP_API_KEY: '6a7b6cf2d97ad4f53a1a72c9627306d8'};\n\n\n//# sourceURL=webpack://test/./src/apikey.js?");
 
 /***/ }),
 
@@ -186,7 +166,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \*******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _firebase_auth_firebase_auth_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../firebase/auth/firebase_auth.js */ \"./src/js/firebase/auth/firebase_auth.js\");\n/* harmony import */ var _css_reset_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../css/reset.css */ \"./src/css/reset.css\");\n/* harmony import */ var _css_login_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../css/login.css */ \"./src/css/login.css\");\n/* harmony import */ var _img_loading_gif__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../img/loading.gif */ \"./src/img/loading.gif\");\n\r\n\r\n\r\n\r\n\r\nconst $loginForm = document.querySelector(\".login-form\");\r\nconst $inputEmail = $loginForm.querySelector(\"#input-email\");\r\nconst $inputPw = $loginForm.querySelector(\"#input-password\");\r\nconst $loginBtn = $loginForm.querySelector(\".btn-login\");\r\nconst $loadingModal = document.querySelector(\".loading-modal\");\r\nif (sessionStorage.getItem(\"userData\")){\r\n  alert(\"이미 로그인 되어있습니다!\");\r\n  location.href = 'home.html';\r\n}\r\n\r\n$inputEmail.addEventListener(\"input\", (e) => {\r\n    e.target.value = e.target.value.trim();\r\n  });\r\n$inputPw.addEventListener(\"input\", (e) => {\r\n  e.target.value = e.target.value.trim();\r\n});\r\n\r\n$loginBtn.addEventListener(\"click\", async (e) => {\r\n  e.preventDefault();\r\n  if (!$inputEmail.value) {\r\n    alert(\"이메일을 입력해주세요!\");\r\n    return;\r\n  }\r\n  if (!$inputPw.value) {\r\n    alert(\"비밀번호를 입력해주세요!\");\r\n    return;\r\n  }\r\n  // 로그인 확인 로직\r\n  $loadingModal.classList.add(\"active\");\r\n  await (0,_firebase_auth_firebase_auth_js__WEBPACK_IMPORTED_MODULE_0__.login)($inputEmail.value, $inputPw.value);\r\n  $inputEmail.value = '';\r\n  $inputPw.value = '';\r\n  $loadingModal.classList.remove(\"active\");\r\n});\r\n\n\n//# sourceURL=webpack://test/./src/js/login/login.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _firebase_auth_firebase_auth_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../firebase/auth/firebase_auth.js */ \"./src/js/firebase/auth/firebase_auth.js\");\n/* harmony import */ var _css_login_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../css/login.css */ \"./src/css/login.css\");\n\r\n\r\n\r\n\r\nconst $loginForm = document.querySelector(\".login-form\");\r\nconst $inputEmail = $loginForm.querySelector(\"#input-email\");\r\nconst $inputPw = $loginForm.querySelector(\"#input-password\");\r\nconst $loginBtn = $loginForm.querySelector(\".btn-login\");\r\nconst $loadingModal = document.querySelector(\".loading-modal\");\r\nif (sessionStorage.getItem(\"userData\")){\r\n  alert(\"이미 로그인 되어있습니다!\");\r\n  location.href = 'home.html';\r\n}\r\n\r\n$inputEmail.addEventListener(\"input\", (e) => {\r\n    e.target.value = e.target.value.trim();\r\n  });\r\n$inputPw.addEventListener(\"input\", (e) => {\r\n  e.target.value = e.target.value.trim();\r\n});\r\n\r\n$loginBtn.addEventListener(\"click\", async (e) => {\r\n  e.preventDefault();\r\n  if (!$inputEmail.value) {\r\n    alert(\"이메일을 입력해주세요!\");\r\n    return;\r\n  }\r\n  if (!$inputPw.value) {\r\n    alert(\"비밀번호를 입력해주세요!\");\r\n    return;\r\n  }\r\n  // 로그인 확인 로직\r\n  $loadingModal.classList.add(\"active\");\r\n  await (0,_firebase_auth_firebase_auth_js__WEBPACK_IMPORTED_MODULE_0__.login)($inputEmail.value, $inputPw.value);\r\n  $inputEmail.value = '';\r\n  $inputPw.value = '';\r\n  $loadingModal.classList.remove(\"active\");\r\n});\r\n\n\n//# sourceURL=webpack://test/./src/js/login/login.js?");
 
 /***/ }),
 
@@ -355,29 +335,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/publicPath */
-/******/ 	(() => {
-/******/ 		var scriptUrl;
-/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
-/******/ 		var document = __webpack_require__.g.document;
-/******/ 		if (!scriptUrl && document) {
-/******/ 			if (document.currentScript)
-/******/ 				scriptUrl = document.currentScript.src;
-/******/ 			if (!scriptUrl) {
-/******/ 				var scripts = document.getElementsByTagName("script");
-/******/ 				if(scripts.length) {
-/******/ 					var i = scripts.length - 1;
-/******/ 					while (i > -1 && !scriptUrl) scriptUrl = scripts[i--].src;
-/******/ 				}
-/******/ 			}
-/******/ 		}
-/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
-/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
-/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
-/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
-/******/ 		__webpack_require__.p = scriptUrl;
 /******/ 	})();
 /******/ 	
 /************************************************************************/
