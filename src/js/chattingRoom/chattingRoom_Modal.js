@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";;
 import { createChattingRoom, checkJoinRoom } from "../firebase/chattingRoom/firebase_chattingRoom.js";
+import { keyBoardFocutOPT } from "../commons/libray.js";
 
 const $sectionContents = document.querySelector(".section-contents");
 
@@ -67,21 +68,13 @@ $createRoomCloseBtn.addEventListener("click", () => {
   $inputPassowrd.classList.remove("active");
 });
 $inputTitle.addEventListener("keydown", (e) => {
-  if (e.keyCode === 9 && e.shiftKey) {
-    e.preventDefault();
-    $createRoomCloseBtn.focus();
-  }
+  keyBoardFocutOPT(e,$createRoomCloseBtn);
   if (e.keyCode === 32 && !e.target.value.trim()) {
     e.preventDefault();
     e.target.value = "";
   }
 });
-$createRoomCloseBtn.addEventListener("keydown", (e) => {
-  if (e.keyCode === 9 && !e.shiftKey) {
-    e.preventDefault();
-    $inputTitle.focus();
-  }
-});
+$createRoomCloseBtn.addEventListener("keydown", (e) => keyBoardFocutOPT(e, $createRoomBtn,$inputTitle));
 
 $inputPassowrd.addEventListener("input", (e) => {
   e.target.value = e.target.value.trim();
@@ -141,20 +134,14 @@ $joinRoomBtn.addEventListener("click", async (e) => {
 });
 
 $inputRoomId.addEventListener("keydown", (e) => {
-  if (e.keyCode === 9 && e.shiftKey) {
-    e.preventDefault();
-    $joinRoomCloseBtn.focus();
-  }
+  keyBoardFocutOPT(e, $joinRoomCloseBtn);
   if (e.keyCode === 32 && !e.target.value.trim()) {
     e.preventDefault();
     e.target.value = "";
   }
 });
 $joinRoomCloseBtn.addEventListener("keydown", (e) => {
-  if (e.keyCode === 9 && !e.shiftKey) {
-    e.preventDefault();
-    $inputRoomId.focus();
-  }
+  keyBoardFocutOPT(e, $joinRoomBtn, $inputRoomId);
 });
 
 // 비밀번호 모달창
@@ -167,21 +154,8 @@ const $passwordModalInput = $passwordModal.querySelector(".input-password");
 $passwordModalInput.addEventListener("input", (e) => {
   e.target.value = e.target.value.trim();
 });
-$passwordModalInput.addEventListener("keydown", (e) => {
-  if (e.keyCode === 9 && e.shiftKey) {
-    e.preventDefault();
-    $passwordModalCancleBtn.focus();
-  }
-});
-$passwordModalCancleBtn.addEventListener("keydown", (e) => {
-  if (e.keyCode === 9 && e.shiftKey) {
-    e.preventDefault();
-    $passwordModalConfirmBtn.focus();
-  } else if (e.keyCode === 9) {
-    e.preventDefault();
-    $passwordModalInput.focus();
-  }
-});
+$passwordModalInput.addEventListener("keydown", (e) => keyBoardFocutOPT(e, $passwordModalCancleBtn));
+$passwordModalCancleBtn.addEventListener("keydown", (e) => keyBoardFocutOPT(e, $passwordModalConfirmBtn, $passwordModalInput));
 
 export function modalPrompt(roomData) {
   $passwordModal.classList.add("active");

@@ -34,10 +34,9 @@ export async function getWeather(lat, lon) {
   const API_KEY = config.OPENWEATHERMAP_API_KEY;
   try {
     const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&lang=kr`
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`
     );
     const json = await response.json();
-    console.log(json);
     const temperature = parseFloat(json.main.temp - 273.15).toFixed(1); // 온도
     const place = json.name; // 사용자 위치
     const humidity = json.main.humidity;
@@ -46,18 +45,24 @@ export async function getWeather(lat, lon) {
     const sunset = json.sys.sunset * 1000;
     const reloadTime = getCustomTime();
     const currentTime = getKST().getTime();
-    let weatherText = json.weather[0].main;
-    if (weatherText === "Clear") {
+    let weatherText = json.weather[0].description;
+    if (weatherText === "clear sky") {
       weatherText = "맑음";
-    } else if (weatherText === "Clouds") {
+    } else if (weatherText === "few clouds") {
+      weatherText = "구름 조금";
+    } else if (weatherText === "scattered clouds") {
+      weatherText = "구름 낌";
+    } else if (weatherText === "broken clouds") {
       weatherText = "흐림";
-    } else if (weatherText === "Rain") {
+    } else if (weatherText === "shower Rain") {
+      weatherText = "소나기";
+    } else if (weatherText === "rain") {
       weatherText = "비";
-    } else if (weatherText === "Thunderstorm") {
+    } else if (weatherText === "thunderstorm") {
       weatherText = "천둥";
-    } else if (weatherText === "Snow") {
+    } else if (weatherText === "snow") {
       weatherText = "눈";
-    } else if (weatherText === "Mist") {
+    } else if (weatherText === "mist") {
       weatherText = "안개";
     }
 
@@ -70,7 +75,7 @@ export async function getWeather(lat, lon) {
       sunrise,
       sunset,
       weatherText: weatherText,
-      currentTime
+      currentTime,
     };
     localStorage.setItem("weather", JSON.stringify(weatherInfo));
     return weatherInfo;

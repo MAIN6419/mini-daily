@@ -21,3 +21,13 @@ export function getKST() {
   return koreaNow;
 }
 
+export function keyBoardFocutOPT(e, prevTarget, nextTarget=null) {
+  if(e.keyCode === 9 && e.shiftKey){
+    e.preventDefault();
+    prevTarget.focus();
+
+  } else if(e.keyCode === 9&&nextTarget) {
+    e.preventDefault();
+    nextTarget.focus();
+  }
+}

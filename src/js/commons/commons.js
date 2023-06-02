@@ -224,10 +224,29 @@ async function reloadWeather() {
     const $weatherIcon = $weather.querySelector(".weather-icon");
     const $weatherHumidity = $weather.querySelector(".weather-humidity");
     const $weatherTime = $weather.querySelector(".weather-time");
+    const $weatherText = $weather.querySelector(".weather-text")
+    if (weatherInfo.weatherText === "Clear sky") {
+      $weatherText.textContent = "맑음";
+    } else if (weatherInfo.weatherText === "few clouds") {
+      $weatherText.textContent  = "구름 조금";
+    } else if (weatherInfo.weatherText === "scattered clouds") {
+      $weatherText.textContent  = "구름 낌";
+    } else if (weatherInfo.weatherText === "broken clouds") {
+      $weatherText.textContent  = "흐림";
+    } else if (weatherInfo.weatherText === "shower Rain") {
+      $weatherText.textContent  = "소나기";
+    } else if (weatherInfo.weatherText === "rain") {
+      $weatherText.textContent  = "비";
+    } else if (weatherInfo.weatherText === "thunderstorm") {
+      $weatherText .textContent = "천둥";
+    } else if (weatherInfo.weatherText === "snow") {
+      $weatherText.textContent  = "눈";
+    } else if (weatherInfo.weatherText === "mist") {
+      $weatherText.textContent  = "안개";
+    }
     const isSunset =
       weatherInfo.currentTime >= weatherInfo.sunset ||
       weatherInfo.currentTime < weatherInfo.sunrise;
-    console.log(weatherInfo.currentTime, weatherInfo.sunrise);
     if (isSunset) $weather.classList.add("sunset");
     $weatherIcon.setAttribute(
       "src",

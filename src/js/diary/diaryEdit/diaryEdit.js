@@ -53,7 +53,6 @@ $cancelBtn.addEventListener("click", () => {
 $editCompletedBtn.addEventListener("click", async () => {
   const $inputTitle = $editForm.querySelector("#input-title");
   const $mood = $editForm.querySelector("input[name='mood']:checked");
-  console.log($mood.value)
   if (!$inputTitle.value.trim()) {
     alert("제목을 입력해주세요!");
     return;
