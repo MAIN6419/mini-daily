@@ -156,7 +156,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \***********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"config\": () => (/* binding */ config)\n/* harmony export */ });\nconst config = {FIREBASE_API_KEY:'AIzaSyDnaqMLR9z8naAC0J06ptfd6HQb1jSnSbY', OPENWEATHERMAP_API_KEY: '6a7b6cf2d97ad4f53a1a72c9627306d8'};\n\n\n//# sourceURL=webpack://test/./src/apikey.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"config\": () => (/* binding */ config)\n/* harmony export */ });\nconst config = {\n  FIREBASE_API_KEY: \"AIzaSyDnaqMLR9z8naAC0J06ptfd6HQb1jSnSbY\",\n  OPENWEATHERMAP_API_KEY: \"6a7b6cf2d97ad4f53a1a72c9627306d8\",\n};\n\n\n//# sourceURL=webpack://test/./src/apikey.js?");
 
 /***/ }),
 
