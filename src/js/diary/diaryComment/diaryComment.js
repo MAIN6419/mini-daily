@@ -23,6 +23,7 @@ async function submitComment(e) {
       alert("내용을 입력해주세요!");
       return;
     }
+    
     const newComment = {
       diaryId: id,
       auth: currentUser.displayName,

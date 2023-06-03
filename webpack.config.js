@@ -83,7 +83,11 @@ module.exports = {
       template: "index.html",
       filename: "index.html",
       chunks: ["reset","login"],
-      inject: "head", // CSS 파일을 <head> 태그 안에 삽입
+    }),
+    new HtmlWebpackPlugin({
+      template: "404.html",
+      filename: "404.html",
+      chunks: [],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/allDiary.html",

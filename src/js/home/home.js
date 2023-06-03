@@ -26,7 +26,7 @@ async function rederRecentDiary() {
   $recentDiaryLists.innerHTML = "";
   if (data.length === 0) {
     $recentDiaryLists.innerHTML += `
-      <li class="none-diary">현재 다이어리가 없어요~</li>
+      <li class="no-diary">현재 다이어리가 없어요~</li>
       `;
     return;
   }
@@ -82,6 +82,14 @@ async function fetchFortuneData() {
 async function renderBestDiary() {
   const frag = new DocumentFragment();
   const data = await fetchBestDiarys();
+  if (data.length === 0) {
+    $diaryLists.innerHTML += `
+      <li class="no-diary">
+      현재 다이어리가 없어요~
+      </li>
+      `;
+    return;
+  }
   for(const diary of data) {
     const listItem = document.createElement('li');
     listItem.classList.add('diary');
@@ -145,7 +153,7 @@ async function renderBestDiary() {
 
 // 다이어리 작성자 이미지를 불러오는 함수 => placeholderImg 교체
 async function fetchAuthImg(profileImg, data) {
-  profileImg.src = await getAuthImg(data.auth);
+  profileImg.src = await getAuthImg(data.auth) || "./img/profile.png";;
 }
 
 

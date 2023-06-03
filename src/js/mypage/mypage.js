@@ -14,6 +14,7 @@ const $changeIntroduceBtn = $sectionContents.querySelector(
   ".btn-changeIntroduce"
 );
 const $introduceModal = $sectionContents.querySelector(".introduce-modal");
+const $introduceDim = $introduceModal.querySelector(".dim");
 const $introduceSubmitBtn = $introduceModal.querySelector(".btn-submit");
 const $introduceCancelBtn = $introduceModal.querySelector(".btn-cancel");
 const $inputIntroduce = $introduceModal.querySelector(".input-introduce");
@@ -23,6 +24,7 @@ const $changeProfileImgBtn = $sectionContents.querySelector(
   ".btn-changeProfileImg"
 );
 const $profileImgModal = $sectionContents.querySelector(".profileImg-modal");
+const $profileImglDim = $profileImgModal.querySelector(".dim");
 const $profileImg = $sectionContents.querySelector(".profile-img");
 const $profileImgSubmitBtn = $profileImgModal.querySelector(".btn-submit");
 const $profileImgCancelBtn = $profileImgModal.querySelector(".btn-cancel");
@@ -35,6 +37,14 @@ const $userGrade = $sectionContents.querySelector(".user-grade");
 const $userPoint = $sectionContents.querySelector(".user-point");
 const $userDiary = $sectionContents.querySelector(".user-diary");
 const $userComment = $sectionContents.querySelector(".user-Comment");
+
+const $gradeInfoBtn = $sectionContents.querySelector(".btn-gradeInfo");
+const $gradeModalCloseBtn = $sectionContents.querySelector(".btn-close");
+const $gradeModal = $sectionContents.querySelector(".grade-modal");
+const $gradeModalDim = $gradeModal.querySelector(".dim");
+const $currentGrade = $gradeModal.querySelector(".current-grade");
+const $nextLevelPoint = $gradeModal.querySelector(".next-levelpoint");
+
 const $loadingModal = document.querySelector(".loading-modal");
 
 const userData = getSessionUser();
@@ -53,13 +63,26 @@ if (host.includes("github.io")) {
   $userNickname.textContent = `닉네임 : ${userInfo.nickname}`;
   $userGrade.textContent = `등급 : ${userInfo.grade}`;
   $userPoint.textContent = `포인트 : ${userInfo.point}점`;
-  $profileImg.setAttribute("src", userData.photoURL || `./img/no-image.png`);
+  $profileImg.setAttribute("src", userData.photoURL || `./img/profile.png`);
   $userDiary.textContent = `다이어리 : ${userInfo.diaryCount}개`;
   $userComment.textContent = `댓글 : ${userInfo.commentCount}개`;
+  $currentGrade.textContent = `나의 현재 등급 : ${userInfo.grade}`;
+  let nextLevelPoint;
+  if(userInfo.grade==="VIP") {
+    nextLevelPoint = '현재 최고 등급';
+  } else if(userInfo.grade==="프로") {
+    nextLevelPoint = 1000 - userInfo.point;
+  } else if(userInfo.grade==="우수") {
+    nextLevelPoint = 500 - userInfo.point;
+  } else {
+    nextLevelPoint = 100 - userInfo.point;
+  }
+ $nextLevelPoint.textContent = `등업까지 남은 포인트 : ${nextLevelPoint} point`
   $loadingModal.classList.remove("active");
 })();
 
 const $passwordModal = $sectionContents.querySelector(".password-modal");
+const $passwordModalDim = $passwordModal.querySelector(".dim");
 const $changePasswordBtn = $sectionContents.querySelector(
   ".btn-changePassword"
 );
@@ -75,13 +98,14 @@ $changeProfileImgBtn.addEventListener("click", () => {
   $profileImgModal.classList.add("active");
   $customInput.focus();
 });
-$profileImgModal.addEventListener("click", (e) => {
-  if (e.target === $profileImgModal || e.target === $profileImgCancelBtn) {
+$profileImgCancelBtn.addEventListener("click", (e) => {
     $profileImgModal.classList.remove("active");
     $customInput.style.backgroundImage = `url(./img/imgUpload.png)`;
     $customInput.style.backgroundSize = "120px";
-  }
 });
+$profileImglDim.addEventListener("click",()=>{
+  $profileImgCancelBtn.click();
+})
 $customInput.addEventListener("click", () => {
   $inputProfileImg.click();
 });
@@ -132,11 +156,12 @@ $changeIntroduceBtn.addEventListener("click", () => {
   $inputIntroduce.focus();
 });
 
-$introduceModal.addEventListener("click", (e) => {
-  if (e.target === $introduceModal || e.target === $introduceCancelBtn)
+$introduceCancelBtn.addEventListener("click", (e) => {
     $introduceModal.classList.remove("active");
 });
-
+$introduceDim.addEventListener("click",()=>{
+  $introduceModal.classList.remove("active");
+})
 $inputIntroduce.addEventListener("input", (e) => {
   $textCounter.textContent = `${e.target.value.length}/150`;
 });
@@ -177,14 +202,15 @@ $changePasswordBtn.addEventListener("click", () => {
   $passwordModal.classList.add("active");
   $inputCurrentPw.focus();
 });
-$passwordModal.addEventListener("click", (e) => {
-  if (e.target === $passwordModal || e.target === $passwordCancelBtn) {
+$passwordCancelBtn.addEventListener("click", (e) => {
     $passwordModal.classList.remove("active");
     $inputCurrentPw.value = "";
     $inputNewPw.value = "";
     $inputChkNewPw.value = "";
-  }
 });
+$passwordModalDim.addEventListener("click",()=>{
+  $passwordCancelBtn.click();
+})
 
 $passwordSubmitBtn.addEventListener("click", async (e) => {
   e.preventDefault();
@@ -233,3 +259,23 @@ $inputCurrentPw.addEventListener("keydown", (e) =>
 $passwordCancelBtn.addEventListener("keydown", (e) =>
   keyBoardFocutOPT(e, $introduceSubmitBtn, $introduceCancelBtn)
 );
+
+// 등업 정보 모달창 관련
+
+
+
+$gradeInfoBtn.addEventListener("click",()=>{
+  $gradeModal.classList.add("active");
+})
+$gradeModalCloseBtn .addEventListener("click",()=>{
+  $gradeModal.classList.remove("active");
+})
+$gradeModalDim.addEventListener("click",()=>{
+  $gradeModal.classList.remove("active");
+})
+
+$gradeModalCloseBtn.addEventListener("keydown", (e)=>{
+  if(e.keyCode===9){
+    e.preventDefault();
+  }
+})

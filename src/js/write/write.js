@@ -76,7 +76,7 @@ $submitBtn.addEventListener("click", async () => {
     const newDiary = {
       id,
       auth: userData.displayName,
-      profileImg: userData.photoURL,
+      profileImg: userData.photoURL||"",
       title: $inputTitle.value,
       contents: $inputcontents.value,
       mood: $mood.value,
@@ -92,6 +92,7 @@ $submitBtn.addEventListener("click", async () => {
     $inputTitle.value = "";
     $inputcontents.value = "";
     uploadImg.splice(0);
+    $previewImg.forEach(el=>el.setAttribute("src","../img/imgUpload.png"));
     $loadingModal.classList.remove("active");
   }
 });
@@ -121,8 +122,7 @@ function resetImg(idx) {
 }
 $inputUpload.addEventListener("change", (e) => previewImg(e));
 function validataionImg(file) {
-  if (!file.size) {
-    alert("파일이 없습니다!");
+  if (!file) {
     return;
   }
   if (file.size > 5 * 1024 * 1024) {

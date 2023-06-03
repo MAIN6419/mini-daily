@@ -10,6 +10,8 @@ import "../../img/bg.png";
 import "../../img/weather-loading.gif";
 import "../../img/sunset-bg.png";
 import "../../img/profile.png";
+import "../../img/no-diary.png";
+import "../../img/404.png";
 
 import { askForCoords } from "./weather.js";
 export let userData;
@@ -74,7 +76,7 @@ async function loadTemplate() {
             <h2 class="a11y-hidden">유저 프로필</h2>
             <img
               class="profile-img"
-              src=" ${userData.profileImgURL || "./img/no-image.png"}"
+              src=" ${userData.profileImgURL || "./img/profile.png"}"
               alt="유저 프로필 이미지"
             />
             <span class="profile-name">${userData.nickname}</span>
@@ -203,9 +205,9 @@ async function loadTemplate() {
   const links = document.querySelector(".links");
   links.innerHTML = `
     <a class="home-link"href="home.html">홈</a>
-    <a class="allDiary-link"href="allDiary.html">전체글</a>
-    <a class="diary-link" href="myDiary.html">마이다이어리</a>
-    <a class="write-link" href="write.html">글작성</a>
+    <a class="allDiary-link"href="allDiary.html">전체다이어리</a>
+    <a class="myDiary-link" href="myDiary.html">마이다이어리</a>
+    <a class="write-link" href="write.html">다이어리작성</a>
     <a class="chattingRoom-link" href="chattingRoom.html">채팅방</a>
     <a class="fortune-link" href="fortune.html">운세보기</a>
     <a class="mypage-link" href="mypage.html">마이페이지</a>
@@ -218,36 +220,23 @@ async function reloadWeather() {
 
   try {
     await askForCoords();
-
     const weatherInfo = JSON.parse(localStorage.getItem("weather"));
     const $weather = document.querySelector(".weather");
     const $weatherIcon = $weather.querySelector(".weather-icon");
     const $weatherHumidity = $weather.querySelector(".weather-humidity");
     const $weatherTime = $weather.querySelector(".weather-time");
-    const $weatherText = $weather.querySelector(".weather-text")
-    if (weatherInfo.weatherText === "Clear sky") {
-      $weatherText.textContent = "맑음";
-    } else if (weatherInfo.weatherText === "few clouds") {
-      $weatherText.textContent  = "구름 조금";
-    } else if (weatherInfo.weatherText === "scattered clouds") {
-      $weatherText.textContent  = "구름 낌";
-    } else if (weatherInfo.weatherText === "broken clouds") {
-      $weatherText.textContent  = "흐림";
-    } else if (weatherInfo.weatherText === "shower Rain") {
-      $weatherText.textContent  = "소나기";
-    } else if (weatherInfo.weatherText === "rain") {
-      $weatherText.textContent  = "비";
-    } else if (weatherInfo.weatherText === "thunderstorm") {
-      $weatherText .textContent = "천둥";
-    } else if (weatherInfo.weatherText === "snow") {
-      $weatherText.textContent  = "눈";
-    } else if (weatherInfo.weatherText === "mist") {
-      $weatherText.textContent  = "안개";
-    }
+    const $weatherText = $weather.querySelector(".weather-text");
+    console.log(weatherInfo.weatherText);
+    $weatherText.textContent = weatherInfo.weatherText;
+
     const isSunset =
       weatherInfo.currentTime >= weatherInfo.sunset ||
       weatherInfo.currentTime < weatherInfo.sunrise;
-    if (isSunset) $weather.classList.add("sunset");
+    if (isSunset) {
+      $weather.classList.add("sunset");
+    } else {
+      $weather.classList.remove("sunset");
+    }
     $weatherIcon.setAttribute(
       "src",
       `http://openweathermap.org/img/w/${weatherInfo.icon}.png`

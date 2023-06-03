@@ -13,7 +13,6 @@ import {
 import { submitComment } from "./diaryComment/diaryComment.js";
 import { uploadImg } from "./diaryEdit/diaryEdit.js";
 
-
 import "../../css/diary.css";
 import "../../img/imgUpload.png";
 import "../../img/placeholderImg.png";
@@ -27,8 +26,9 @@ const $empathyBtn = $diaryWrapper.querySelector(".btn-empathy");
 const $editForm = $sectionContents.querySelector(".edit-form");
 const $loadingModal = $sectionContents.querySelector(".loading-modal");
 const $backBtn = $sectionContents.querySelector(".btn-back");
-const $diaryLink = document.querySelector(".diary-link");
+const $myDiaryLink = document.querySelector(".myDiary-link");
 const $allDiaryLink = document.querySelector(".allDiary-link");
+const $homeLink = document.querySelector(".home-link");
 const $commentForm = $sectionContents.querySelector(".comment-form");
 const $commentInput = $commentForm.querySelector("#input-comment");
 const $commentSubitBtn = $commentForm.querySelector(".btn-submit");
@@ -36,9 +36,14 @@ const $commentSubitBtn = $commentForm.querySelector(".btn-submit");
 const previousPageUrl = document.referrer;
 
 if (previousPageUrl.includes("myDiary")) {
-  $diaryLink.classList.add("active");
+  $myDiaryLink.classList.add("active");
   $backBtn.addEventListener("click", () => {
     location.href = "myDiary.html";
+  });
+} else if (previousPageUrl.includes("home")) {
+  $homeLink.classList.add("active");
+  $backBtn.addEventListener("click", () => {
+    location.href = "home.html";
   });
 } else {
   $allDiaryLink.classList.add("active");
@@ -49,6 +54,7 @@ if (previousPageUrl.includes("myDiary")) {
 
 // 게시글 데이터 가져오기
 const fetchData = async () => {
+  console.log('a')
   $loadingModal.classList.add("active");
   $sectionContents.style.overflow = "hidden";
   return await FetchDiary(id).then((res) => {
@@ -107,7 +113,8 @@ async function renderdiary() {
 
     editBtn.addEventListener("click", async (e) => {
       e.preventDefault();
-      const $articleComment = $sectionContents.querySelector(".article-comment");
+      const $articleComment =
+        $sectionContents.querySelector(".article-comment");
       const $diaryDate = $editForm.querySelector(".diary-date");
       const $inputTitle = $editForm.querySelector("#input-title");
       const $inputContents = $editForm.querySelector("#input-contents");
@@ -118,10 +125,14 @@ async function renderdiary() {
       $diaryWrapper.classList.toggle("inactive");
       const diaryCreatedAt = new Date(data.createdAt);
       const year = diaryCreatedAt.getFullYear();
-      const month = '0' + (diaryCreatedAt.getMonth() + 1);
-      const date = '0' + diaryCreatedAt.getDate();
-      const day = ["일","월","화","수","목","금","토"][diaryCreatedAt.getDay()];
-      $diaryDate.textContent = `${year}.${month.slice(-2)}.${date.slice(-2)}.(${day})`;
+      const month = "0" + (diaryCreatedAt.getMonth() + 1);
+      const date = "0" + diaryCreatedAt.getDate();
+      const day = ["일", "월", "화", "수", "목", "금", "토"][
+        diaryCreatedAt.getDay()
+      ];
+      $diaryDate.textContent = `${year}.${month.slice(-2)}.${date.slice(
+        -2
+      )}.(${day})`;
       $inputTitle.value = data.title;
       $inputContents.value = data.contents;
       $moodList.forEach((el) => {
@@ -141,11 +152,15 @@ async function renderdiary() {
       if (confirm("정말 삭제하시겠습니까?")) {
         $loadingModal.classList.add("active");
         await deleteDiary(id);
-        previousPageUrl.includes("myDiary")
-          ? (location.href = "myDiary.html")
-          : (location.href = "allDiary.html");
-        alert("삭제가 완료되었습니다.");
-        $loadingModal.classList.remove("active");
+        if (previousPageUrl.includes("write")) {
+          alert("삭제가 완료되었습니다.");
+          $loadingModal.classList.remove("active");
+          location.replace("allDiary.html");
+        } else {
+          alert("삭제가 완료되었습니다.");
+          $loadingModal.classList.remove("active");
+          location.replace(previousPageUrl);
+        }
       }
     });
   }
@@ -205,10 +220,13 @@ $empathyBtn.addEventListener("click", async () => {
     alert("현재 삭제되었거나 존재하지 않는 게시글 입니다.");
     if (previousPageUrl.includes("myDiary")) {
       return (location.href = "myDiary.html");
+    } else if (previousPageUrl.includes("home")) {
+      return (location.href = "home.html");
     } else {
       return (location.href = "allDiary.html");
     }
   }
+
   const user = await FetchUserData(currentUser.displayName);
   if (user.empathyList.includes(id)) {
     updateEmpathy(id, -1, data.auth);
@@ -216,7 +234,7 @@ $empathyBtn.addEventListener("click", async () => {
     // sessionStorage.setItem("diaryData", JSON.stringify(data));
     $empathyCount.textContent = `공감 ${data.empathy}`;
     $empathyBtn.style.background =
-      " url(../img/icon-sprite.png) no-repeat -205px -216px / 330px 298.5px"
+      " url(../img/icon-sprite.png) no-repeat -205px -216px / 330px 298.5px";
   } else {
     updateEmpathy(id, 1, data.auth);
     data.empathy += 1;

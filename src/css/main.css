@@ -132,7 +132,7 @@ body {
   position: absolute;
   top: 8px;
   right: 10px;
-  background: url("../img/icon-sprite.png") no-repeat -65px -249px / 330px 298px;
+  background: url("../img/icon-sprite.png") no-repeat -356px -273px / 410px 329px;
   padding-left: 15px;
 }
 .wether-reload{
@@ -144,14 +144,14 @@ body {
 }
 .btn-reload{
   border: none;
-  background: url("../img/icon-sprite.png") no-repeat  -120px -273.5px / 330px 298.5px;
+  background: url("../img/icon-sprite.png") no-repeat  -331px -274px / 410px 329px;
   width: 15px;
   height: 15px;
   cursor: pointer;
   margin-right: 5px;
 }
 .weather.sunset .btn-reload{
-  background: url("../img/icon-sprite.png") no-repeat  -95px -273.5px / 330px 298.5px;
+  background: url("../img/icon-sprite.png") no-repeat  -306px -274px / 410px 329px;
 }
 .profile {
   text-align: center;
@@ -266,7 +266,7 @@ caption {
   left: 20px;
   border: none;
   padding-left: 20px;
-  background: url("../img/icon-sprite.png") no-repeat -306px -213.5px / 330px 298.5px;
+  background: url("../img/icon-sprite.png") no-repeat -256px -272px / 410px 329px;
   font-size: 14px;
   cursor: pointer;
 }
@@ -276,7 +276,7 @@ caption {
 .links {
   position: absolute;
   top: 20px;
-  right: -102px;
+  right: -107px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -284,7 +284,7 @@ caption {
 .links a {
   background-color: #b4d1da;
   text-align: center;
-  padding: 5px 8px;
+  padding: 5px 10px;
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;

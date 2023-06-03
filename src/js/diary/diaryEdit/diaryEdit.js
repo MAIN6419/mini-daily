@@ -123,14 +123,10 @@ function previewImg(e) {
   if (!vaild) return;
   const imageSrc = URL.createObjectURL(file);
   $previewImg[imgIdx].setAttribute("src", imageSrc);
-  $previewImg[imgIdx].style.width = "100%";
-  $previewImg[imgIdx].style.height = "100%";
   uploadImg[imgIdx] = file;
 }
 function resetImg(idx) {
   $previewImg[idx].setAttribute("src", "./img/imgUpload.png");
-  $previewImg[idx].style.width = "70px";
-  $previewImg[idx].style.height = "70px";
   uploadImg[idx] = "";
 }
 

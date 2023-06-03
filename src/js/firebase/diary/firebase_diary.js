@@ -1,7 +1,6 @@
 import {
   arrayRemove,
   arrayUnion,
-  getFirestore,
   collection,
   getDocs,
   query,
@@ -21,8 +20,8 @@ import {
   ref as storageRef,
   deleteObject,
 } from "firebase/storage";
-import { db,  storage } from "../setting/firebase_setting.js";
-import {v4 as uuidv4} from 'uuid';
+import { db, storage } from "../setting/firebase_setting.js";
+import { v4 as uuidv4 } from "uuid";
 import { getKST } from "../../commons/libray.js";
 import { currentUser } from "../auth/firebase_auth.js";
 
@@ -73,8 +72,7 @@ async function writeDiary(newDiary) {
 // 다이어리 이미지 업로드 함수
 async function uploadFile(files) {
   try {
-    const fileInfo = { url: [], fileName: [] };
-    for (const file of files) {
+    const uploadPromises = files.map(async (file) => {
       if (file) {
         const fileName = uuidv4() + "_" + file.name;
         const res = await uploadBytes(
@@ -82,10 +80,23 @@ async function uploadFile(files) {
           file
         );
         const uploadfileUrl = await getDownloadURL(res.ref);
-        fileInfo.url.push(uploadfileUrl);
-        fileInfo.fileName.push(fileName);
+        return { url: uploadfileUrl, fileName: fileName };
       }
-    }
+    });
+
+    const fileInfoArray = await Promise.all(uploadPromises);
+    const fileInfo = {
+      url: [],
+      fileName: [],
+    };
+
+    fileInfoArray.forEach((file) => {
+      if (file) {
+        fileInfo.url.push(file.url);
+        fileInfo.fileName.push(file.fileName);
+      }
+    });
+
     return fileInfo;
   } catch (error) {
     alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
@@ -93,11 +104,12 @@ async function uploadFile(files) {
   }
 }
 
+
 // 최신 다이어리 목록 4개를 불러오는 함수
 async function fetchRecentDiary() {
   try {
     const diaryList = collection(db, "diaryList");
-    const q = query(diaryList, limit(4));
+    const q = query(diaryList, orderBy("createdAt", "desc"), limit(4));
     const res = await getDocs(q);
     const datas = res.docs.map((el) => el.data());
     return datas;
@@ -147,7 +159,7 @@ async function FetchDiary(id) {
 async function editDiary(id, newData) {
   try {
     const updateDiary = doc(db, `diaryList/${id}`);
-    await updateDoc(updateDiary, {...newData});
+    await updateDoc(updateDiary, { ...newData });
     alert("수정이 완료되었습니다.");
   } catch (error) {
     throw error;
@@ -157,22 +169,29 @@ async function editDiary(id, newData) {
 async function deleteDiary(id) {
   try {
     const diary = await FetchDiary(id);
-    if (diary.imgFileName.length) {
-      for (let i = 0; i < diary.imgFileName.length; i++) {
-        await deleteObject(
-          storageRef(storage, `images/diary/${String(diary.imgFileName[i])}`)
-        );
-      }
-    }
-    // 삭제되는 게시글의 공감 버튼을 누른 유저의 공감목록에서 삭제
+    const deleteImagePromises = diary.imgFileName.map((fileName) => {
+      return deleteObject(storageRef(storage, `images/diary/${String(fileName)}`));
+    });
+
+    const deleteUserPromises = [];
     const userCollection = collection(db, "user");
     const querySnapshot = await getDocs(userCollection);
-    // 비동기 처리를 위해 for of문을 사용
-    for (const docs of querySnapshot.docs) {
-      await updateDoc(doc(db, "user", docs.id), {
+    querySnapshot.docs.forEach((doc_) => {
+      const promise = updateDoc(doc(db, "user", doc_.id), {
         empathyList: arrayRemove(id),
       });
-    }
+      deleteUserPromises.push(promise);
+    });
+
+    const deleteCommentPromises = [];
+    const commentRef = collection(db, "comment");
+    const commentQuery = query(commentRef, where("diaryId", "==", id));
+    const commentDocs = await getDocs(commentQuery);
+    commentDocs.docs.forEach((doc_) => {
+      const promise = deleteDoc(doc_.ref);
+      deleteCommentPromises.push(promise);
+    });
+
     const diaryRef = doc(db, `diaryList/${id}`);
     const diaryDoc = await getDoc(diaryRef);
     const data = diaryDoc.data();
@@ -181,15 +200,24 @@ async function deleteDiary(id) {
         lastDiaryDate: null,
       });
     }
-    await deleteDoc(diaryRef);
 
-    await updateDoc(doc(db, "user", currentUser.displayName), {
+    const deleteDiaryPromise = deleteDoc(diaryRef);
+    const updateDiaryCountPromise = updateDoc(doc(db, "user", currentUser.displayName), {
       diaryCount: increment(-1),
     });
+
+    await Promise.all([
+      ...deleteImagePromises,
+      ...deleteUserPromises,
+      ...deleteCommentPromises,
+      deleteDiaryPromise,
+      updateDiaryCountPromise,
+    ]);
   } catch (error) {
     throw error;
   }
 }
+
 
 async function deleteEditDiaryImg(filename) {
   // 빈배열이 올 수 있기 때문에 filename이 있는 경우에만 이미지 삭제 처리
@@ -235,5 +263,5 @@ export {
   editDiary,
   deleteDiary,
   deleteEditDiaryImg,
-  updateEmpathy
+  updateEmpathy,
 };

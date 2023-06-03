@@ -92,12 +92,6 @@
 .profileImg-modal,
 .password-modal {
   display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
 }
 .introduce-modal.active,
 .profileImg-modal.active,
@@ -113,6 +107,7 @@
   transform: translate(-50%, -50%);
   border-radius: 5px;
   overflow: hidden;
+  z-index: 1;
 }
 /* 소개글 변경 모달 창*/
 .introduce-form {
@@ -165,19 +160,6 @@
   border: none;
   background-color: #eee;
   cursor: pointer;
-}
-.btn-close {
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #bdbdbd;
 }
 
 /* 프로필 이미지 변경창 */
@@ -270,13 +252,128 @@
   cursor: pointer;
 }
 .password-form .btn-submit {
-  background-color: dodgerblue;
+  background-color: rgb(110, 178, 245);
   color: #fff;
 }
 .password-form .btn-cancel {
   background-color: #fff;
 }
+.dim{
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.grade-modal{
+  display: none;
+}
+.grade-modal .modal-contents {
+  position: absolute;
+  top:50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 600px;
+  margin: 0 auto;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 40px;
+  box-sizing: border-box;
+  line-height: 1.5;
+  background-color: rgb(255, 241, 214);
+  z-index: 1;
+}
+.grade-modal.active{
+  display: block;
+}
+.grade-info{
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30px;
+}
 
+.grade-lists li:not(:last-child){
+  margin-bottom: 10px;
+}
+.levelup-point{
+  display: inline-block;
+  width: 80px;
+}
+.grade-title,
+.pointInfo-title{
+  font-size: 18px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.grade{
+  font-size: 10px;
+  border: 1px solid #bdbdbd;
+  border-radius: 8px;
+  padding: 3px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+.grade.VIP{
+  padding: 3px 5px;
+  color: hotpink;
+  border-color: hotpink;
+  background-color:rgb(253, 228, 231);
+}
+.grade.pro{
+  color: yellowgreen;
+  border-color: yellowgreen;
+  background-color: rgb(252, 252, 145);
+}
+.grade.good{
+  color: royalblue;
+  border-color: royalblue;
+}
+.point-info p:not(:last-child){
+  margin-bottom: 10px;
+}
+.grade-notice{
+  border-top: 1px solid black;
+  padding-top: 20px;
+  text-align: center;
+}
+.grade-notice p {
+  margin-bottom: 5px;
+}
+.grade-notice h2{
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: violet;
+}
+.current-grade, .next-levelpoint{
+  display: block;
+  text-align: center;
+}
+.current-grade{
+  margin: 20px 0 10px 0;
+}
+.btn-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  border: 1px solid black;
+  background-color: #fff;
+  border-radius: 5px;
+}
+.btn-close::after{
+  content: "";
+  display: block;
+  position: absolute;
+  top:50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  background: url("../img/icon-sprite.png") no-repeat -175px -218px / 330px 298px;
+}
 .links .mypage-link {
   background-color: #fff;
   font-weight: bold;

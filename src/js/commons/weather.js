@@ -52,7 +52,7 @@ export async function getWeather(lat, lon) {
       weatherText = "구름 조금";
     } else if (weatherText === "scattered clouds") {
       weatherText = "구름 낌";
-    } else if (weatherText === "broken clouds") {
+    } else if (weatherText === "broken clouds"|| "overcast clouds") {
       weatherText = "흐림";
     } else if (weatherText === "shower Rain") {
       weatherText = "소나기";

@@ -363,30 +363,33 @@ async function getAuthImg(auth) {
 const updateProfileImg = async (url) => {
   try {
     if (!auth.currentUser) return;
-    await updateProfile(auth.currentUser, {
+
+    const updateProfilePromise = updateProfile(auth.currentUser, {
       photoURL: url,
     });
-    const updateUser = doc(db, `user/${currentUser.displayName}`);
-    await updateDoc(updateUser, { profileImgUrl: url });
+    const updateUserPromise = updateDoc(doc(db, `user/${currentUser.displayName}`), { profileImgUrl: url });
+
+    await Promise.all([updateProfilePromise, updateUserPromise]);
   } catch (error) {
     alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
     throw error;
   }
 };
 
-// 유저 프로필 변경 적용 함수
+
 const applyProfileImg = async (file) => {
   if (file) {
     try {
       const fileName = `${uuidv4()}_${file.name}`;
-      const res = await uploadBytes(
+      const uploadTask = uploadBytes(
         storageRef(storage, `images/profile/${fileName}`),
         file
       );
+
+      const [res, user] = await Promise.all([uploadTask, FetchUserData(currentUser.displayName)]);
       const uploadfileUrl = await getDownloadURL(res.ref);
       await updateProfileImg(uploadfileUrl);
-      const user = await FetchUserData(currentUser.displayName);
-      console.log('a:',user.profileImgFileName)
+
       if (user.profileImgFileName) {
         await deleteObject(
           storageRef(
@@ -398,6 +401,7 @@ const applyProfileImg = async (file) => {
 
       const updateUser = doc(db, `user/${currentUser.displayName}`);
       await updateDoc(updateUser, { profileImgFileName: fileName });
+
       userData.profileImgURL = uploadfileUrl;
       sessionStorage.setItem("userData", JSON.stringify(userData));
       location.reload();
@@ -408,6 +412,7 @@ const applyProfileImg = async (file) => {
     }
   }
 };
+
 
 export {
   FetchUserData,

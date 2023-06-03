@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="미니 다이어리" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://minidiary.netlify.app/" />
+    <meta
+      property="og:image"
+      content="https://firebasestorage.googleapis.com/v0/b/mini-diary-65ff3.appspot.com/o/images%2Ffavicon%2Ffree-icon-planner-5304799.png?alt=media&token=976c7b58-96f6-4e43-ba7c-378007b22427&_gl=1*c3gtvf*_ga*MTQzNTY1ODUwMi4xNjg0MjI0MTA2*_ga_CW55HF8NVT*MTY4NTc2NzE5MS41Ni4xLjE2ODU3NjcyMjYuMC4wLjA"
+    />
+    <meta
+      name="description"
+      content="하루를 기록하고 여러분의 일상과 감정을 공유 해보세요."
+    />
+    <title>Mini Diary</title>
+  </head>
+  <body>
+    <style>
+      @font-face {
+        font-family: "NeoDunggeunmo";
+        src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.3/NeoDunggeunmo.woff")
+          format("woff");
+        font-weight: normal;
+        font-style: normal;
+      }
+      *{
+        font-family: "NeoDunggeunmo", "sans-serif";
+      }
+      .wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      img {
+        display: block;
+        margin: 0 auto;
+        text-align: center;
+        width: 350px;
+      }
+      .message {
+        font-size: 40px;
+        font-weight: bold;
+        color: blueviolet;
+        margin: 20px 0;
+        text-align: center;
+      }
+      .btn-back {
+        display: block;
+        margin: 0 auto;
+        border: none;
+        font-size: 25px;
+        font-weight: bold;
+        padding: 15px 50px 15px 20px;
+        border-radius: 10px;
+        color: white;
+        cursor: pointer;
+        background: url(./src/img/icon-sprite.png) no-repeat center right 10px / 35px rgba(221, 158, 211);
+      }
+    </style>
+    <div class="wrapper">
+      <img class="error-img" src="../img/404.png" />
+      <p class="message">404 Error</p>
+      <p class="message">Not Found Page</p>
+      <button class="btn-back" type="button">이전 페이지</button>
+    </div>
+    <script>
+      const $backBtn = document.querySelector(".btn-back");
+      $backBtn.addEventListener("click", ()=>history.back())
+    </script>
+  </body>
+</html>

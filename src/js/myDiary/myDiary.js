@@ -2,7 +2,6 @@
 import _ from "lodash";
 import { getCreatedAt } from "../commons/libray.js";
 
-
 import "../../css/myDiary.css";
 
 import {
@@ -19,8 +18,8 @@ import { db } from "../firebase/setting/firebase_setting.js";
 import { getSessionUser } from "../firebase/auth/firebase_auth.js";
 const $sectionContents = document.querySelector(".section-contents");
 const $diaryList = $sectionContents.querySelector(".diary-lists");
-
 const $inputSearch = $sectionContents.querySelector(".input-search");
+const $topBtn = $sectionContents.querySelector(".btn-top");
 const $loadingModal = $sectionContents.querySelector(".loading-modal");
 
 const userData = getSessionUser();
@@ -110,10 +109,10 @@ async function nextDiaryList() {
 function renderDiaryList(data) {
   if (data.length === 0) {
     $diaryList.innerHTML += `
-    <li class="none-item">
-      다이어리가 없어요.
-    </li>
-    `;
+    <li class="no-diary">
+    현재 다이어리가 없어요.
+  </li>
+  `;
     return;
   }
   const $frag = document.createDocumentFragment();
@@ -165,15 +164,21 @@ async function addItems() {
   slicedData = await nextDiaryList(userData.displayName);
   if (slicedData.length === 0) return;
   renderDiaryList(slicedData);
-  if (!hasNextpage) {
-    $sectionContents.removeEventListener("scroll", handleScroll);
-  }
+  if (!hasNextpage) return;
+  ectionContents.removeEventListener("scroll", handleScroll);
 }
 
 function handleScroll() {
   // scrollTop 요소의 수직 스크롤 바의 현재 위치를 반환
   // clientHeight 현재 요소의 높이
   // scrollHeight 스크롤 가능한 전체 영역의 높이
+  if ($sectionContents.scrollTop > 500) {
+    $topBtn.classList.add("active");
+    $topBtn.disabled = false;
+  } else {
+    $topBtn.classList.remove("active");
+    $topBtn.disabled = true;
+  }
   if (
     $sectionContents.scrollTop + $sectionContents.clientHeight >=
     $sectionContents.scrollHeight
