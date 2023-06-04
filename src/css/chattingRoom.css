@@ -14,13 +14,13 @@
 .btn-next {
   width: 15px;
   height: 24px;
-  background: url("../img/icon-sprite.png") no-repeat  -103px -214px / 330px 298px;
+  background: url("../img/icon-sprite.png") no-repeat  -263px -236px / 410px 329px;
   border: none;
   cursor: pointer;
   transition: all 0.3s;
 }
 .btn-next{
-  background: url("../img/icon-sprite.png") no-repeat  -72px -214px / 330px 298px;
+  background: url("../img/icon-sprite.png") no-repeat  -232px -235.5px / 410px 329px;
   margin-left: 10px;
 }
 .btn-prev.inactive,
@@ -63,7 +63,7 @@
   left: 15px;
   transform: translateY(-45%);
   display: block;
-  background: url("../img/icon-sprite.png") no-repeat  -4px -218.8px / 264px 238.8px;
+  background: url("../img/icon-sprite.png") no-repeat -164.8px -239.2px / 328px 263.2px;
   width: 16px;
   height: 16px;
 }
@@ -110,7 +110,7 @@
   display: block;
   width: 30px;
   height: 30px;
-  background: url("../img/icon-sprite.png") no-repeat -232px -173px / 330px 298px;
+  background: url("../img/icon-sprite.png") no-repeat -228px -199.5px / 410px 329px;
   position: absolute;
   top: 20px;
   right: 10px;
@@ -242,7 +242,7 @@
   width: 14px;
   height: 14px;
   transform: translate(-50%, -50%);
-  background: url("../img/icon-sprite.png") no-repeat -175px -218px / 330px 298px;
+  background: url("../img/icon-sprite.png") no-repeat -45px -304px / 410px 329px;
 }
 .btn-close:hover {
   background-color: #dadada;

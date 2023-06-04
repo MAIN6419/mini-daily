@@ -209,7 +209,7 @@ async function renderdiary() {
   const user = await FetchUserData(currentUser.displayName);
   if (user.empathyList.includes(id)) {
     $empathyBtn.style.background =
-      " url(../img/icon-sprite.png)no-repeat -239px -216px / 330px 298.5px";
+      "url(../img/icon-sprite.png)no-repeat -109px -301px / 410px 329px";
   }
 }
 
@@ -234,14 +234,14 @@ $empathyBtn.addEventListener("click", async () => {
     // sessionStorage.setItem("diaryData", JSON.stringify(data));
     $empathyCount.textContent = `공감 ${data.empathy}`;
     $empathyBtn.style.background =
-      " url(../img/icon-sprite.png) no-repeat -205px -216px / 330px 298.5px";
+      "url(../img/icon-sprite.png) no-repeat -75px -301px / 410px 329px";
   } else {
     updateEmpathy(id, 1, data.auth);
     data.empathy += 1;
     // sessionStorage.setItem("diaryData", JSON.stringify(data));
     $empathyCount.textContent = `공감 ${data.empathy}`;
     $empathyBtn.style.background =
-      "url(../img/icon-sprite.png)no-repeat -239px -216px / 330px 298.5px";
+      "url(../img/icon-sprite.png)no-repeat -109px -301px / 410px 329px";
   }
 });
 

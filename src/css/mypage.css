@@ -169,7 +169,7 @@
 .custom-input {
   width: 100%;
   height: 250px;
-  background: url(../img/imgUpload.png) no-repeat center / 120px;
+  background: url("../img/imgUpload.png") no-repeat center / 120px;
   border: none;
   cursor: pointer;
 }
@@ -372,7 +372,7 @@
   width: 14px;
   height: 14px;
   transform: translate(-50%, -50%);
-  background: url("../img/icon-sprite.png") no-repeat -175px -218px / 330px 298px;
+  background: url("../img/icon-sprite.png") no-repeat -45px -304px / 410px 329px;
 }
 .links .mypage-link {
   background-color: #fff;

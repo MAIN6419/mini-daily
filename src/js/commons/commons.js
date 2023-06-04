@@ -10,7 +10,6 @@ import "../../img/bg.png";
 import "../../img/weather-loading.gif";
 import "../../img/sunset-bg.png";
 import "../../img/profile.png";
-import "../../img/no-diary.png";
 import "../../img/404.png";
 
 import { askForCoords } from "./weather.js";

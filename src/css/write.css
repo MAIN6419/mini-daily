@@ -59,19 +59,19 @@
   border-width: 3px;
 }
 .label-happy {
-  background: url("../img/icon-sprite.png") no-repeat -226px -5px / 330px 298.5px yellowgreen;
+  background: url("../img/icon-sprite.png") no-repeat -306px -109px / 410px 329px yellowgreen;
 }
 .label-good  {
-  background: url("../img/icon-sprite.png") no-repeat -115px -109.5px / 330px 298.5px gold;
+  background: url("../img/icon-sprite.png") no-repeat -306px -5px / 410px 329px gold;
 }
 .label-sad  {
-  background: url("../img/icon-sprite.png") no-repeat -5px -5px / 330px 298.5px skyblue;
+  background: url("../img/icon-sprite.png") no-repeat -197px -5px / 410px 329px skyblue;
 }
 .label-gloomy  {
-  background: url("../img/icon-sprite.png") no-repeat -5px -104.5px / 330px  298.5px royalblue;
+  background: url("../img/icon-sprite.png") no-repeat -115px -190px / 410px 329px royalblue;
 }
 .label-angry  {
-  background: url("../img/icon-sprite.png") no-repeat -115px -0px / 330px 298.5px tomato;
+  background: url("../img/icon-sprite.png") no-repeat -5px -190px / 410px 329px tomato;
 }
 
 
@@ -106,7 +106,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  background: url("../img/icon-sprite.png") no-repeat -66px -273.5px / 330px 298.5px;
+  background: url("../img/icon-sprite.png") no-repeat -226px -270px / 410px 329px
 }
 .upload-title {
   margin-bottom: 10px;

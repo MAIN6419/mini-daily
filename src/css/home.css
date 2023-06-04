@@ -30,7 +30,7 @@
   width: 48px;
   height: 48px;
   transform: translate(-50%, -50%);
-  background: url(../img/favicon.png) no-repeat center / 48px;
+  background: url("../img/favicon.png") no-repeat center / 48px;
 }
 .banner-title{
   position: absolute;
@@ -263,7 +263,7 @@
   display: inline-block;
   width: 24px;
   height: 24px;
-  background: url("../img/icon-sprite.png") no-repeat -238px -213.5px / 330px 298.5px;
+  background: url("../img/icon-sprite.png") no-repeat -109px -301px / 410px 329px;
   vertical-align: middle;
   margin-right: 3px;
 }

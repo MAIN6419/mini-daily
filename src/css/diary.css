@@ -146,27 +146,28 @@
 }
 .diary-wrapper .mood-box.happy {
   display: block;
-  background: url("../img/icon-sprite.png") no-repeat -315px -124px / 410px 329px yellowgreen;
+  background: url("../img/icon-sprite.png") no-repeat -305px -109px / 410px 329px yellowgreen;
 }
 .diary-wrapper .mood-box.good {
   display: block;
   width: 100px;
   height: 100px;
-  background: url("../img/icon-sprite.png") no-repeat -5px -124px / 410px 329px gold;
+  background: url("../img/icon-sprite.png") no-repeat -306px -5px / 410px 329px gold;
   
 }
 .diary-wrapper .mood-box.sad {
   display: block;
-  background: url("../img/icon-sprite.png") no-repeat -5px -5px / 330px 298.5px skyblue;
+  background: url("../img/icon-sprite.png") no-repeat -197px -5px / 410px 329px skyblue;
 }
 .diary-wrapper .mood-box.gloomy {
   display: block;
-  background: url("../img/icon-sprite.png") no-repeat -5px -109.5px / 330px  298.5px royalblue;
+  background: url("../img/icon-sprite.png") no-repeat -115px -190px / 410px 329px royalblue;
 }
 .diary-wrapper .mood-box.angry {
   display: block;
-  background: url("../img/icon-sprite.png") no-repeat -115px 0px / 330px 298.5px tomato;
+  background: url("../img/icon-sprite.png") no-repeat -5px -190px / 410px 329px tomato;
 }
+
 .empathy-box {
   border-radius: 5px;
   width: 80px;
@@ -186,7 +187,7 @@
   margin: 0 auto;
   cursor: pointer;
   margin-bottom: 5px;
-  background: url("../img/icon-sprite.png") no-repeat  -205px -216px / 330px 298.5px;
+  background: url("../img/icon-sprite.png") no-repeat -75px -301px / 410px 329px;
   border: none;
 }
 .empathy-count {
@@ -265,19 +266,19 @@
 }
 
 .label-happy {
-  background: url("../img/icon-sprite.png") no-repeat -226px -5px / 330px 298.5px yellowgreen;
+  background: url("../img/icon-sprite.png") no-repeat -306px -109px / 410px 329px yellowgreen;
 }
 .label-good  {
-  background: url("../img/icon-sprite.png") no-repeat -115px -109.5px / 330px 298.5px gold;
+  background: url("../img/icon-sprite.png") no-repeat -306px -5px / 410px 329px gold;
 }
 .label-sad  {
-  background: url("../img/icon-sprite.png") no-repeat -5px -5px / 330px 298.5px skyblue;
+  background: url("../img/icon-sprite.png") no-repeat -197px -5px / 410px 329px skyblue;
 }
 .label-gloomy  {
-  background: url("../img/icon-sprite.png") no-repeat -5px -104.5px / 330px  298.5px royalblue;
+  background: url("../img/icon-sprite.png") no-repeat -115px -190px / 410px 329px royalblue;
 }
 .label-angry  {
-  background: url("../img/icon-sprite.png") no-repeat -115px -0px / 330px 298.5px tomato;
+  background: url("../img/icon-sprite.png") no-repeat -5px -190px / 410px 329px tomato;
 }
 .mood-box input:checked + label {
   border-color:black;
@@ -308,7 +309,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  background: url("../img/icon-sprite.png") no-repeat -66px -273.5px / 330px 298.5px;
+  background: url("../img/icon-sprite.png") no-repeat -226px -270px / 410px 329px
 }
 .upload-title {
   width: 100%;
@@ -362,7 +363,7 @@
   display: inline-block;
   width: 24px;
   height: 24px;
-  background: url("../img/icon-sprite.png") no-repeat -275px -217.5px / 330px 298.5px;
+  background: url("../img/icon-sprite.png") no-repeat -145px -303px / 410px 329px;
   vertical-align: top;
   margin-right: 3px;
 }
@@ -520,7 +521,7 @@
   display: inline-block;
   width: 20px;
   height: 20px;
-  background: url("../img/icon-sprite.png") no-repeat -306px -170px / 330px 298px;
+  background: url("../img/icon-sprite.png") no-repeat -177px -300px / 410px 329px;
 }
 .reply-lists .comment-item{
   border: none;

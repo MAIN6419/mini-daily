@@ -1,5 +1,5 @@
 .section-contents {
-  background: url(../img/fortune-bg.jpg) no-repeat center / cover;
+  background: url("../img/fortune-bg.jpg") no-repeat center / cover;
   overflow: hidden;
   position: relative;
 }
@@ -20,7 +20,7 @@
   left: 0;
   transform: translateY(-50%);
   display: block;
-  background: url("../img/icon-sprite.png") no-repeat -266px -169px / 330px 298px;
+  background: url("../img/icon-sprite.png") no-repeat -266px -195px / 410px 329px;
   width: 27px;
   height: 27px;
 }
@@ -158,10 +158,10 @@
   height: 50px;
 }
 .btn-prev::after {
-  background: url("../img/icon-sprite.png") no-repeat -225px -109px / 330px 298px;
+  background: url("../img/icon-sprite.png") no-repeat -305px -213px / 410px 329px;
 }
 .btn-next::after {
-  background: url("../img/icon-sprite.png") no-repeat -5px -213px/ 330px 298px;
+  background: url("../img/icon-sprite.png") no-repeat -195px -109px / 410px 329px;
 }
 
 .btn-reset {

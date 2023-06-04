@@ -69,7 +69,7 @@ if (host.includes("github.io")) {
   $currentGrade.textContent = `나의 현재 등급 : ${userInfo.grade}`;
   let nextLevelPoint;
   if(userInfo.grade==="VIP") {
-    nextLevelPoint = '현재 최고 등급';
+    nextLevelPoint = '0';
   } else if(userInfo.grade==="프로") {
     nextLevelPoint = 1000 - userInfo.point;
   } else if(userInfo.grade==="우수") {
