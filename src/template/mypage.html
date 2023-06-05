@@ -6,12 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta property="og:title" content="미니 다이어리" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://minidiary.netlify.app" />
+    <meta property="og:url" content="https://minidiary.site/" />
     <meta
       property="og:image"
       content="https://firebasestorage.googleapis.com/v0/b/mini-diary-65ff3.appspot.com/o/images%2Fog%2Fog%20(2).png?alt=media&token=eeac22e7-809e-4670-a7e3-a2bc780251e4&_gl=1*1pmjxx2*_ga*MTQzNTY1ODUwMi4xNjg0MjI0MTA2*_ga_CW55HF8NVT*MTY4NTg5MDIzOC42NC4xLjE2ODU4OTAyOTYuMC4wLjA"
     />
-    <meta name="description" content="오늘 하루를 기록하고 여러분의 일상과 감정을 공유 해보세요." />
+    <meta
+      name="description"
+      content="오늘 하루를 기록하고 여러분의 일상과 감정을 공유 해보세요."
+    />
     <title>Mini Diary</title>
   </head>
   <body>
@@ -50,12 +53,19 @@
                 <button class="btn-changeIntroduce" type="button">
                   소개글 변경
                 </button>
-                <button class="btn-gradeInfo" type="button">
-                  등업 정보
-                </button>
+                <button class="btn-gradeInfo" type="button">등업 정보</button>
               </div>
             </div>
           </section>
+          <article class="empathy-box">
+            <h2>나의 공감 목록</h2>
+            <div id="empathy-slide" class="swiper-container">
+              <ul class="swiper-wrapper"></ul>
+            </div>
+            <div class="swiper-button-prev"><span class="a11y-hidden">다음</span></div>
+            <div class="swiper-button-next"><span class="a11y-hidden">이전</span></div>
+            <div class="pagination"></div>
+          </article>
 
           <article class="introduce-modal">
             <div class="dim"></div>
@@ -131,10 +141,10 @@
               <h2 class="a11y-hidden">등업 정보</h2>
               <div class="grade-info">
                 <ul class="grade-lists">
-                  <h3 class="grade-title">등급</h3>
                   <li>
-                    <span class="levelup-point">1000 point</span> 
-                    <span class="grade VIP">VIP</span></li>
+                    <span class="levelup-point">1000 point</span>
+                    <span class="grade VIP">VIP</span>
+                  </li>
                   <li>
                     <span class="levelup-point">500 point </span>
                     <span class="grade pro">프로</span>
@@ -157,13 +167,24 @@
               </div>
               <div class="grade-notice">
                 <h2>일일 획득 제한</h2>
-                <p>다이어리 작성은 <strong>일일 최초 1회</strong> 포인트가 지급됩니다.</p>
-                <p>댓글 작성은 <strong>일일 최대 3회까지</strong> 포인트가 지급됩니다.</p>
-                <p>공감 수에 따른 포인트 획득은 <strong>일일 제한이</strong> 없습니다.</p>
+                <p>
+                  다이어리 작성은 <strong>일일 최초 1회</strong> 포인트가
+                  지급됩니다.
+                </p>
+                <p>
+                  댓글 작성은 <strong>일일 최대 3회까지</strong> 포인트가
+                  지급됩니다.
+                </p>
+                <p>
+                  공감 수에 따른 포인트 획득은
+                  <strong>일일 제한이</strong> 없습니다.
+                </p>
               </div>
               <span class="current-grade">나의 현재 등급 : </span>
               <span class="next-levelpoint">등업까지 남은 포인트 : </span>
-              <button class="btn-close" type="button"><span class="a11y-hidden">닫기</span></button>
+              <button class="btn-close" type="button">
+                <span class="a11y-hidden">닫기</span>
+              </button>
             </div>
           </article>
 

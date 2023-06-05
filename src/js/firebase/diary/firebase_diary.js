@@ -72,15 +72,17 @@ async function writeDiary(newDiary) {
 // 다이어리 이미지 업로드 함수
 async function uploadFile(files) {
   try {
-    const uploadPromises = files.map(async (file) => {
+    const uploadPromises = files.map((file) => {
       if (file) {
         const fileName = uuidv4() + "_" + file.name;
-        const res = await uploadBytes(
+        const uploadTask = uploadBytes(
           storageRef(storage, `images/diary/${fileName}`),
           file
         );
-        const uploadfileUrl = await getDownloadURL(res.ref);
-        return { url: uploadfileUrl, fileName: fileName };
+        return uploadTask.then(async (res) => {
+          const uploadfileUrl = await getDownloadURL(res.ref);
+          return { url: uploadfileUrl, fileName: fileName };
+        });
       }
     });
 
@@ -103,6 +105,7 @@ async function uploadFile(files) {
     throw error;
   }
 }
+
 
 
 // 최신 다이어리 목록 4개를 불러오는 함수
@@ -142,6 +145,22 @@ async function fetchBestDiarys() {
     throw error;
   }
 }
+
+async function fetchEmpathyDiarys(nickname) {
+  const userRef = doc(db, `user/${nickname}`);
+  const res = await getDoc(userRef);
+  const empathyList = res.data().empathyList;
+  const diaryListRef = collection(db, "diaryList");
+  const empathyDataPromises = empathyList.map((el) => {
+    const q = query(diaryListRef, where("id", "==", el));
+    return getDocs(q)
+      .then((querySnapshot) => querySnapshot.docs.map((el) => el.data())[0]);
+  });
+  
+  const empathyData = await Promise.all(empathyDataPromises);
+  return empathyData;
+}
+
 
 // 현재 페이지의 다이어리를 불러오는 함수
 async function FetchDiary(id) {
@@ -264,4 +283,5 @@ export {
   deleteDiary,
   deleteEditDiaryImg,
   updateEmpathy,
+  fetchEmpathyDiarys,
 };

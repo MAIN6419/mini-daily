@@ -78,7 +78,6 @@ if (host.includes("github.io")) {
     nextLevelPoint = 100 - userInfo.point;
   }
  $nextLevelPoint.textContent = `등업까지 남은 포인트 : ${nextLevelPoint} point`
-  $loadingModal.classList.remove("active");
 })();
 
 const $passwordModal = $sectionContents.querySelector(".password-modal");

@@ -1,4 +1,3 @@
-import { config } from "../../apikey";
 import { getKST } from "./libray";
 
 export async function askForCoords() {
@@ -31,7 +30,7 @@ async function saveCoords(coordsObj) {
 }
 
 export async function getWeather(lat, lon) {
-  const API_KEY = config.OPENWEATHERMAP_API_KEY;
+  const API_KEY = OPENWEATHERMAP_API_KEY;
   try {
     const response = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`

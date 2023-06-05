@@ -16,6 +16,7 @@ import { uploadImg } from "./diaryEdit/diaryEdit.js";
 import "../../css/diary.css";
 import "../../img/imgUpload.png";
 import "../../img/placeholderImg.png";
+import { userData } from "../commons/commons.js";
 
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
@@ -45,7 +46,12 @@ if (previousPageUrl.includes("myDiary")) {
   $backBtn.addEventListener("click", () => {
     location.href = "home.html";
   });
-} else {
+}  else if (previousPageUrl.includes("mypage")) {
+  $homeLink.classList.add("active");
+  $backBtn.addEventListener("click", () => {
+    location.href = "mypage.html";
+  });
+}else {
   $allDiaryLink.classList.add("active");
   $backBtn.addEventListener("click", () => {
     location.href = "allDiary.html";
@@ -222,9 +228,14 @@ $empathyBtn.addEventListener("click", async () => {
       return (location.href = "myDiary.html");
     } else if (previousPageUrl.includes("home")) {
       return (location.href = "home.html");
+    } else if (previousPageUrl.includes("mypage")) {
+      return (location.href = "mypage.html");
     } else {
       return (location.href = "allDiary.html");
     }
+  }
+  if(checkdiary.auth===userData.nickname) {
+    return alert("자기글은 공감할 수 없습니다!");
   }
 
   const user = await FetchUserData(currentUser.displayName);

@@ -1,4 +1,5 @@
 const path = require("path");
+const dotenv = require('dotenv').config();
 const webpack = require("webpack");
 // html 번들링 플러그인
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -8,20 +9,22 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 // favicon 번들링 플러그인
 const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
-const { SourceMapDevToolPlugin } = require("webpack");
+
+// 빌드 이전에 남아있는 결과물을 제거하는 플러그인
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
 module.exports = {
+  mode: "production",
   experiments: {
     topLevelAwait: true,
   },
-  mode: "production",
   entry: {
     commons: "./src/js/commons/commons.js",
     reset: "./src/css/reset.css",
     main: "./src/css/main.css",
     allDiary: "./src/js/allDiary/allDiary.js",
     chatting: "./src/js/chatting/chatting.js",
-    chattingRoom:  "./src/js/chattingRoom/chattingRoom.js",
+    chattingRoom: "./src/js/chattingRoom/chattingRoom.js",
     chattingRoom_modal: "./src/js/chattingRoom/chattingRoom_modal.js",
     diary: "./src/js/diary/diary.js",
     findAccount: "./src/js/findAccount/findAccount.js",
@@ -29,16 +32,14 @@ module.exports = {
     home: "./src/js/home/home.js",
     login: "./src/js/login/login.js",
     myDiary: "./src/js/myDiary/myDiary.js",
-    mypage: "./src/js/mypage/mypage.js",
+    mypage: ["./src/js/mypage/mypage.js", "./src/js/mypage/myEmpathyList.js", "./src/js/mypage/myEmpathySwiper.js"],
     signup: "./src/js/signup/signup.js",
     write: "./src/js/write/write.js",
   },
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].bundle.js",
-    clean: true,
   },
-  mode: "production",
   module: {
     rules: [
       {
@@ -75,14 +76,13 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      "process.env": {
-        FIREBASE_API_KEY: JSON.stringify(process.env.FIREBASE_API_KEY),
-      },
+      FIREBASE_API_KEY: JSON.stringify(process.env.FIREBASE_API_KEY),
+      OPENWEATHERMAP_API_KEY: JSON.stringify(process.env.OPENWEATHERMAP_API_KEY)
     }),
     new HtmlWebpackPlugin({
       template: "index.html",
       filename: "index.html",
-      chunks: ["reset","login"],
+      chunks: ["reset", "login"],
     }),
     new HtmlWebpackPlugin({
       template: "404.html",
@@ -102,7 +102,13 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/template/chattingRoom.html",
       filename: "chattingRoom.html",
-      chunks: ["reset", "commons", "main", "chattingRoom", "chattingRoom_modal"],
+      chunks: [
+        "reset",
+        "commons",
+        "main",
+        "chattingRoom",
+        "chattingRoom_modal",
+      ],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/diary.html",
@@ -168,8 +174,6 @@ module.exports = {
         // ... 기타 옵션 ...
       },
     }),
-    new SourceMapDevToolPlugin({
-      filename: "[file].map",
-    }),
+    new CleanWebpackPlugin()
   ],
 };

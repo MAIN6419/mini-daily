@@ -220,7 +220,6 @@ function handleScroll() {
   }
 }
 
-// 스크롤이 끝까지 내려가면 다음 4개 요소를 출력
 $sectionContents.addEventListener("scroll", handleScroll);
 
 $inputSearch.addEventListener("input", (e) => {
