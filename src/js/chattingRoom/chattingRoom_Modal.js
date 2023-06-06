@@ -130,6 +130,7 @@ $joinRoomBtn.addEventListener("click", async (e) => {
     }
   } else {
     alert("존재하지 않는 채팅방입니다!");
+    $inputRoomId.value = "";
   }
 });
 

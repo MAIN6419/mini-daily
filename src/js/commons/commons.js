@@ -218,14 +218,13 @@ async function reloadWeather() {
   $weatherLoading.classList.add("active");
 
   try {
-    await askForCoords();
+     await askForCoords();
     const weatherInfo = JSON.parse(localStorage.getItem("weather"));
     const $weather = document.querySelector(".weather");
     const $weatherIcon = $weather.querySelector(".weather-icon");
     const $weatherHumidity = $weather.querySelector(".weather-humidity");
     const $weatherTime = $weather.querySelector(".weather-time");
     const $weatherText = $weather.querySelector(".weather-text");
-    console.log(weatherInfo.weatherText);
     $weatherText.textContent = weatherInfo.weatherText;
 
     const isSunset =

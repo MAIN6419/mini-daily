@@ -14,7 +14,6 @@ import {
 import { db } from "../firebase/setting/firebase_setting.js";
 import { getAuthImg } from "../firebase/auth/firebase_auth.js";
 
-
 import "../../css/allDiary.css";
 import "../../img/no-image.png";
 
@@ -103,14 +102,14 @@ async function nextDiaryList() {
 
 renderAllDiary(data);
 async function renderAllDiary(data) {
-  if(data.length===0) {
+  if (data.length === 0) {
     $allDiaryList.innerHTML = `
     <li class="no-diary">
       현재 다이어리가 없어요.
     </li>
-    `
+    `;
     return;
-  }
+  } 
   // 최초로딩시에만 로딩화면을 보여주기 위해서
   if (!isfirstLoding) $loadingModal.classList.add("active");
   const frag = new DocumentFragment();
@@ -183,8 +182,8 @@ async function renderAllDiary(data) {
 }
 
 // 다이어리 작성자 이미지를 불러오는 함수 => placeholderImg 교체
- async function fetchAuthImg(profileImg, data) {
-  profileImg.src = await getAuthImg(data.auth) || "./img/profile.png";
+async function fetchAuthImg(profileImg, data) {
+  profileImg.src = (await getAuthImg(data.auth)) || "./img/profile.png";
 }
 // 스크롤이 빠르게 일어날시 마지막 데이터가 중복됨
 // 이 문제를 해결하기 위해 isloading 변수을 사용해 현재 로딩 중임을 체크하고 로딩중이 아닐때만 데이터가 추가 되도록 함
@@ -192,8 +191,9 @@ let isLoading = false;
 async function addItems() {
   isLoading = true; // Set the loading state
   const slicedData = await nextDiaryList();
-
-  renderAllDiary(slicedData);
+  if(slicedData.length > 0){
+    renderAllDiary(slicedData);
+  }
   isLoading = false; // Clear the loading state
 }
 
@@ -202,14 +202,13 @@ function handleScroll() {
   // clientHeight 현재 요소의 높이
   // scrollHeight 스크롤 가능한 전체 영역의 높이
 
-  if($sectionContents.scrollTop > 500) {
+  if ($sectionContents.scrollTop > 500) {
     $topBtn.classList.add("active");
     $topBtn.disabled = false;
-  }
-  else {
-    $topBtn.classList.remove("active")
+  } else {
+    $topBtn.classList.remove("active");
     $topBtn.disabled = true;
-}
+  }
 
   if (isLoading || !hasNextpage) return;
   if (
@@ -246,6 +245,6 @@ const debounceSearch = _.debounce(async (e) => {
   renderAllDiary(data);
 }, 500);
 
-$topBtn.addEventListener('click', ()=>{
-  $sectionContents.scrollTo({ top: 0, behavior: 'smooth'})
-})
+$topBtn.addEventListener("click", () => {
+  $sectionContents.scrollTo({ top: 0, behavior: "smooth" });
+});

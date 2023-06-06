@@ -22,7 +22,7 @@ let keyword = "";
 async function renderChattingRooms(data) {
   if (!data.length) {
     variables.hasNextPage = false;
-    $roomList.innerHTML = `<li>현재 채팅방이 없습니다.</li>`;
+    $roomList.innerHTML = `<li class="no-room">현재 채팅방이 없습니다.</li>`;
     $loadingModal.classList.remove("active");
     $nextBtn.classList.add("inactive");
     $prevBtn.classList.add("inactive");

@@ -22,6 +22,7 @@ async function renderAllDiary(data) {
       현재 공감한 다이어리가 없어요.
     </li>
     `;
+    $loadingModal.classList.remove("active");
     return;
   }
   const frag = new DocumentFragment();
