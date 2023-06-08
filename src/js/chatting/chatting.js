@@ -29,6 +29,7 @@ window.addEventListener("beforeunload", async () => {
 $loadingModal.classList.add("active");
 await joinChatRoom(chatRoomId, userData.displayName, rednerJoinUsers);
 await fetchChatting($chattingBox, chatRoomId, renderChattingMsg);
+
 $loadingModal.classList.remove("active");
 
 $chattingForm.addEventListener("submit", async (e) => {
@@ -186,6 +187,7 @@ async function rednerJoinUsers({users, limit, title, id}){
       introduce.textContent = currentUser.introduce;
     })
   }
+  $chattingBox.scrollTop = $chattingBox.scrollHeight;
 }
 $copyBtn.addEventListener("click", copyId);
 
@@ -198,6 +200,7 @@ function copyId() {
     document.execCommand(`copy`);
     document.body.removeChild(el);
     alert('아이디가 복사되었습니다.');
+ 
 }
 
 $userInfoModal.addEventListener("click", (e)=>{
@@ -205,3 +208,4 @@ $userInfoModal.addEventListener("click", (e)=>{
     $userInfoModal.classList.remove("active");
   }
 })
+

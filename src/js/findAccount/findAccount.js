@@ -130,7 +130,7 @@ const findEmailEvent = () => {
           toggleResult(`찾으시는 이메일은 ${res} 입니다.`, $findResult)
           $findEmailBtn.removeEventListener("click", findEmailEvent);
           $findEmailBtn.addEventListener("click", () =>
-            location.replace("/")
+            location.replace("login.html")
           );
           $findEmailBtn.textContent = "로그인하러 가기";
         } else {
@@ -171,7 +171,7 @@ const findPwEvent = () => {
         toggleResult('가입된 메일로 비밀번호 변경 메일을 발송하였습니다.\n메일이 없을 경우 스팸 메일함을 확인해주세요.',$changeResult)
         $changePwBtn.removeEventListener("click", findPwEvent);
         $changePwBtn.addEventListener("click", () =>
-          location.replace("../../")
+          location.replace("login.html")
         );
         $changePwBtn.textContent = "로그인하러 가기";
       } else {

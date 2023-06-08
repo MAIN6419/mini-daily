@@ -189,12 +189,12 @@ async function fetchAuthImg(profileImg, data) {
 // 이 문제를 해결하기 위해 isloading 변수을 사용해 현재 로딩 중임을 체크하고 로딩중이 아닐때만 데이터가 추가 되도록 함
 let isLoading = false;
 async function addItems() {
-  isLoading = true; // Set the loading state
+  isLoading = true; 
   const slicedData = await nextDiaryList();
   if(slicedData.length > 0){
     renderAllDiary(slicedData);
   }
-  isLoading = false; // Clear the loading state
+  isLoading = false; 
 }
 
 function handleScroll() {

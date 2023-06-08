@@ -130,6 +130,10 @@ async function createReplyCommentEl(item) {
       alert("내용을 입력해주세요!");
       return;
     }
+    if(editTextarea.value === item.content){
+      alert("수정한 내용이 업습니다!");
+      return;
+    }
     if (confirm("정말 수정하시겠습니까?")) {
       editReplyComment(
         item.commentId,

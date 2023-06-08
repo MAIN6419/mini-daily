@@ -97,7 +97,6 @@ async function fetchPage(type) {
   }
 
   return new Promise((resolve, reject) => {
-    variables.currentSnapshotUnsubscribe();
     variables.currentSnapshotUnsubscribe = onSnapshot(q, async (snapshot) => {
       try {
         const res = await getDocs(chattingRoomRef);

@@ -9,7 +9,7 @@ const $loginBtn = $loginForm.querySelector(".btn-login");
 const $loadingModal = document.querySelector(".loading-modal");
 if (sessionStorage.getItem("userData")){
   alert("이미 로그인 되어있습니다!");
-  location.href = 'home.html';
+  location.href = '/';
 }
 
 $inputEmail.addEventListener("input", (e) => {

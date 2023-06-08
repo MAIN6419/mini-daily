@@ -10,12 +10,12 @@ import { getStorage } from "firebase/storage";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: FIREBASE_API_KEY,
-  authDomain: "mini-diary-65ff3.firebaseapp.com",
-  projectId: "mini-diary-65ff3",
-  storageBucket: "mini-diary-65ff3.appspot.com",
-  messagingSenderId: "407798731197",
-  appId: "1:407798731197:web:130b483a33ace812bdc2d4",
-  measurementId: "G-NZGRQDDVH2",
+  authDomain: FIREBASE_AUTH_DOMAIN,
+  projectId: FIREBASE_PROJECT_ID,
+  storageBucket: FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+  appId: FIREBASE_APP_ID,
+  measurementId: FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase

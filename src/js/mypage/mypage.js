@@ -29,6 +29,7 @@ const $profileImg = $sectionContents.querySelector(".profile-img");
 const $profileImgSubmitBtn = $profileImgModal.querySelector(".btn-submit");
 const $profileImgCancelBtn = $profileImgModal.querySelector(".btn-cancel");
 const $customInput = $profileImgModal.querySelector(".custom-input");
+const $previewImg = $profileImgModal.querySelector(".preview-img")
 const $inputProfileImg = $profileImgModal.querySelector(".input-profileImg");
 
 const $userEmail = $sectionContents.querySelector(".user-email");
@@ -99,8 +100,8 @@ $changeProfileImgBtn.addEventListener("click", () => {
 });
 $profileImgCancelBtn.addEventListener("click", (e) => {
     $profileImgModal.classList.remove("active");
-    $customInput.style.backgroundImage = `url(./img/imgUpload.png)`;
-    $customInput.style.backgroundSize = "120px";
+    $previewImg.setAttribute('src', './img/imgUpload.png');
+    $previewImg.classList.remove("preview");
 });
 $profileImglDim.addEventListener("click",()=>{
   $profileImgCancelBtn.click();
@@ -111,25 +112,33 @@ $customInput.addEventListener("click", () => {
 
 $inputProfileImg.addEventListener("change", (e) => {
   // 이미지 유효성 검사 및 임시 이미지 적용
-  const currentUploadFile = e.target.files?.[0];
-  if (!currentUploadFile) return;
-  if (
-    !currentUploadFile?.type.includes("jpeg") &&
-    !currentUploadFile?.type.includes("png") &&
-    !currentUploadFile?.type.includes("jpg")
-  ) {
-    alert("파일 형식을 확인해주세요!");
-    return;
-  }
-  if (currentUploadFile.size > 5 * 1024 * 1024) {
-    alert("파일의 크기가 큽니다. (제한: 5MB)");
-    return;
-  }
-  uploadFile = currentUploadFile;
-  tempUrl = URL.createObjectURL(uploadFile);
-  $customInput.style.backgroundImage = `url(${tempUrl})`;
-  $customInput.style.backgroundSize = "contain";
+  const file = e.currentTarget.files[0];
+  const vaild = validataionImg(file);
+  if (!vaild) return;
+  uploadFile = file;
+  tempUrl = URL.createObjectURL(file);
+  $previewImg.setAttribute('src',tempUrl);
+  $previewImg.classList.add("preview");
 });
+
+function validataionImg(file) {
+  if (!file) {
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    alert("파일의 크기를 초과하였습니다.(최대 5MB)");
+    return;
+  }
+  if (
+    !file.name.includes("png") &&
+    !file.name.includes("jpg") 
+  ) {
+    alert("이미지 형식을 확인해주세요.(지원형식 : png, jpg)");
+    return;
+  }
+  return true;
+}
+
 
 $profileImgSubmitBtn.addEventListener("click", async (e) => {
   e.preventDefault();

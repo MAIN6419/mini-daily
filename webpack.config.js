@@ -1,5 +1,5 @@
 const path = require("path");
-const dotenv = require('dotenv').config();
+const dotenv = require("dotenv").config();
 const webpack = require("webpack");
 // html 번들링 플러그인
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -11,7 +11,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 
 // 빌드 이전에 남아있는 결과물을 제거하는 플러그인
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
   mode: "production",
@@ -31,7 +31,11 @@ module.exports = {
     home: "./src/js/home/home.js",
     login: "./src/js/login/login.js",
     myDiary: "./src/js/myDiary/myDiary.js",
-    mypage: ["./src/js/mypage/mypage.js", "./src/js/mypage/myEmpathyList.js", "./src/js/mypage/myEmpathySwiper.js"],
+    mypage: [
+      "./src/js/mypage/mypage.js",
+      "./src/js/mypage/myEmpathyList.js",
+      "./src/js/mypage/myEmpathySwiper.js",
+    ],
     signup: "./src/js/signup/signup.js",
     write: "./src/js/write/write.js",
   },
@@ -76,17 +80,36 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       FIREBASE_API_KEY: JSON.stringify(process.env.FIREBASE_API_KEY),
-      OPENWEATHERMAP_API_KEY: JSON.stringify(process.env.OPENWEATHERMAP_API_KEY)
+      FIREBASE_AUTH_DOMAIN: JSON.stringify(process.env.FIREBASE_AUTH_DOMAIN),
+      FIREBASE_PROJECT_ID: JSON.stringify(process.env.FIREBASE_PROJECT_ID),
+      FIREBASE_STORAGE_BUCKET: JSON.stringify(
+        process.env.FIREBASE_STORAGE_BUCKET
+      ),
+      FIREBASE_MESSAGING_SENDER_ID: JSON.stringify(
+        process.env.FIREBASE_MESSAGING_SENDER_ID
+      ),
+      FIREBASE_APP_ID: JSON.stringify(process.env.FIREBASE_APP_ID),
+      FIREBASE_MEASUREMENT_ID: JSON.stringify(
+        process.env.FIREBASE_MEASUREMENT_ID
+      ),
+      OPENWEATHERMAP_API_KEY: JSON.stringify(
+        process.env.OPENWEATHERMAP_API_KEY
+      ),
     }),
     new HtmlWebpackPlugin({
       template: "index.html",
       filename: "index.html",
-      chunks: ["reset", "login"],
+      chunks: ["reset", "commons", "main", "home"],
     }),
     new HtmlWebpackPlugin({
       template: "404.html",
       filename: "404.html",
-      chunks: [],
+      chunks: ["reset"],
+    }),
+    new HtmlWebpackPlugin({
+      template: "./src/template/login.html",
+      filename: "login.html",
+      chunks: ["reset", "login"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/allDiary.html",
@@ -101,11 +124,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/template/chattingRoom.html",
       filename: "chattingRoom.html",
-      chunks: [
-        "reset",
-        "commons",
-        "main",
-        "chattingRoom"],
+      chunks: ["reset", "commons", "main", "chattingRoom"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/diary.html",
@@ -121,11 +140,6 @@ module.exports = {
       template: "./src/template/fortune.html",
       filename: "fortune.html",
       chunks: ["reset", "commons", "main", "fortune"],
-    }),
-    new HtmlWebpackPlugin({
-      template: "./src/template/home.html",
-      filename: "home.html",
-      chunks: ["reset", "commons", "main", "home"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/myDiary.html",
@@ -171,6 +185,6 @@ module.exports = {
         // ... 기타 옵션 ...
       },
     }),
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
   ],
 };

@@ -1,4 +1,4 @@
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import {
   arrayRemove,
   collection,
@@ -34,7 +34,6 @@ import {
 } from "firebase/auth";
 import { db, storage } from "../setting/firebase_setting.js";
 
-
 const userData = JSON.parse(sessionStorage.getItem("userData"));
 const auth = getAuth();
 let currentUser;
@@ -42,10 +41,8 @@ let currentUser;
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
-  } 
+  }
 });
-
-
 
 // 유저 정보를 가져오는 함수
 const FetchUserData = async (nickname) => {
@@ -71,15 +68,34 @@ async function checkLogin(nickname) {
         await signOut(auth);
         sessionStorage.removeItem("userData");
         sessionStorage.removeItem("diaryData");
-        location.replace('/');
+        location.replace("login.html");
       }
       if (data.point >= 100 && data.grade === "일반") {
         await updateDoc(doc.ref, { grade: "우수" });
+        document.querySelector(".profile-grade").classList.add("good");
+        document.querySelector(".profile-grade").textContent = "우수";
+        sessionStorage.setItem(
+          "userData",
+          JSON.stringify({ ...userData, grade: "우수" })
+        );
         alert("축하합니다! 우수 등급으로 등업되었습니다!");
       } else if (data.point >= 500 && data.grade === "우수") {
         await updateDoc(doc.ref, { grade: "프로" });
+        document.querySelector(".profile-grade").classList.add("pro");
+        document.querySelector(".profile-grade").textContent = "프로";
+        sessionStorage.setItem(
+          "userData",
+          JSON.stringify({ ...userData, grade: "프로" })
+        );
         alert("축하합니다! 프로 등급으로 등업되었습니다!");
       } else if (data.point >= 1000 && data.grade === "프로") {
+        await updateDoc(doc.ref, { grade: "VIP" });
+        document.querySelector(".profile-grade").classList.add("VIP");
+        document.querySelector(".profile-grade").textContent = "VIP";
+        sessionStorage.setItem(
+          "userData",
+          JSON.stringify({ ...userData, grade: "VIP" })
+        );
         alert("축하합니다! VIP 등급으로 등업되었습니다!");
       }
     });
@@ -123,9 +139,10 @@ const login = async (email, password) => {
         introduce: datas[0].introduce,
         profileImgURL: datas[0].profileImgUrl,
         fortune: datas[0].fortune,
+        grade: datas[0].grade,
       })
     );
-    location.replace(`home.html`);
+    location.replace("/");
   } catch (error) {
     if (error.message.includes("auth/invalid-email")) {
       alert("유효하지 않은 이메일 형식 입니다!");
@@ -133,7 +150,7 @@ const login = async (email, password) => {
       alert("일치 하는 로그인 정보가 없습니다!");
       return;
     } else if (error.message.includes("auth/wrong-password")) {
-      alert("비밀번호가 일치하지 않습니다!");
+      alert("아이디 또는 비밀번호가 일치하지 않습니다!");
       return;
     } else if (error.message.includes("auth/too-many-requests")) {
       alert("많은 로그인 시도로 인해 로그인이 일시적으로 제한됩니다! ");
@@ -172,14 +189,13 @@ const logout = async () => {
       // 유저 DB 로그아웃 변경
       await updateDoc(userDocRef, { islogin: true });
       await updateDoc(userDocRef, { islogin: false });
-      location.replace("/");
+      location.replace("login.html");
     } catch (error) {
       alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해 주세요.");
       throw error;
     }
   }
 };
-
 // 회원가입시 정보 중복검사를 처리하는 함수
 // duplicationValue는 중복처리검사할 값, duplicationTarget 현재 비교할 DB에서의 key값
 const duplication = async (duplicationValue, duplicationTarget) => {
@@ -262,14 +278,14 @@ const signup = async ({ nickname, email, phone, password }) => {
       diaryCount: 0,
       grade: "일반",
       empathyList: [],
-      lastCommentData: null,
-      lastDiaryData: null,
+      lastCommentDate: null,
+      lastDiaryDate: null,
       maxCommentPoint: 0,
       maxDiaryPoint: 0,
     });
 
     alert("회원가입이 완료되었습니다.");
-    location.replace('/');
+    location.replace("login.html");
   } catch (error) {
     if (error.message.includes("email-already-in-use")) {
       alert("이미 사용중인 이메일 입니다!");
@@ -364,29 +380,28 @@ const updateProfileImg = async (url) => {
   try {
     if (!auth.currentUser) return;
 
-    const updateProfilePromise = updateProfile(auth.currentUser, {
+    await updateProfile(auth.currentUser, {
       photoURL: url,
     });
-    const updateUserPromise = updateDoc(doc(db, `user/${currentUser.displayName}`), { profileImgUrl: url });
-
-    await Promise.all([updateProfilePromise, updateUserPromise]);
+    await updateDoc(doc(db, `user/${currentUser.displayName}`), {
+      profileImgUrl: url,
+    });
   } catch (error) {
     alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");
     throw error;
   }
 };
 
-
 const applyProfileImg = async (file) => {
   if (file) {
     try {
       const fileName = `${uuidv4()}_${file.name}`;
-      const uploadTask = uploadBytes(
+      const res = await uploadBytes(
         storageRef(storage, `images/profile/${fileName}`),
         file
       );
 
-      const [res, user] = await Promise.all([uploadTask, FetchUserData(currentUser.displayName)]);
+      const user = await FetchUserData(currentUser.displayName);
       const uploadfileUrl = await getDownloadURL(res.ref);
       await updateProfileImg(uploadfileUrl);
 
@@ -412,7 +427,6 @@ const applyProfileImg = async (file) => {
     }
   }
 };
-
 
 export {
   FetchUserData,

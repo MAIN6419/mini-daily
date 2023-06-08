@@ -15,13 +15,12 @@ import "../../img/404.png";
 import { askForCoords } from "./weather.js";
 export let userData;
 if (!sessionStorage.getItem("userData")) {
-  location.replace(`/`);
+  location.replace(`login.html`);
   alert("로그인 후 이용가능합니다!");
 } else {
   userData = JSON.parse(sessionStorage.getItem("userData"));
 }
 await checkLogin(userData.nickname);
-
 (async function () {
   await loadTemplate();
   const $logoutBtn = document.querySelector(".btn-logout");
@@ -66,6 +65,16 @@ async function loadTemplate() {
   const isSunset =
     weatherInfo.currentTime >= weatherInfo.sunset ||
     weatherInfo.currentTime < weatherInfo.sunrise;
+  let userGrade;
+  if(userData.grade==="우수") {
+    userGrade = "good"
+  } else if(userData.grade==="프로") {
+    userGrade = "pro"
+  } else if(userData.grade==="VIP") {
+    userGrade = "VIP"
+  } else {
+    userGrade = ""
+  }
   sectionProfile.innerHTML = `
           <article class="clock">
             <h2 class="a11y-hidden">clock</h2>
@@ -78,12 +87,11 @@ async function loadTemplate() {
               src=" ${userData.profileImgURL || "./img/profile.png"}"
               alt="유저 프로필 이미지"
             />
+            <span class="profile-grade ${userGrade}">${userData.grade}</span>
             <span class="profile-name">${userData.nickname}</span>
             <h3 class="introduce-title">자기소개</h3>
             <div class="introduce-box">
-              <p class="profile-introduce">
-                ${DOMPurify.sanitize(userData.introduce)}
-              </p>
+              <p class="profile-introduce">${DOMPurify.sanitize(userData.introduce)}</p>
             </div>
           </article>
           <article class="weather ${isSunset ? "sunset" : ""}">
@@ -203,7 +211,7 @@ async function loadTemplate() {
       "위치정보 수집에 동의하지 않아 현재 날씨 정보를 받아올 수 없습니다!";
   const links = document.querySelector(".links");
   links.innerHTML = `
-    <a class="home-link"href="home.html">홈</a>
+    <a class="home-link"href="/">홈</a>
     <a class="allDiary-link"href="allDiary.html">전체다이어리</a>
     <a class="myDiary-link" href="myDiary.html">마이다이어리</a>
     <a class="write-link" href="write.html">다이어리작성</a>

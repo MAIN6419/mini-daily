@@ -88,9 +88,10 @@ $submitBtn.addEventListener("click", async () => {
     };
 
     await writeDiary(newDiary);
-    sessionStorage.setItem("diaryData", JSON.stringify(newDiary));
     $inputTitle.value = "";
     $inputcontents.value = "";
+    $mood.value = "";
+    $mood.checked = false;
     uploadImg.splice(0);
     $previewImg.forEach(el=>el.setAttribute("src","../img/imgUpload.png"));
     $loadingModal.classList.remove("active");
@@ -102,6 +103,7 @@ $uploadBtn.forEach((el, idx) => {
     $inputUpload.click();
     imgIdx = idx;
   });
+
 });
 
 $resetBtn.forEach((el, idx) => {
@@ -114,13 +116,15 @@ function previewImg(e) {
   if (!vaild) return;
   const imageSrc = URL.createObjectURL(file);
   $previewImg[imgIdx].setAttribute("src", imageSrc);
+  $previewImg[imgIdx].classList.add("preview");
   uploadImg[imgIdx] = file;
 }
 function resetImg(idx) {
   $previewImg[idx].setAttribute("src", "../img/imgUpload.png");
+  $previewImg[idx].classList.remove("preview");
   uploadImg[idx] = "";
 }
-$inputUpload.addEventListener("change", (e) => previewImg(e));
+$inputUpload.addEventListener("input", (e) => previewImg(e));
 function validataionImg(file) {
   if (!file) {
     return;
@@ -132,11 +136,11 @@ function validataionImg(file) {
   if (
     !file.name.includes("png") &&
     !file.name.includes("jpg") &&
-    !file.name.includes("webp") &&
-    !file.name.includes("avif")
+    !file.name.includes("gif")
   ) {
-    alert("이미지 형식을 확인해주세요.(지원형식 : png, jpg, webp, avif)");
+    alert("이미지 형식을 확인해주세요.(지원형식 : png, jpg, gif)");
     return;
   }
+  $inputUpload.value = null;
   return true;
 }

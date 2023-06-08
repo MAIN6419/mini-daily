@@ -50,9 +50,6 @@
             </div>
 
             <div class="diary-btns"></div>
-            <button class="btn-back">
-              <span class="a11y-hidden">이전 페이지로 돌아가기 버튼</span>
-            </button>
           </div>
           <form class="edit-form">
             <time class="diary-date" datetime="2023"></time>
@@ -65,7 +62,7 @@
               maxlength="1000"
             ></textarea>
             <div class="mood-box">
-              <h3 class="mood-title">오늘의 기분은 어때요?</h3>
+              <h3 class="mood-title">오늘의 감정은 어때요?</h3>
               <ul class="mood-list">
                 <li class="mood-item">
                   <input
@@ -134,7 +131,7 @@
                 </li>
               </ul>
             </div>
-            <h2 class="upload-title">이미지 업로드</h2>
+            <h2 class="upload-title">이미지 업로드 (용량: 5KB 이하, 형식: png,jpg,gif)</h2>
             <label for="input-upload" class="a11y-hidden"
               >이미지 업로드 버튼</label
             >
@@ -191,7 +188,9 @@
             </form>
             <ul class="comment-lists"></ul>
           </article>
-
+          <button class="btn-back">
+            <span class="a11y-hidden">이전 페이지로 돌아가기 버튼</span>
+          </button>
           <article class="loading-modal">
             <h2 class="a11y-hidden">로딩화면</h2>
             <img src="./img/loading.gif" alt="로딩중 이미지" />

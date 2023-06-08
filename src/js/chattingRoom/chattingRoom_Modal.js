@@ -81,8 +81,8 @@ $inputPassowrd.addEventListener("input", (e) => {
 });
 
 $inputLimit.addEventListener("change", (e) => {
-  if (e.target.value > 100) {
-    e.target.value = 100;
+  if (e.target.value > 10) {
+    e.target.value = 10;
   } else if (e.target.value < 2) {
     e.target.value = 2;
   }

@@ -13,7 +13,6 @@ import {
   startAfter,
   limit,
 } from "firebase/firestore";
-import { FetchDiary } from "../firebase/diary/firebase_diary.js";
 import { db } from "../firebase/setting/firebase_setting.js";
 import { getSessionUser } from "../firebase/auth/firebase_auth.js";
 const $sectionContents = document.querySelector(".section-contents");
@@ -47,12 +46,12 @@ async function FetchDiarys() {
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
       startAfter(lastpage),
-      limit(4)
+      limit(5)
     );
     const res = await getDocs(q);
     const datas = res.docs.map((el) => el.data());
     lastpage = res.docs[res.docs.length - 1];
-    hasNextpage = res.docs.length === 4;
+    hasNextpage = res.docs.length === 5;
     $diaryList.innerHTML = "";
     return datas;
   } else {
@@ -61,14 +60,16 @@ async function FetchDiarys() {
       diaryList,
       where("auth", "==", userData.displayName),
       orderBy("createdAt", "desc"),
-      limit(4)
+      limit(5)
     );
     const res = await getDocs(q);
     lastpage = res.docs[res.docs.length - 1];
-    hasNextpage = res.docs.length === 4;
+    hasNextpage = res.docs.length === 5;
     const datas = res.docs.map((el) => el.data());
+
     return datas;
   }
+  
 }
 
 async function nextDiaryList() {
@@ -81,13 +82,12 @@ async function nextDiaryList() {
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
       startAfter(lastpage),
-      limit(4)
+      limit(5)
     );
     const res = await getDocs(q);
     const datas = res.docs.map((el) => el.data());
     lastpage = res.docs[res.docs.length - 1];
-    hasNextpage = res.docs.length === 4;
-    console.log(hasNextpage);
+    hasNextpage = res.docs.length === 5;
     return datas;
   } else {
     const diaryList = collection(db, "diaryList");
@@ -96,12 +96,12 @@ async function nextDiaryList() {
       where("auth", "==", userData.displayName),
       orderBy("createdAt", "desc"),
       startAfter(lastpage),
-      limit(4)
+      limit(5)
     );
     const res = await getDocs(q);
-    lastpage = res.docs[res.docs.length - 1];
     const datas = res.docs.map((el) => el.data());
-    hasNextpage = res.docs.length === 4;
+    lastpage = res.docs[res.docs.length - 1];
+    hasNextpage = res.docs.length === 5;
     return datas;
   }
 }
@@ -120,7 +120,7 @@ function renderDiaryList(data) {
     const $diaryItem = document.createElement("li");
     $diaryItem.setAttribute("class", "diary-item");
     $diaryItem.setAttribute("data-id", item.id);
-    $diaryItem.addEventListener("mouseover", () => getThorttle(item.id));
+  
 
     const $diaryLink = document.createElement("a");
     $diaryLink.setAttribute("href", `diary.html?id=${item.id}`);
@@ -151,21 +151,16 @@ function renderDiaryList(data) {
   $diaryList.appendChild($frag);
 }
 
-// 게시글 preload 과부하 방지
-const getThorttle = _.throttle(async (id) => {
-  const diaryData = await FetchDiary(id);
-  sessionStorage.setItem("diaryData", JSON.stringify(diaryData));
-}, 500);
+
 
 // 무한스크롤 구현
-let slicedData;
 
 async function addItems() {
-  slicedData = await nextDiaryList(userData.displayName);
-  if (slicedData.length === 0) return;
-  renderDiaryList(slicedData);
-  if (!hasNextpage) return;
-  ectionContents.removeEventListener("scroll", handleScroll);
+  const slicedData = await nextDiaryList();
+  if (slicedData.length > 0) {
+    renderDiaryList(slicedData);
+  }
+  
 }
 
 function handleScroll() {
@@ -179,6 +174,8 @@ function handleScroll() {
     $topBtn.classList.remove("active");
     $topBtn.disabled = true;
   }
+  
+  if (!hasNextpage) return;
   if (
     $sectionContents.scrollTop + $sectionContents.clientHeight >=
     $sectionContents.scrollHeight
@@ -187,7 +184,7 @@ function handleScroll() {
   }
 }
 
-// 스크롤이 끝까지 내려가면 다음 4개 요소를 출력
+
 $sectionContents.addEventListener("scroll", handleScroll);
 
 $inputSearch.addEventListener("input", (e) => {
@@ -213,3 +210,7 @@ const debounceSearch = _.debounce(async (e) => {
   $diaryList.innerHTML = "";
   renderDiaryList(data);
 }, 500);
+
+$topBtn.addEventListener("click", () => {
+  $sectionContents.scrollTo({ top: 0, behavior: "smooth" });
+});

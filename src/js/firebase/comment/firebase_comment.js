@@ -22,9 +22,9 @@ async function writeComment(commentData) {
     let data = userDoc.data();
     let maxCommentPoint = data.maxCommentPoint;
     const resetCommentPoint =
-      new Date(data.lastDiaryDate).getFullYear() !== getKST().getFullYear() ||
-      new Date(data.lastDiaryDate).getMonth() !== getKST().getMonth() ||
-      new Date(data.lastDiaryDate).getDate() !== getKST().getDate();
+      new Date(data.lastCommentDate).getFullYear() !== getKST().getFullYear() &&
+      new Date(data.lastCommentDate).getMonth() !== getKST().getMonth() &&
+      new Date(data.lastCommentDate).getDate() !== getKST().getDate();
 
     if (resetCommentPoint) {
       await updateDoc(userRef, {
@@ -40,10 +40,10 @@ async function writeComment(commentData) {
     });
 
     await updateDoc(userRef, {
-      commentCount: increment(1),
-      lastCommentDate: new Date().getTime(),
+      lastCommentDate: getKST().getTime(),
       maxCommentPoint: maxCommentPoint < 3 ? increment(1) : increment(0),
       point: maxCommentPoint < 3 ? increment(1) : increment(0),
+      commentCount: increment(1),
     });
   } catch (error) {
     alert("알 수 없는 에러가 발생하였습니다. 잠시 후 다시 시도해주세요.");

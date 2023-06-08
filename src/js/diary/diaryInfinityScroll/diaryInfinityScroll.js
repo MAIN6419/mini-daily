@@ -59,7 +59,10 @@ async function addItems() {
   }
 
   const commentData = await nextComment();
-  renderComment(commentData);
+  if(commentData.length > 0){
+    renderComment(commentData);
+  }
+
 }
 
 function handleScroll() {

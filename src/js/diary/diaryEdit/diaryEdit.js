@@ -15,7 +15,8 @@ const $uploadBtn = $sectionContents.querySelectorAll(".btn-upload");
 const $resetBtn = $sectionContents.querySelectorAll(".btn-reset");
 const $diaryWrapper = $sectionContents.querySelector(".diary-wrapper");
 const $previewImg = $sectionContents.querySelectorAll(".preview-img");
-const $articleComment = $sectionContents.querySelector(".article-comment")
+const $articleComment = $sectionContents.querySelector(".article-comment");
+const $backBtn = $sectionContents.querySelector(".btn-back");
 export const uploadImg = [];
 let imgIdx = "0";
 
@@ -45,6 +46,7 @@ $uploadBtn[0].addEventListener("keydown", (e)=>{
 })
 
 $cancelBtn.addEventListener("click", () => {
+  $backBtn.classList.remove("inactive");
   $editForm.classList.toggle("active");
   $diaryWrapper.classList.toggle("inactive");
   $articleComment.classList.remove("inactive");
@@ -123,10 +125,12 @@ function previewImg(e) {
   if (!vaild) return;
   const imageSrc = URL.createObjectURL(file);
   $previewImg[imgIdx].setAttribute("src", imageSrc);
+  $previewImg[imgIdx].classList.add("preview");
   uploadImg[imgIdx] = file;
 }
 function resetImg(idx) {
   $previewImg[idx].setAttribute("src", "./img/imgUpload.png");
+  $previewImg[idx].classList.remove("preview");
   uploadImg[idx] = "";
 }
 
@@ -138,6 +142,14 @@ function validataionImg(file) {
   }
   if (file.size > 5 * 1024 * 1024) {
     alert("파일의 크기를 초과하였습니다.(최대 5MB)");
+    return;
+  }
+  if (
+    !file.name.includes("png") &&
+    !file.name.includes("jpg") &&
+    !file.name.includes("gif")
+  ) {
+    alert("이미지 형식을 확인해주세요.(지원형식 : png, jpg, gif)");
     return;
   }
   return true;

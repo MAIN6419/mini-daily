@@ -2,7 +2,11 @@
 
 "use strict";
 import { getCreatedAt } from "../commons/libray.js";
-import { currentUser, FetchUserData } from "../firebase/auth/firebase_auth.js";
+import {
+  currentUser,
+  FetchUserData,
+  getSessionUser,
+} from "../firebase/auth/firebase_auth.js";
 
 import {
   FetchDiary,
@@ -16,8 +20,8 @@ import { uploadImg } from "./diaryEdit/diaryEdit.js";
 import "../../css/diary.css";
 import "../../img/imgUpload.png";
 import "../../img/placeholderImg.png";
-import { userData } from "../commons/commons.js";
 
+const userData = getSessionUser();
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
 
@@ -41,26 +45,28 @@ if (previousPageUrl.includes("myDiary")) {
   $backBtn.addEventListener("click", () => {
     location.href = "myDiary.html";
   });
-} else if (previousPageUrl.includes("home")) {
-  $homeLink.classList.add("active");
-  $backBtn.addEventListener("click", () => {
-    location.href = "home.html";
-  });
-}  else if (previousPageUrl.includes("mypage")) {
+} else if (previousPageUrl.includes("mypage")) {
   $homeLink.classList.add("active");
   $backBtn.addEventListener("click", () => {
     location.href = "mypage.html";
   });
-}else {
+} else if (
+  previousPageUrl.includes("allDiary") ||
+  previousPageUrl.includes("write")
+) {
   $allDiaryLink.classList.add("active");
   $backBtn.addEventListener("click", () => {
     location.href = "allDiary.html";
   });
+} else {
+  $homeLink.classList.add("active");
+  $backBtn.addEventListener("click", () => {
+    location.href = "/";
+  });
 }
 
 // 게시글 데이터 가져오기
-const fetchData = async () => {
-  console.log('a')
+export const fetchData = async () => {
   $loadingModal.classList.add("active");
   $sectionContents.style.overflow = "hidden";
   return await FetchDiary(id).then((res) => {
@@ -119,6 +125,7 @@ async function renderdiary() {
 
     editBtn.addEventListener("click", async (e) => {
       e.preventDefault();
+      $backBtn.classList.add("inactive");
       const $articleComment =
         $sectionContents.querySelector(".article-comment");
       const $diaryDate = $editForm.querySelector(".diary-date");
@@ -150,6 +157,7 @@ async function renderdiary() {
       $previewImg.forEach((el, idx) => {
         if (data.imgURL[idx]) {
           el.setAttribute("src", data.imgURL[idx]);
+          el.classList.add("preview");
         }
       });
     });
@@ -158,14 +166,21 @@ async function renderdiary() {
       if (confirm("정말 삭제하시겠습니까?")) {
         $loadingModal.classList.add("active");
         await deleteDiary(id);
-        if (previousPageUrl.includes("write")) {
+        if (previousPageUrl.includes("mydiary")) {
+          alert("삭제가 완료되었습니다.");
+          $loadingModal.classList.remove("active");
+          location.replace("mydiary.html");
+        } else if (
+          previousPageUrl.includes("allDiary") ||
+          previousPageUrl.includes("write")
+        ) {
           alert("삭제가 완료되었습니다.");
           $loadingModal.classList.remove("active");
           location.replace("allDiary.html");
         } else {
           alert("삭제가 완료되었습니다.");
           $loadingModal.classList.remove("active");
-          location.replace(previousPageUrl);
+          location.replace("/");
         }
       }
     });
@@ -234,7 +249,7 @@ $empathyBtn.addEventListener("click", async () => {
       return (location.href = "allDiary.html");
     }
   }
-  if(checkdiary.auth===userData.nickname) {
+  if (checkdiary.auth === userData.displayName) {
     return alert("자기글은 공감할 수 없습니다!");
   }
 
@@ -242,14 +257,12 @@ $empathyBtn.addEventListener("click", async () => {
   if (user.empathyList.includes(id)) {
     updateEmpathy(id, -1, data.auth);
     data.empathy -= 1;
-    // sessionStorage.setItem("diaryData", JSON.stringify(data));
     $empathyCount.textContent = `공감 ${data.empathy}`;
     $empathyBtn.style.background =
       "url(../img/icon-sprite.png) no-repeat -75px -301px / 410px 329px";
   } else {
     updateEmpathy(id, 1, data.auth);
     data.empathy += 1;
-    // sessionStorage.setItem("diaryData", JSON.stringify(data));
     $empathyCount.textContent = `공감 ${data.empathy}`;
     $empathyBtn.style.background =
       "url(../img/icon-sprite.png)no-repeat -109px -301px / 410px 329px";

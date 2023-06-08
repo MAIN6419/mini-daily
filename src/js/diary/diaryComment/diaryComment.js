@@ -34,7 +34,7 @@ async function submitComment(e) {
     };
     await writeComment(newComment);
     $commentInput.value = "";
-    // 만약에 데이터가 없을 경우에만 직적 동적으로 요소를 생성
+    // 만약에 데이터가 없을 경우에만 직접 동적으로 요소를 생성
     // 다른경우에는 무한 스크롤이 적용되어서 데이터를 불러와서 자동으로 요소를 생성하므로
     if (!pageVarialbes.hasNextpage) {
       addComment(newComment);
@@ -213,6 +213,10 @@ async function createCommentEl(item) {
         }
         if (!editTextarea.value.trim()) {
           alert("내용을 입력해주세요!");
+          return;
+        }
+        if(editTextarea.value === item.content){
+          alert("수정한 내용이 업습니다!");
           return;
         }
         if (confirm("정말 수정하시겠습니까?")) {

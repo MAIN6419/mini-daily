@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../setting/firebase_setting.js";
 import { currentUser } from "../auth/firebase_auth.js";
+import { userData } from "../../commons/commons.js";
 let isfirst = true;
 
 // 채팅방 참가시 실행되는 함수
@@ -42,7 +43,7 @@ const joinChatRoom = async (chatRoomId, nickname, renderJoinUser) => {
       users: arrayUnion(nickname),
     });
 
-    currentSnapshotUnsubscribe = onSnapshot(chatRoomRef, async (snapshot) => {
+    onSnapshot(chatRoomRef, async (snapshot) => {
       try {
         const data = snapshot.data();
 
@@ -86,7 +87,10 @@ async function fetchChatting($chattingBox, chatRoomId, renderChattingMsg) {
       const userInfo = res.find((el) => el.nickname === data.user);
 
       if (change.type === "added") {
-        renderChattingMsg(data, userInfo);
+        renderChattingMsg(data, userInfo, data.user === userData.nickname);
+        if (data.user === userData.nickname) {
+          $chattingBox.scrollTop = $chattingBox.scrollHeight;
+        }
       } else if (change.type === "modified") {
         const $messageBox = document.getElementById(`${change.doc.id}`);
         const $message = $messageBox.querySelector(".message");
@@ -101,12 +105,11 @@ async function fetchChatting($chattingBox, chatRoomId, renderChattingMsg) {
         }
       }
     });
-
-    $chattingBox.scrollTop = $chattingBox.scrollHeight;
   });
 
   return unsubscribe;
 }
+
 
 
 

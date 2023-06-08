@@ -166,6 +166,31 @@ body {
   background-color: #eee;
   margin: 0 auto 10px auto;
 }
+.profile-grade{
+  font-size: 10px;
+  border: 1px solid #bdbdbd;
+  border-radius: 8px;
+  padding: 3px 5px;
+  background-color: #f9f9f9;
+  font-weight: bold;
+  width: 26px;
+  text-align: center;
+  vertical-align: middle;
+}
+.profile-grade.good{
+  color: royalblue;
+  border-color: royalblue;
+}
+.profile-grade.pro{
+  color: yellowgreen;
+  border-color: yellowgreen;
+  background-color: rgb(252, 252, 145);
+}
+.profile-grade.VIP{
+  color: hotpink;
+  border-color: hotpink;
+  background-color:rgb(253, 228, 231);
+}
 .profile-name {
   display: inline-block;
   font-size: 20px;
@@ -186,13 +211,13 @@ body {
   width: 287px;
   margin: 0 auto;
   height: 168px;
-  overflow-y: scroll;
   margin-bottom: 20px;
 }
 .profile-introduce {
   text-align: left;
-  overflow-y: scroll;
+  height: 100%;
   font-size: 14px;
+  white-space: pre-wrap;
   line-height: 1.2;
 }
 .calendar {
