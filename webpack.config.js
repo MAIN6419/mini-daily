@@ -9,7 +9,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 // favicon 번들링 플러그인
 const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
-
+const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin");
 // 빌드 이전에 남아있는 결과물을 제거하는 플러그인
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
@@ -69,12 +69,6 @@ module.exports = {
           },
         ],
       },
-      {
-        test: /\.m?js$/,
-        exclude: /reset/,
-        enforce: "pre",
-        use: ["source-map-loader"],
-      },
     ],
   },
   plugins: [
@@ -100,66 +94,133 @@ module.exports = {
       template: "index.html",
       filename: "index.html",
       chunks: ["reset", "commons", "main", "home"],
+      minify: {
+        collapseWhitespace: true, // 공백 문자 압축
+        removeComments: true, // 주석 제거
+        removeEmptyAttributes: true, // 빈 속성 제거
+      },
     }),
     new HtmlWebpackPlugin({
       template: "404.html",
       filename: "404.html",
       chunks: ["reset"],
+      minify: {
+        minify: {
+          collapseWhitespace: true, 
+          removeComments: true, 
+          removeEmptyAttributes: true,
+        },
+      },
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/login.html",
       filename: "login.html",
       chunks: ["reset", "login"],
+      minify: {
+        collapseWhitespace: true, 
+        removeComments: true, 
+        removeEmptyAttributes: true,
+      },
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/allDiary.html",
       filename: "allDiary.html",
       chunks: ["reset", "commons", "main", "allDiary"],
+      minify: {
+        collapseWhitespace: true, 
+        removeComments: true, 
+        removeEmptyAttributes: true,
+      },
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/chatting.html",
       filename: "chatting.html",
       chunks: ["reset", "commons", "main", "chatting"],
+      minify: {
+        collapseWhitespace: true, 
+        removeComments: true, 
+        removeEmptyAttributes: true,
+      },
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/chattingRoom.html",
       filename: "chattingRoom.html",
       chunks: ["reset", "commons", "main", "chattingRoom"],
+      minify: {
+        collapseWhitespace: true, 
+        removeComments: true, 
+        removeEmptyAttributes: true,
+      },
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/diary.html",
       filename: "diary.html",
       chunks: ["reset", "commons", "main", "diary"],
+      minify: {
+        collapseWhitespace: true, 
+        removeComments: true, 
+        removeEmptyAttributes: true,
+      },
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/findAccount.html",
       filename: "findAccount.html",
       chunks: ["reset", "findAccount"],
+      minify: {
+        collapseWhitespace: true, 
+        removeComments: true, 
+        removeEmptyAttributes: true,
+      },
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/fortune.html",
       filename: "fortune.html",
       chunks: ["reset", "commons", "main", "fortune"],
+      minify: {
+        collapseWhitespace: true, 
+        removeComments: true, 
+        removeEmptyAttributes: true,
+      },
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/myDiary.html",
       filename: "myDiary.html",
       chunks: ["reset", "commons", "main", "myDiary"],
+      minify: {
+        collapseWhitespace: true, 
+        removeComments: true, 
+        removeEmptyAttributes: true,
+      },
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/mypage.html",
       filename: "mypage.html",
       chunks: ["reset", "reset", "commons", "main", "mypage"],
+      minify: {
+        collapseWhitespace: true, 
+        removeComments: true, 
+        removeEmptyAttributes: true,
+      },
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/signup.html",
       filename: "signup.html",
       chunks: ["reset", "signup"],
+      minify: {
+        collapseWhitespace: true, 
+        removeComments: true, 
+        removeEmptyAttributes: true,
+      },
     }),
     new HtmlWebpackPlugin({
       template: "./src/template/write.html",
       filename: "write.html",
       chunks: ["reset", "commons", "main", "write"],
+      minify: {
+        collapseWhitespace: true, 
+        removeComments: true, 
+        removeEmptyAttributes: true,
+      },
     }),
     new MiniCssExtractPlugin({
       filename: "css/[name].css",
@@ -187,4 +248,15 @@ module.exports = {
     }),
     new CleanWebpackPlugin(),
   ],
+  optimization: {
+    minimizer: [
+      new HtmlMinimizerPlugin({
+        minimizerOptions: {
+          collapseWhitespace: true, // 공백 문자 압축
+          removeComments: true, // 주석 제거
+          removeEmptyAttributes: true, // 빈 속성 제거
+        },
+      }),
+    ],
+  },
 };

@@ -6,12 +6,13 @@ import "../../css/write.css";
 
 import { getSessionUser } from "../firebase/auth/firebase_auth.js";
 import { getKST } from "../commons/libray.js";
+
 const data = JSON.parse(localStorage.getItem("diary")) || [];
 
 const $sectionContents = document.querySelector(".section-contents");
 const $diaryForm = $sectionContents.querySelector(".diary-form");
 const $inputTitle = $diaryForm.querySelector("#input-title");
-const $inputcontents = $diaryForm.querySelector("#input-contents");
+const $inputContents = $diaryForm.querySelector("#input-contents");
 const $submitBtn = $diaryForm.querySelector(".btn-submit");
 const $inputUpload = $diaryForm.querySelector("#input-upload");
 const $uploadBtn = $diaryForm.querySelectorAll(".btn-upload");
@@ -20,11 +21,52 @@ const $resetBtn = $diaryForm.querySelectorAll(".btn-reset");
 const $loadingModal = $sectionContents.querySelector(".loading-modal");
 const $radioInputs = $diaryForm.querySelectorAll("input[name='mood']");
 
+$diaryForm.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+  }
+});
+
+// 붙여넣기시 글자 수가 최대 글자 수를 초과한다면 경고창 출력
+$inputContents.addEventListener("paste", (e) => {
+  const clipboardData = e.clipboardData || window.clipboardData;
+  const pastedText = clipboardData.getData("text/plain");
+  const totalLength = $inputContents.value.length + pastedText.length;
+
+  if (totalLength > 3000) {
+    e.preventDefault();
+    // 글자 수 초과 처리
+    alert("최대 입력 가능한 글자 수는 3000자 입니다!");
+  }
+});
+
+$inputContents.addEventListener("keydown", (e) => {
+  // 글자수 초과시 개행 방지
+  if (e.keyCode === 13 && e.shiftKey && e.target.value.length >= 3000) {
+    e.preventDefault();
+    return;
+  } else if (e.keyCode === 13&&e.shiftKey) {
+    // 쉬프트 + 엔터키를 눌렀을 때
+    e.preventDefault();
+    const enterPos = $inputContents.selectionStart;
+    const value = $inputContents.value;
+
+    $inputContents.value =
+      value.substring(0, enterPos) +
+      "\n" +
+      value.substring(enterPos, value.length);
+    // 커서 위치 조정
+    $inputContents.selectionStart = enterPos + 1;
+    $inputContents.selectionEnd = enterPos + 1;
+    $inputContents.scrollTop = $inputContents.scrollHeight;
+    return;
+  } 
+});
 $radioInputs.forEach((el, idx) => {
     el.addEventListener("keydown", (e) => {
       if(e.keyCode === 9 && e.shiftKey && idx===0){
         e.preventDefault();
-        $inputcontents.focus();
+        $inputContents.focus();
       } else if (e.keyCode === 9 && e.shiftKey && idx !== 0) {
         e.preventDefault();
         $radioInputs[idx - 1].focus();
@@ -54,6 +96,7 @@ let imgIdx = "0";
   )}.(${day})`;
   $todayDate.setAttribute("datetime", getKST());
 })();
+
 $submitBtn.addEventListener("click", async () => {
   const $mood = $diaryForm.querySelector('input[name="mood"]:checked');
   // 유효성 검사
@@ -61,7 +104,7 @@ $submitBtn.addEventListener("click", async () => {
     alert("제목을 입력해주세요!");
     return;
   }
-  if (!$inputcontents.value.trim()) {
+  if (!$inputContents.value.trim()) {
     alert("내용을 입력해주세요!");
     return;
   }
@@ -78,7 +121,7 @@ $submitBtn.addEventListener("click", async () => {
       auth: userData.displayName,
       profileImg: userData.photoURL||"",
       title: $inputTitle.value,
-      contents: $inputcontents.value,
+      contents: $inputContents.value,
       mood: $mood.value,
       imgURL: fileInfo.url || [],
       imgFileName: fileInfo.fileName || [],
@@ -89,7 +132,7 @@ $submitBtn.addEventListener("click", async () => {
 
     await writeDiary(newDiary);
     $inputTitle.value = "";
-    $inputcontents.value = "";
+    $inputContents.value = "";
     $mood.value = "";
     $mood.checked = false;
     uploadImg.splice(0);

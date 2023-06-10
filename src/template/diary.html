@@ -11,7 +11,10 @@
       property="og:image"
       content="https://firebasestorage.googleapis.com/v0/b/mini-diary-65ff3.appspot.com/o/images%2Fog%2Fog%20(2).png?alt=media&token=eeac22e7-809e-4670-a7e3-a2bc780251e4&_gl=1*1pmjxx2*_ga*MTQzNTY1ODUwMi4xNjg0MjI0MTA2*_ga_CW55HF8NVT*MTY4NTg5MDIzOC42NC4xLjE2ODU4OTAyOTYuMC4wLjA"
     />
-    <meta name="description" content="오늘 하루를 기록하고 여러분의 일상과 감정을 공유 해보세요." />
+    <meta
+      name="description"
+      content="오늘 하루를 기록하고 여러분의 일상과 감정을 공유 해보세요."
+    />
     <title>Mini Diary</title>
   </head>
   <body>
@@ -59,7 +62,7 @@
             <textarea
               id="input-contents"
               placeholder="오늘은 어떤일이 있었나요? 다른사람과 이야기를 나누어 보아요."
-              maxlength="1000"
+              maxlength="3000"
             ></textarea>
             <div class="mood-box">
               <h3 class="mood-title">오늘의 감정은 어때요?</h3>
@@ -131,7 +134,9 @@
                 </li>
               </ul>
             </div>
-            <h2 class="upload-title">이미지 업로드 (용량: 5KB 이하, 형식: png,jpg,gif)</h2>
+            <h2 class="upload-title">
+              이미지 업로드 (용량: 5KB 이하, 형식: png,jpg,gif)
+            </h2>
             <label for="input-upload" class="a11y-hidden"
               >이미지 업로드 버튼</label
             >
@@ -182,9 +187,14 @@
           <article class="article-comment">
             <h2 class="comment-title">댓글</h2>
             <form class="comment-form">
-              <label for="input-comment">내용</label>
-              <textarea id="input-comment" maxlength="150"></textarea>
-              <button class="btn-submit">댓글달기</button>
+              <label class="a11y-hidden" for="input-comment">내용</label>
+              <div class="textarea-wrapper">
+                <textarea id="input-comment" maxlength="300" placeholder="개인정보를 공용 및 요청하거나 명예훼손, 무단 광고, 불법 정보 유포시 삭제될 수 있으며, 이에 대한 민형사상 책임은 게시자에게 있습니다."></textarea>
+                <div class="textarea-bottom">
+                  <span class="text-count">0/300</span>
+                  <button class="btn-submit">댓글달기</button>
+                </div>
+              </div>
             </form>
             <ul class="comment-lists"></ul>
           </article>

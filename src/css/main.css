@@ -7,6 +7,7 @@
 }
 
 body {
+  display: none;
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -212,7 +213,14 @@ body {
   margin: 0 auto;
   height: 168px;
   margin-bottom: 20px;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
 }
+.introduce-box::-webkit-scrollbar {
+  display: none;
+}
+
 .profile-introduce {
   text-align: left;
   height: 100%;

@@ -89,6 +89,11 @@
   border-bottom: 1px solid #999;
   padding: 5px 20px;
 }
+.recent-item a{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 300px;
+}
 .recent-item .createdAt {
   font-size: 12px;
   color: gray;

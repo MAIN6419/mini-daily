@@ -149,7 +149,7 @@ async function renderAllDiary(data) {
     profileImg.classList.add("diary-profileImg");
     // 초기 유저 이미지의 경우 임시 이미지 사용 => 렌더링이 완료된후 유저 이미지를 불러옴
     profileImg.src = "./img/placeholderImg.png";
-    profileImg.alt = "";
+    profileImg.alt = "유저 프로필 이미지";
     bottomDiv.appendChild(profileImg);
 
     const auth = document.createElement("span");
@@ -185,7 +185,7 @@ async function renderAllDiary(data) {
 async function fetchAuthImg(profileImg, data) {
   profileImg.src = (await getAuthImg(data.auth)) || "./img/profile.png";
 }
-// 스크롤이 빠르게 일어날시 마지막 데이터가 중복됨
+// 스크롤이 빠르게 일어나면 마지막 데이터가 중복됨
 // 이 문제를 해결하기 위해 isloading 변수을 사용해 현재 로딩 중임을 체크하고 로딩중이 아닐때만 데이터가 추가 되도록 함
 let isLoading = false;
 async function addItems() {

@@ -29,7 +29,7 @@ const $profileImg = $sectionContents.querySelector(".profile-img");
 const $profileImgSubmitBtn = $profileImgModal.querySelector(".btn-submit");
 const $profileImgCancelBtn = $profileImgModal.querySelector(".btn-cancel");
 const $customInput = $profileImgModal.querySelector(".custom-input");
-const $previewImg = $profileImgModal.querySelector(".preview-img")
+const $previewImg = $profileImgModal.querySelector(".preview-img");
 const $inputProfileImg = $profileImgModal.querySelector(".input-profileImg");
 
 const $userEmail = $sectionContents.querySelector(".user-email");
@@ -69,16 +69,16 @@ if (host.includes("github.io")) {
   $userComment.textContent = `댓글 : ${userInfo.commentCount}개`;
   $currentGrade.textContent = `나의 현재 등급 : ${userInfo.grade}`;
   let nextLevelPoint;
-  if(userInfo.grade==="VIP") {
-    nextLevelPoint = '0';
-  } else if(userInfo.grade==="프로") {
+  if (userInfo.grade === "VIP") {
+    nextLevelPoint = "0";
+  } else if (userInfo.grade === "프로") {
     nextLevelPoint = 1000 - userInfo.point;
-  } else if(userInfo.grade==="우수") {
+  } else if (userInfo.grade === "우수") {
     nextLevelPoint = 500 - userInfo.point;
   } else {
     nextLevelPoint = 100 - userInfo.point;
   }
- $nextLevelPoint.textContent = `등업까지 남은 포인트 : ${nextLevelPoint} point`
+  $nextLevelPoint.textContent = `등업까지 남은 포인트 : ${nextLevelPoint} point`;
 })();
 
 const $passwordModal = $sectionContents.querySelector(".password-modal");
@@ -99,13 +99,13 @@ $changeProfileImgBtn.addEventListener("click", () => {
   $customInput.focus();
 });
 $profileImgCancelBtn.addEventListener("click", (e) => {
-    $profileImgModal.classList.remove("active");
-    $previewImg.setAttribute('src', './img/imgUpload.png');
-    $previewImg.classList.remove("preview");
+  $profileImgModal.classList.remove("active");
+  $previewImg.setAttribute("src", "./img/imgUpload.png");
+  $previewImg.classList.remove("preview");
 });
-$profileImglDim.addEventListener("click",()=>{
+$profileImglDim.addEventListener("click", () => {
   $profileImgCancelBtn.click();
-})
+});
 $customInput.addEventListener("click", () => {
   $inputProfileImg.click();
 });
@@ -117,7 +117,7 @@ $inputProfileImg.addEventListener("change", (e) => {
   if (!vaild) return;
   uploadFile = file;
   tempUrl = URL.createObjectURL(file);
-  $previewImg.setAttribute('src',tempUrl);
+  $previewImg.setAttribute("src", tempUrl);
   $previewImg.classList.add("preview");
 });
 
@@ -129,16 +129,12 @@ function validataionImg(file) {
     alert("파일의 크기를 초과하였습니다.(최대 5MB)");
     return;
   }
-  if (
-    !file.name.includes("png") &&
-    !file.name.includes("jpg") 
-  ) {
+  if (!file.name.includes("png") && !file.name.includes("jpg")) {
     alert("이미지 형식을 확인해주세요.(지원형식 : png, jpg)");
     return;
   }
   return true;
 }
-
 
 $profileImgSubmitBtn.addEventListener("click", async (e) => {
   e.preventDefault();
@@ -165,12 +161,31 @@ $changeIntroduceBtn.addEventListener("click", () => {
 });
 
 $introduceCancelBtn.addEventListener("click", (e) => {
-    $introduceModal.classList.remove("active");
-});
-$introduceDim.addEventListener("click",()=>{
   $introduceModal.classList.remove("active");
-})
+});
+$introduceDim.addEventListener("click", () => {
+  $introduceModal.classList.remove("active");
+});
+
+$inputIntroduce.addEventListener("paste", (e) => {
+  const clipboardData = e.clipboardData || window.clipboardData;
+  const pastedText = clipboardData.getData("text/plain");
+  const totalLength = $inputIntroduce.value.length + pastedText.length;
+
+  if (totalLength > 150) {
+    e.preventDefault();
+    // 글자 수 초과 처리
+    alert("최대 입력 가능한 글자 수는 150자 입니다!");
+  }
+});
+
+
 $inputIntroduce.addEventListener("input", (e) => {
+  if(e.target.value.length > 150) {
+    $textCounter.textContent = "150/150";
+    return;
+  }
+  console.log(e.target.value.length)
   $textCounter.textContent = `${e.target.value.length}/150`;
 });
 
@@ -200,9 +215,36 @@ $introduceCancelBtn.addEventListener("keydown", (e) =>
   keyBoardFocutOPT(e, $introduceSubmitBtn, $inputIntroduce)
 );
 
-$inputIntroduce.addEventListener("keydown", (e) =>
+$inputIntroduce.addEventListener("keydown", (e) => {
+  // 키보드 focus 접근성 고려
   keyBoardFocutOPT(e, $introduceCancelBtn)
-);
+  // 글자수 초과시 개행 방지
+  if (e.keyCode === 13 && e.shiftKey && e.target.value.length > 150) {
+    e.preventDefault();
+    return;
+  } else if (e.keyCode === 13 && e.shiftKey) {
+    // 쉬프트 + 엔터키를 눌렀을 때
+    e.preventDefault();
+    const enterPos = $inputIntroduce.selectionStart;
+    const value = $inputIntroduce.value;
+
+    $inputIntroduce.value =
+      value.substring(0, enterPos) +
+      "\n" +
+      value.substring(enterPos, value.length);
+      $textCounter.textContent = `${e.target.value.length}/150`;
+    // 커서 위치 조정
+    $inputIntroduce.selectionStart = enterPos + 1;
+    $inputIntroduce.selectionEnd = enterPos + 1;
+    $inputIntroduce.scrollTop = $inputIntroduce.scrollHeight;
+    return;
+  } else if (e.keyCode === 13) {
+    // 일반 엔터키를 눌렀을 때
+    e.preventDefault();
+    $introduceSubmitBtn.click();
+  }
+});
+
 
 // 비밀번호 변경 모달창
 
@@ -211,14 +253,14 @@ $changePasswordBtn.addEventListener("click", () => {
   $inputCurrentPw.focus();
 });
 $passwordCancelBtn.addEventListener("click", (e) => {
-    $passwordModal.classList.remove("active");
-    $inputCurrentPw.value = "";
-    $inputNewPw.value = "";
-    $inputChkNewPw.value = "";
+  $passwordModal.classList.remove("active");
+  $inputCurrentPw.value = "";
+  $inputNewPw.value = "";
+  $inputChkNewPw.value = "";
 });
-$passwordModalDim.addEventListener("click",()=>{
+$passwordModalDim.addEventListener("click", () => {
   $passwordCancelBtn.click();
-})
+});
 
 $passwordSubmitBtn.addEventListener("click", async (e) => {
   e.preventDefault();
@@ -270,20 +312,18 @@ $passwordCancelBtn.addEventListener("keydown", (e) =>
 
 // 등업 정보 모달창 관련
 
-
-
-$gradeInfoBtn.addEventListener("click",()=>{
+$gradeInfoBtn.addEventListener("click", () => {
   $gradeModal.classList.add("active");
-})
-$gradeModalCloseBtn .addEventListener("click",()=>{
+});
+$gradeModalCloseBtn.addEventListener("click", () => {
   $gradeModal.classList.remove("active");
-})
-$gradeModalDim.addEventListener("click",()=>{
+});
+$gradeModalDim.addEventListener("click", () => {
   $gradeModal.classList.remove("active");
-})
+});
 
-$gradeModalCloseBtn.addEventListener("keydown", (e)=>{
-  if(e.keyCode===9){
+$gradeModalCloseBtn.addEventListener("keydown", (e) => {
+  if (e.keyCode === 9) {
     e.preventDefault();
   }
-})
+});

@@ -79,6 +79,7 @@ async function nextDiaryList() {
       dirayList,
       orderBy("title"),
       orderBy("createdAt", "desc"),
+      where("auth", "==", userData.displayName),
       where("title", ">=", keyword),
       where("title", "<=", keyword + "\uf8ff"),
       startAfter(lastpage),
@@ -154,13 +155,14 @@ function renderDiaryList(data) {
 
 
 // 무한스크롤 구현
-
+let isLoading = false;
 async function addItems() {
+  isLoading = true; 
   const slicedData = await nextDiaryList();
-  if (slicedData.length > 0) {
+  if(slicedData.length > 0){
     renderDiaryList(slicedData);
   }
-  
+  isLoading = false; 
 }
 
 function handleScroll() {
@@ -175,10 +177,10 @@ function handleScroll() {
     $topBtn.disabled = true;
   }
   
-  if (!hasNextpage) return;
+  if (isLoading || !hasNextpage) return;
   if (
     $sectionContents.scrollTop + $sectionContents.clientHeight >=
-    $sectionContents.scrollHeight
+    $sectionContents.scrollHeight - 20
   ) {
     addItems();
   }

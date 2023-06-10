@@ -222,7 +222,7 @@ async function renderdiary() {
     $postImg.setAttribute("alt", "포스트 이미지");
     $diaryText.insertAdjacentElement("beforebegin", $postImg);
   });
-  $diaryMood.classList.add(data.mood);
+  $diaryMood.classList.add(data.mood || "good");
 
   $empathyBox.classList.add("active");
   $diaryText.textContent = data.contents;
@@ -271,13 +271,18 @@ $empathyBtn.addEventListener("click", async () => {
 
 $commentSubitBtn.addEventListener("click", (e) => submitComment(e));
 // 댓글 작성
-
 // 엔터키 submit를 위한 키보드 이벤트
 $commentInput.addEventListener("keydown", (e) => {
-  if (e.keyCode === 13 && e.shiftKey) {
+  // 글자수 초과시 개행 방지
+  if (e.keyCode === 13 && e.shiftKey && e.target.value.length >= 300) {
+    e.preventDefault();
+    return;
+  } else if (e.keyCode === 13 && e.shiftKey) {
     // 쉬프트 + 엔터키를 눌렀을 때
     e.preventDefault();
     $commentInput.value += "\n";
+    $commentInput.scrollTop = $commentInput.scrollHeight
+    console.log(e.target.value.length)
     return;
   } else if (e.keyCode === 13) {
     // 일반 엔터키를 눌렀을 때

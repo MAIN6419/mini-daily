@@ -16,8 +16,8 @@ import { askForCoords } from "./weather.js";
 export let userData;
 if (!sessionStorage.getItem("userData")) {
   location.replace(`login.html`);
-  alert("로그인 후 이용가능합니다!");
 } else {
+  document.body.style.display = "block"
   userData = JSON.parse(sessionStorage.getItem("userData"));
 }
 await checkLogin(userData.nickname);

@@ -152,6 +152,7 @@
   height: 70px;
   border: none;
   transition: all 0.5s;
+  background-color: rgb(228, 243, 255);
 }
 .btn-top.active{
   opacity: 1;

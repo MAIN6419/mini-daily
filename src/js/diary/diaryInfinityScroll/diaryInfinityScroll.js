@@ -16,7 +16,7 @@ const $sectionContents = document.querySelector(".section-contents");
 const pageVarialbes = {
   lastpage: null,
   hasNextpage: false,
-}
+};
 
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
@@ -53,22 +53,23 @@ async function nextComment() {
 }
 
 // 무한스크롤 구현
+let isLoading = false;
 async function addItems() {
-  if (!pageVarialbes.hasNextpage) {
-    return;
-  }
-
+  isLoading = true;
   const commentData = await nextComment();
-  if(commentData.length > 0){
+  if (commentData.length > 0) {
     renderComment(commentData);
   }
-
+  isLoading = false;
 }
 
 function handleScroll() {
+  if (isLoading || !pageVarialbes.hasNextpage) {
+    return;
+  }
   const scrollBottom =
     $sectionContents.scrollTop + $sectionContents.clientHeight >=
-    $sectionContents.scrollHeight - 1;
+    $sectionContents.scrollHeight - 120;
 
   if (scrollBottom) {
     addItems();
@@ -78,4 +79,4 @@ function handleScroll() {
 // 스크롤이 끝까지 내려가면 다음 4개 요소를 출력
 $sectionContents.addEventListener("scroll", handleScroll);
 
-export{ firstComment, nextComment, pageVarialbes }
+export { firstComment, nextComment, pageVarialbes };

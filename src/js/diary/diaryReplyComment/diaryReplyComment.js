@@ -76,9 +76,28 @@ async function createReplyCommentEl(item) {
   const editForm = document.createElement("form");
   editForm.classList.add("editComment-form");
 
+  const editTextareaWrapper = document.createElement("div");
+  editTextareaWrapper.classList.add("textarea-wrapper");
+
   const editTextarea = document.createElement("textarea");
   editTextarea.id = "input-editComment";
   editTextarea.value = item.content;
+  editTextarea.maxLength = 300;
+  editTextarea.placeholder =
+    "개인정보를 공용 및 요청하거나 명예훼손, 무단 광고, 불법 정보 유포시 삭제될 수 있으며, 이에 대한 민형사상 책임은 게시자에게 있습니다.";
+
+  const editTextareaBottom = document.createElement("div");
+  editTextareaBottom.classList.add("textarea-bottom");
+
+  const editTextareaTextCount = document.createElement("span");
+  editTextareaTextCount.classList.add("text-count");
+  editTextareaTextCount.textContent = `${editTextarea.value.length}/300`;
+
+  const editTextareaBtns = document.createElement("div");
+  editTextareaBtns.classList.add("btns-editTextarea");
+
+  editTextareaBottom.appendChild(editTextareaTextCount);
+  editTextareaBottom.appendChild(editTextareaBtns);
 
   const editCommpleteBtn = document.createElement("button");
   editCommpleteBtn.classList.add("btn-submit");
@@ -90,10 +109,11 @@ async function createReplyCommentEl(item) {
   editCancelBtn.type = "button";
   editCancelBtn.textContent = "취소하기";
 
-  editForm.appendChild(editTextarea);
-  editForm.appendChild(editCommpleteBtn);
-  editForm.appendChild(editCancelBtn);
-
+  editTextareaWrapper.appendChild(editTextarea);
+  editTextareaBtns.appendChild(editCommpleteBtn);
+  editTextareaBtns.appendChild(editCancelBtn);
+  editTextareaWrapper.appendChild(editTextareaBottom);
+  editForm.appendChild(editTextareaWrapper);
   li.append(editForm);
 
   delBtn.addEventListener("click", async (e) => {
@@ -114,6 +134,8 @@ async function createReplyCommentEl(item) {
   });
 
   editCancelBtn.addEventListener("click", () => {
+    editTextarea.value = item.content;
+    editTextareaTextCount.textContent = `${editTextarea.value.length}/300`;
     contents.classList.add("active");
     editForm.classList.remove("active");
   });
@@ -130,7 +152,7 @@ async function createReplyCommentEl(item) {
       alert("내용을 입력해주세요!");
       return;
     }
-    if(editTextarea.value === item.content){
+    if (editTextarea.value === item.content) {
       alert("수정한 내용이 업습니다!");
       return;
     }
@@ -145,11 +167,40 @@ async function createReplyCommentEl(item) {
       text.textContent = editTextarea.value;
     }
   });
+  // 붙여넣기시 글자 수가 최대 글자 수를 초과한다면 경고창 출력
+  editTextarea.addEventListener("paste", (e) => {
+    const clipboardData = e.clipboardData || window.clipboardData;
+    const pastedText = clipboardData.getData("text/plain");
+    const totalLength = editTextarea.value.length + pastedText.length;
 
-  editTextarea.addEventListener("keydown", (e) => {
-    if (e.keyCode === 13 && e.shiftKey) {
+    if (totalLength > 300) {
       e.preventDefault();
-      editTextarea.value += "\n";
+      // 글자 수 초과 처리
+      alert("최대 입력 가능한 글자 수는 300자 입니다!");
+    }
+  });
+  editTextarea.addEventListener("input", (e) => {
+    if (e.target.value.length >= 300) {
+      editTextareaTextCount.textContent = "300/300";
+      return;
+    }
+    editTextareaTextCount.textContent = `${e.target.value.length}/300`;
+  });
+  editTextarea.addEventListener("keydown", (e) => {
+    if (e.keyCode === 13 && e.shiftKey && e.target.value.length >= 300) {
+      e.preventDefault();
+      return;
+    } else if (e.keyCode === 13 && e.shiftKey) {
+      e.preventDefault();
+      const enterPos = editTextarea.selectionStart;
+      const value = editTextarea.value;
+      editTextarea.value =
+        value.substring(0, enterPos) + "\n" + value.substring(enterPos, editTextarea.value.length);
+      editTextareaTextCount.textContent = `${e.target.value.length}/300`;
+      // 커서 위치 조정
+      editTextarea.selectionStart = enterPos + 1;
+      editTextarea.selectionEnd = enterPos + 1;
+      editTextarea.scrollTop = editTextarea.scrollHeight;
       return;
     } else if (e.keyCode === 13) {
       e.preventDefault();
@@ -161,5 +212,3 @@ async function createReplyCommentEl(item) {
 }
 
 export { addReplyComment, renderReplyComment };
-
-

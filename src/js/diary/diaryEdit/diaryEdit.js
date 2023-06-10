@@ -24,6 +24,35 @@ const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
 
 const $radioInputs = $editForm.querySelectorAll("input[name='mood']");
+
+$editForm.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+  }
+});
+$inputContents.addEventListener("keydown", (e) => {
+  // 글자수 초과시 개행 방지
+  if (e.keyCode === 13 && e.shiftKey && e.target.value.length >= 3000) {
+    e.preventDefault();
+    return;
+  } else if (e.keyCode === 13&&e.shiftKey) {
+    // 쉬프트 + 엔터키를 눌렀을 때
+    e.preventDefault();
+    const enterPos = $inputContents.selectionStart;
+    const value = $inputContents.value;
+
+    $inputContents.value =
+      value.substring(0, enterPos) +
+      "\n" +
+      value.substring(enterPos, value.length);
+    // 커서 위치 조정
+    $inputContents.selectionStart = enterPos + 1;
+    $inputContents.selectionEnd = enterPos + 1;
+    $inputContents.scrollTop = $inputContents.scrollHeight;
+    return;
+    return;
+  } 
+});
 $radioInputs.forEach((el, idx) => {
     el.addEventListener("keydown", (e) => {
       if(e.keyCode === 9 && e.shiftKey && idx===0){
