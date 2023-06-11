@@ -76,6 +76,7 @@
 .diary-text {
   font-size: 16px;
   white-space: pre-wrap;
+  word-break: break-all;
   line-height: 1.5;
   margin: 20px 0;
 }
@@ -236,6 +237,8 @@
   line-height: 1.5;
   font-size: 16px;
   border: 2px solid #bdbdbd;
+  white-space: pre-wrap;
+  word-break: break-all;
   margin-bottom: 20px;
 }
 .edit-form .mood-box {

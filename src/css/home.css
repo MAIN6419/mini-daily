@@ -208,6 +208,7 @@
 .diary-contents{
   padding: 20px;
   white-space: pre-wrap;
+  word-break: break-all;
   box-sizing: border-box;
 }
 .diary-title {

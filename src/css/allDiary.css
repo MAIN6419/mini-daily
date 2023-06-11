@@ -72,8 +72,6 @@
 }
 .diary-contents{
   padding: 20px;
-  box-sizing: border-box;
-  white-space: pre-wrap;
   line-height: 1.2;
 }
 .diary-title {
@@ -91,6 +89,8 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  white-space: pre-wrap;
+  word-break: break-all;
   min-height: 40px;
 }
 .diary-bottom {

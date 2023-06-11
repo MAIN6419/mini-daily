@@ -71,6 +71,7 @@
   line-height: 1.2;
   -webkit-line-clamp: 3;
   white-space: pre-wrap;
+  word-break: break-all;
 }
 
 .btn-top {
