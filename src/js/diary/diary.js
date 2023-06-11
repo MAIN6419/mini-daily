@@ -37,6 +37,7 @@ const $homeLink = document.querySelector(".home-link");
 const $commentForm = $sectionContents.querySelector(".comment-form");
 const $commentInput = $commentForm.querySelector("#input-comment");
 const $commentSubitBtn = $commentForm.querySelector(".btn-submit");
+const $textCount = $sectionContents.querySelector(".text-count");
 
 const previousPageUrl = document.referrer;
 
@@ -96,6 +97,7 @@ async function renderdiary() {
   const $empathyBox = $diaryWrapper.querySelector(".empathy-box");
   const $authGrade = $sectionContents.querySelector(".auth-grade");
   const $diaryBtns = $sectionContents.querySelector(".diary-btns");
+
   if (data.length === 0) {
     $diaryTitle.textContent = "존재하지 않는 게시물";
     alert("현재 삭제되었거나 존재하지 않는 게시물 입니다!");
@@ -271,7 +273,21 @@ $empathyBtn.addEventListener("click", async () => {
 
 $commentSubitBtn.addEventListener("click", (e) => submitComment(e));
 // 댓글 작성
-// 엔터키 submit를 위한 키보드 이벤트
+$commentInput.addEventListener("paste", (e) => {
+  const clipboardData = e.clipboardData || window.clipboardData;
+  const pastedText = clipboardData.getData("text/plain");
+  const totalLength = $commentInput.value.length + pastedText.length;
+
+  if (totalLength > 300) {
+    e.preventDefault();
+    // 글자 수 초과 처리
+    alert("최대 입력 가능한 글자 수는 300자 입니다!");
+  }
+});
+
+$commentInput.addEventListener("input",(e)=>{
+  $textCount.textContent = `${e.target.value.length}/300`
+})
 $commentInput.addEventListener("keydown", (e) => {
   // 글자수 초과시 개행 방지
   if (e.keyCode === 13 && e.shiftKey && e.target.value.length >= 300) {
@@ -280,13 +296,24 @@ $commentInput.addEventListener("keydown", (e) => {
   } else if (e.keyCode === 13 && e.shiftKey) {
     // 쉬프트 + 엔터키를 눌렀을 때
     e.preventDefault();
-    $commentInput.value += "\n";
-    $commentInput.scrollTop = $commentInput.scrollHeight
-    console.log(e.target.value.length)
+    const enterPost = $commentInput.selectionStart;
+    const value = $commentInput.value;
+
+    $commentInput.value =
+      value.substring(0, enterPost) +
+      "\n" +
+      value.substring(enterPost, value.length);
+    $textCount.textContent = `${e.target.value.length}/300`;
+    // 커서 위치 조정
+    $commentInput.selectionStart = enterPost + 1;
+    $commentInput.selectionEnd = enterPost + 1;
+    $commentInput.scrollTop = $commentInput.scrollHeight;
+    $commentInput.scrollTop = $commentInput.scrollHeight;
     return;
   } else if (e.keyCode === 13) {
     // 일반 엔터키를 눌렀을 때
     e.preventDefault();
     $commentSubitBtn.click();
   }
-});
+})
+

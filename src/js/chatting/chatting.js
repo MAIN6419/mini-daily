@@ -45,12 +45,34 @@ $chattingForm.addEventListener("submit", async (e) => {
   await addChatting(chatRoomId, newChat);
   $chattingInput.value = "";
 });
+$chattingInput.addEventListener("paste", (e) => {
+  const clipboardData = e.clipboardData || window.clipboardData;
+  const pastedText = clipboardData.getData("text/plain");
+  const totalLength = $chattingInput.value.length + pastedText.length;
 
+  if (totalLength > 1000) {
+    e.preventDefault();
+    // 글자 수 초과 처리
+    alert("최대 입력 가능한 글자 수는 1000자 입니다!");
+  }
+});
 $chattingInput.addEventListener("keydown",(e)=>{
-  // shift를 눌렀을경우 enter키 이벤트를 막기위해 e.preventDefault();
-    if (e.keyCode === 13 && e.shiftKey) { // 쉬프트 + 엔터키를 눌렀을 때
-      $chattingInput.value += "\n";
+  if (e.keyCode === 13 && e.shiftKey && e.target.value.length >= 1000) {
+    e.preventDefault();
+    return;
+  } else if (e.keyCode === 13 && e.shiftKey) { // 쉬프트 + 엔터키를 눌렀을 때
       e.preventDefault();
+      const enterPost = $chattingInput.selectionStart;
+      const value = $chattingInput.value;
+  
+      $chattingInput.value =
+        value.substring(0, enterPost) +
+        "\n" +
+        value.substring(enterPost, value.length);
+      // 커서 위치 조정
+      $chattingInput.selectionStart = enterPost + 1;
+      $chattingInput.selectionEnd = enterPost + 1;
+      $chattingInput.scrollTop = $chattingInput.scrollHeight;
       return;
     } else if (e.keyCode === 13) { // 일반 엔터키를 눌렀을 때
       e.preventDefault();
@@ -84,22 +106,22 @@ async function renderChattingMsg(data, userInfo) {
 
   const userName = document.createElement("span");
   userName.classList.add("user-name");
-  userName.innerText = data.user;
+  userName.textContent = data.user;
 
   const message = document.createElement("p");
   message.classList.add("message");
-  message.innerText = data.message;
+  message.textContent = data.message;
 
   const createdAt = document.createElement("time");
   createdAt.classList.add("createdAt");
-  createdAt.innerText = getCreatedAt(data.createdAt).slice(2);
+  createdAt.textContent = getCreatedAt(data.createdAt).slice(2);
   createdAt.setAttribute(
     "datetime",
     new Date(data.createdAt).toISOString()
   );
   const delBtn = document.createElement("button");
   delBtn.classList.add("btn-del");
-  delBtn.innerText = "X";
+  delBtn.textContent = "X";
   delBtn.addEventListener("click", async () => {
     if (confirm("정말 삭제하시겠습니까?")) {
      await deleteChat(chatRoomId, data.id);

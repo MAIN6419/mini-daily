@@ -12,7 +12,6 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db } from "../setting/firebase_setting.js";
-import { currentUser } from "../auth/firebase_auth.js";
 import { userData } from "../../commons/commons.js";
 let isfirst = true;
 

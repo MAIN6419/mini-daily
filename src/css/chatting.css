@@ -133,6 +133,16 @@
   width: 150px;
   margin: auto auto 20px auto;
 }
+.message {
+  position: relative;
+  display: flex;
+  font-size: 12px;
+  background-color: #fff;
+  padding: 10px 10px;
+  border-radius: 0.4em;
+  max-width: 200px;
+  white-space: pre-wrap;
+}
 .message-box.sent {
   flex-direction: row-reverse;
   justify-content: right;
@@ -210,16 +220,7 @@
   font-size: 14px;
   align-self: flex-start;
 }
-.message {
-  position: relative;
-  display: flex;
 
-  font-size: 12px;
-  background-color: #fff;
-  padding: 10px 10px;
-  border-radius: 0.4em;
-  max-width: 200px;
-}
 .message-box.received .message {
   margin-left: 8px;
 }
