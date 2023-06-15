@@ -219,29 +219,9 @@ $inputIntroduce.addEventListener("keydown", (e) => {
   // 키보드 focus 접근성 고려
   keyBoardFocutOPT(e, $introduceCancelBtn)
   // 글자수 초과시 개행 방지
-  if (e.keyCode === 13 && e.shiftKey && e.target.value.length > 150) {
+  if (e.keyCode === 13 && e.target.value.length > 150) {
     e.preventDefault();
     return;
-  } else if (e.keyCode === 13 && e.shiftKey) {
-    // 쉬프트 + 엔터키를 눌렀을 때
-    e.preventDefault();
-    const enterPos = $inputIntroduce.selectionStart;
-    const value = $inputIntroduce.value;
-
-    $inputIntroduce.value =
-      value.substring(0, enterPos) +
-      "\n" +
-      value.substring(enterPos, value.length);
-      $textCounter.textContent = `${e.target.value.length}/150`;
-    // 커서 위치 조정
-    $inputIntroduce.selectionStart = enterPos + 1;
-    $inputIntroduce.selectionEnd = enterPos + 1;
-    $inputIntroduce.scrollTop = $inputIntroduce.scrollHeight;
-    return;
-  } else if (e.keyCode === 13) {
-    // 일반 엔터키를 눌렀을 때
-    e.preventDefault();
-    $introduceSubmitBtn.click();
   }
 });
 

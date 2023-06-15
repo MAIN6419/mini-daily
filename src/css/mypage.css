@@ -110,6 +110,7 @@
   border-radius: 5px;
   overflow: hidden;
   z-index: 1;
+  z-index: 999;
 }
 /* 소개글 변경 모달 창*/
 .introduce-form {
@@ -453,6 +454,7 @@
   bottom: 0;
   right: 0;
   background-color: rgba(255, 255, 255, 0.5);
+  z-index: 99;
 }
 .grade-modal{
   display: none;
@@ -470,7 +472,7 @@
   box-sizing: border-box;
   line-height: 1.5;
   background-color: rgb(255, 241, 214);
-  z-index: 1;
+  z-index: 999;
 }
 .grade-modal.active{
   display: block;

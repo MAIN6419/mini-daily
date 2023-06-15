@@ -7,6 +7,7 @@ import { data } from "../diary.js";
 
 const $sectionContents = document.querySelector(".section-contents");
 const $editForm = $sectionContents.querySelector(".edit-form");
+const $inputTitle = $editForm.querySelector("#input-title");
 const $inputContents = $editForm.querySelector("#input-contents");
 const $cancelBtn = $editForm.querySelector(".btn-cancel");
 const $editCompletedBtn = $editForm.querySelector(".btn-editCompleted");
@@ -25,54 +26,52 @@ const id = urlParams.get("id");
 
 const $radioInputs = $editForm.querySelectorAll("input[name='mood']");
 
-$editForm.addEventListener("keydown", (e) => {
+$inputTitle.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
   }
 });
 $inputContents.addEventListener("keydown", (e) => {
   // 글자수 초과시 개행 방지
-  if (e.keyCode === 13 && e.shiftKey && e.target.value.length >= 3000) {
+  if (e.keyCode === 13 && e.target.value.length >= 3000) {
     e.preventDefault();
     return;
-  } else if (e.keyCode === 13&&e.shiftKey) {
-    // 쉬프트 + 엔터키를 눌렀을 때
-    e.preventDefault();
-    const enterPos = $inputContents.selectionStart;
-    const value = $inputContents.value;
+  }
+});
 
-    $inputContents.value =
-      value.substring(0, enterPos) +
-      "\n" +
-      value.substring(enterPos, value.length);
-    // 커서 위치 조정
-    $inputContents.selectionStart = enterPos + 1;
-    $inputContents.selectionEnd = enterPos + 1;
-    $inputContents.scrollTop = $inputContents.scrollHeight;
-    return;
-    return;
-  } 
+// 붙여넣기시 글자 수가 최대 글자 수를 초과한다면 경고창 출력
+$inputContents.addEventListener("paste", (e) => {
+  const clipboardData = e.clipboardData || window.clipboardData;
+  const pastedText = clipboardData.getData("text/plain");
+  const totalLength = $inputContents.value.length + pastedText.length;
+
+  if (totalLength > 3000) {
+    e.preventDefault();
+    // 글자 수 초과 처리
+    alert("최대 입력 가능한 글자 수는 3000자 입니다!");
+  }
 });
+
 $radioInputs.forEach((el, idx) => {
-    el.addEventListener("keydown", (e) => {
-      if(e.keyCode === 9 && e.shiftKey && idx===0){
-        e.preventDefault();
-        $inputContents.focus();
-      } else if (e.keyCode === 9 && e.shiftKey && idx !== 0) {
-        e.preventDefault();
-        $radioInputs[idx - 1].focus();
-      } else if (e.keyCode === 9 && idx!==4) {
-        e.preventDefault();
-        $radioInputs[idx + 1].focus();
-      }
-    });
+  el.addEventListener("keydown", (e) => {
+    if (e.keyCode === 9 && e.shiftKey && idx === 0) {
+      e.preventDefault();
+      $inputContents.focus();
+    } else if (e.keyCode === 9 && e.shiftKey && idx !== 0) {
+      e.preventDefault();
+      $radioInputs[idx - 1].focus();
+    } else if (e.keyCode === 9 && idx !== 4) {
+      e.preventDefault();
+      $radioInputs[idx + 1].focus();
+    }
+  });
 });
-$uploadBtn[0].addEventListener("keydown", (e)=>{
+$uploadBtn[0].addEventListener("keydown", (e) => {
   if (e.keyCode === 9 && e.shiftKey) {
     e.preventDefault();
     $radioInputs[4].focus();
-  } 
-})
+  }
+});
 
 $cancelBtn.addEventListener("click", () => {
   $backBtn.classList.remove("inactive");
@@ -82,7 +81,6 @@ $cancelBtn.addEventListener("click", () => {
 });
 
 $editCompletedBtn.addEventListener("click", async () => {
-  const $inputTitle = $editForm.querySelector("#input-title");
   const $mood = $editForm.querySelector("input[name='mood']:checked");
   if (!$inputTitle.value.trim()) {
     alert("제목을 입력해주세요!");

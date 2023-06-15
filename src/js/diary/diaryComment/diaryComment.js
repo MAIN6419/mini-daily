@@ -151,7 +151,7 @@ async function createCommentEl(item) {
   editTextarea.value = item.content;
   editTextarea.maxLength = 300;
   editTextarea.placeholder =
-    "개인정보를 공용 및 요청하거나 명예훼손, 무단 광고, 불법 정보 유포시 삭제될 수 있으며, 이에 대한 민형사상 책임은 게시자에게 있습니다.";
+    "개인정보를 공용 및 요청하거나 명예훼손, 무단 광고, 불법 정보 유포시 삭제될 수 있으며, 이에 대한 민형사상 책임은 게시자에게 있습니다.\n(Shift+Enter를 누르면 줄 바꿈이 됩니다.)";
 
   const editTextareaBottom = document.createElement("div");
   editTextareaBottom.classList.add("textarea-bottom");
@@ -193,7 +193,7 @@ async function createCommentEl(item) {
   replyTextarea.id = "input-replyComment";
   replyTextarea.maxLength = 300;
   replyTextarea.placeholder =
-    "개인정보를 공용 및 요청하거나 명예훼손, 무단 광고, 불법 정보 유포시 삭제될 수 있으며, 이에 대한 민형사상 책임은 게시자에게 있습니다.";
+    "개인정보를 공용 및 요청하거나 명예훼손, 무단 광고, 불법 정보 유포시 삭제될 수 있으며, 이에 대한 민형사상 책임은 게시자에게 있습니다.\n(Shift+Enter를 누르면 줄 바꿈이 됩니다.)";
 
   const replyTextareaBottom = document.createElement("div");
   replyTextareaBottom.classList.add("textarea-bottom");
