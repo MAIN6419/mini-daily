@@ -200,127 +200,127 @@
 <div align="center">
     
 ### 회원가입
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/30340e35-8ba9-40f2-aa5c-4ea9e44f18c2">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/34858329-a474-4ee8-8ea9-18d85d744e1c">
 <br>
 <br>
 
 ### 로그인
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/be7e330c-3643-404b-9b8b-c43ed8b80f68">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/bac93459-c9b8-452c-8fe8-b8a2adc96b28">
 <br>
 <br>
 
 ### 아이디 | 비밀번호 찾기
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/dee0fd78-74e6-4d72-9ebc-5707795749bf">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/c2de771d-f01c-4d78-8eeb-af98f858de14">
 <br>
 <br>
 
 ### 홈
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/f3e5bf98-2d7e-4136-83c8-746e6700f38d">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/b8f7d86c-c4e8-48f9-9bda-2653b4707cb6">
 <br>
 <br>
 
 ### 전체 다이어리
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/767f1cd2-d6d4-4e47-bc7f-f0101c50a1bc">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/f30bc16c-7f95-4b2b-b644-a6f6092b7c7a">
 <br>
 <br>
 
 ### 마이 다이어리 
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/097dadbe-8f39-4e10-8889-6e56faeb0b88">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/380c436a-d9e7-47ff-9f8d-3f1bacf943fa">
 <br>
 <br>
 
 ### 다이어리 작성
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/861a9f9d-27a1-4f89-8049-8a7509955343">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/cc7bd0cf-d15d-4db7-92b9-2d575a6983f7">
 <br>
 <br>
 
 ### 다이어리 편집
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/f791229c-aa9b-4fe6-8585-9b155e0f8e74">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/dafed43c-5ba3-4ac8-afec-86b463bee3a0">
 <br>
 <br>
 
 ### 다이어리 삭제
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/8c44fc8b-13da-4f2e-b6ce-2bcb5a575597">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/ebc0e1d6-e899-4ec9-90a9-c31ce2d89155">
 <br>
 <br>
 
 ### 댓글 | 답글(작성, 삭제, 수정)
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/9991e6cd-86d3-4605-929e-907f936146bd">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/52fca2ee-56df-4073-94fb-f9de3fcaf73e">
 <br>
 <br>
 
 ### 채팅방 생성
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/b8f556a7-be8c-44ae-bd52-a0246ea59eed">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/6bac03f0-35a5-4660-be56-6e6cdd7dd98c">
 <br>
 <br>
 
 ### 채팅방 아이디 참여
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/f13d8960-98a4-4243-aa82-98a2e5ffb513">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/1e8f7cbd-deb6-4540-af85-4efe95f3d4a8">
 <br>
 <br>
 
 ### 비밀 채팅방
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/5e9d8681-722d-428a-a0c2-99a61f7c0cc3">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/38a87fb4-6f76-40db-aea9-3c150086d0fa">
 <br>
 <br>
 
 ### 실시간 채팅
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/77ea172e-2633-4633-bf29-0cbcaa239ae6">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/dd01d472-ab8a-4341-bf09-fee10664172c">
 <br>
 <br>
 
 ### 채팅 유저 정보
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/30541370-dd4a-48b9-a06e-b6cdfdeab6af">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/03cc92c7-eba8-4e37-bda7-e4b17c8d7186">
 <br>
 <br>
 
 ### 운세보기
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/4efbc332-07d7-4c9d-92a2-696489c201af">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/1c5e6b8e-df82-4e45-87a6-f9447b164c31">
 <br>
 <br>
 
 ### 자동 등업
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/c88f2c00-d113-44a7-8225-95a43a328f57">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/2ede999b-32e2-43cd-9328-884cad352cef">
 <br>
 <br>
   
 ### 프로필 사진 변경
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/dcb617ed-7157-4341-908d-d9d73d592f02">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/b63b45dd-3434-4700-91e3-3abe632d9bba">
 <br>
 <br>
 
 ### 비밀번호 변경
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/e7733992-b2c5-4d31-8aac-f82b900c0f62">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/7ed2983a-5d7f-4a07-a080-4f8ca58224bf">
 <br>
 <br>
   
 ### 소개글 변경
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/6d092618-349a-4701-9d1f-dee0e759b0f9">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/6f8c1d30-db0d-44e8-8c98-a7ececdd1165">
 <br>
 <br>
    
 ### 등업정보, 나의 공감 목록
 <br>
-<img src="https://github.com/MAIN6419/minidiary-launch/assets/113427991/e1fdfa17-fec3-4ec1-8cc9-612204f03085">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/8ed98d88-65ce-4eb7-b373-f86bb6b06cf2">
 <br>
 <br>
 
