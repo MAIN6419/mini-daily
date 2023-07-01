@@ -161,11 +161,11 @@
   - placehloder 이미지 기법을 통해 이미지가 로딩전 placehloder이미지를 보여줘 갑자기 UI의 높이가 변화하는 것을 개선
   - 적용 전
   
-     ![diaryPlaceholder-before](https://github.com/MAIN6419/minidiary-launch/assets/113427991/adaa5d53-dc92-449b-9290-aeaec68fa8f5)
+     ![diaryPlaceholder-before](https://github.com/MAIN6419/mini-diary/assets/113427991/36f765c2-e4c0-44f7-b7c4-9ab459155f99)
         
   - 적용 후
   
-    ![diaryPlaceholder-after](https://github.com/MAIN6419/minidiary-launch/assets/113427991/f56c576a-aa08-4dd7-bd6d-868e1f2916a0)
+    ![diaryPlaceholder-after](https://github.com/MAIN6419/mini-diary/assets/113427991/62193ae9-f677-49dd-86e3-85a93b19735a)
 
 - 다이어리 카드에서 유저 프로필 이미지를 받아오는 로딩으로 페이지 로딩시간 증가
   - 게시글의 작성자의 닉네임을 가져와 user DB에서 해당되는 유저의 프로필 이미지를 가져옴
@@ -176,11 +176,11 @@
   - 로딩 시간이 **2.5초**에서 **1.2초**로 **50%** 단축됨
   - 적용 전
   
-     ![placeholder-Before](https://github.com/MAIN6419/minidiary-launch/assets/113427991/5d5013bf-d731-42b4-b10b-94822a51a141)
+     ![placeholder-Before](https://github.com/MAIN6419/mini-diary/assets/113427991/8dc955d1-3877-4f31-a073-5cadb8a0e558)
 
   - 적용 후
   
-    ![placeholder-after](https://github.com/MAIN6419/minidiary-launch/assets/113427991/0254b130-0ba2-4338-afe5-d5e6643219c4)
+    ![placeholder-after](https://github.com/MAIN6419/mini-diary/assets/113427991/c0f00676-7d84-4422-8122-6a116f0d7cba)
     
 - foreach문 안에서 비동기 처리가 동작하지 않음
    - 게시글 삭제 시 공감 버튼을 누른 유저의 목록에서 공감 목록 삭제가 제대로 처리되지 않음
