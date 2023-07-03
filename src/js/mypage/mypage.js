@@ -138,6 +138,7 @@ function validataionImg(file) {
 
 $profileImgSubmitBtn.addEventListener("click", async (e) => {
   e.preventDefault();
+  $profileImgModal.classList.remove("active");
   $loadingModal.classList.add("active");
   await applyProfileImg(uploadFile);
   $loadingModal.classList.remove("active");
@@ -206,6 +207,7 @@ $introduceSubmitBtn.addEventListener("click", async (e) => {
     userData.introduce = $inputIntroduce.value;
     sessionStorage.setItem("userData", JSON.stringify(userData));
     alert("수정이 완료되었습니다.");
+    $introduceModal.classList.remove("active");
     location.reload();
   }
 });
