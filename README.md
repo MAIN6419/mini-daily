@@ -302,25 +302,25 @@
   
 ### 프로필 사진 변경
 <br>
-<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/b63b45dd-3434-4700-91e3-3abe632d9bba">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/b541de24-cdc2-41ca-957d-8af89d909615">
 <br>
 <br>
 
 ### 비밀번호 변경
 <br>
-<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/7ed2983a-5d7f-4a07-a080-4f8ca58224bf">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/f12c007e-0ab4-4452-a903-da977cd5f126">
 <br>
 <br>
   
 ### 소개글 변경
 <br>
-<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/6f8c1d30-db0d-44e8-8c98-a7ececdd1165">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/c19e3fd0-9256-4341-ac7f-0973c2bc5630">
 <br>
 <br>
    
 ### 등업정보, 나의 공감 목록
 <br>
-<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/8ed98d88-65ce-4eb7-b373-f86bb6b06cf2">
+<img src="https://github.com/MAIN6419/mini-diary/assets/113427991/eeadaf96-9f3f-4447-a553-b41ad91fa750">
 <br>
 <br>
 
