@@ -180,13 +180,12 @@ $inputIntroduce.addEventListener("paste", (e) => {
   }
 });
 
-
 $inputIntroduce.addEventListener("input", (e) => {
-  if(e.target.value.length > 150) {
+  if (e.target.value.length > 150) {
     $textCounter.textContent = "150/150";
     return;
   }
-  console.log(e.target.value.length)
+  console.log(e.target.value.length);
   $textCounter.textContent = `${e.target.value.length}/150`;
 });
 
@@ -219,14 +218,13 @@ $introduceCancelBtn.addEventListener("keydown", (e) =>
 
 $inputIntroduce.addEventListener("keydown", (e) => {
   // 키보드 focus 접근성 고려
-  keyBoardFocutOPT(e, $introduceCancelBtn)
+  keyBoardFocutOPT(e, $introduceCancelBtn);
   // 글자수 초과시 개행 방지
   if (e.keyCode === 13 && e.target.value.length > 150) {
     e.preventDefault();
     return;
   }
 });
-
 
 // 비밀번호 변경 모달창
 
@@ -271,12 +269,12 @@ $passwordSubmitBtn.addEventListener("click", async (e) => {
   }
   // 비밀번호 변경로직
   $loadingModal.classList.add("active");
+  $passwordModal.classList.remove("active");
   const res = await changeUserPassword(
     $inputCurrentPw.value,
     $inputNewPw.value
   );
   $loadingModal.classList.remove("active");
-  $passwordModal.classList.remove("active");
   if (!res) {
     $inputCurrentPw.value = "";
     $inputNewPw.value = "";
