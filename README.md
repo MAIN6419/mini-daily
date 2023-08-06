@@ -150,10 +150,10 @@
 <br>
 
 ## 🛠 Skills
-<img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
-<img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
-<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> 
-<img src="https://img.shields.io/badge/firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white">
+|프론트엔드|벡엔드|배포,관리|
+|---|---|---|
+|<img src="https://img.shields.io/badge/html-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white">|<img src="https://img.shields.io/badge/firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white">|<img src="https://img.shields.io/badge/netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">|
+
 <br>
 
 ## 🔫 트러블 슈팅
@@ -170,10 +170,133 @@
 - 다이어리 카드에서 유저 프로필 이미지를 받아오는 로딩으로 페이지 로딩시간 증가
   - 게시글의 작성자의 닉네임을 가져와 user DB에서 해당되는 유저의 프로필 이미지를 가져옴
   - 다이어리 목록이 많아질 수록 user DB에서 유저 프로필 이미지를 가져오는 횟수가 증가하여 로딩속도 저하
-  - 캐싱 기법으로 중복되는 작성자 프로필 이미지는 캐싱 변수를 생성하여 캐싱 변수에 프로필 이미지를 저장
-  - 이미 가져온 유저 프로필 이미지는 해당 캐싱 변수에서 가져와서 사용 => 중복으로 프로필 이미지를 가져오지 않음
-  - placeholder 이미지 기법을 이용하여 로딩전 palcehloder 이미지로 유저 프로필과 UI를 먼저 보여준 후 마지막에 유저 프로필 이미지를 불러옴
-  - 로딩 시간이 **2.5초**에서 **1.2초**로 **50%** 단축됨
+  - 중복되는 작성자 프로필 이미지를 변수에 변수(cachedImages)에 저장
+  - 이미 가져온 유저 프로필 이미지는 해당 저장된 변수(cachedImages)에서 가져와서 사용 => 중복된 프로필 이미지는 API요청을 보내지 않음, 아래 getAuthImg 함수 코드 참고
+  - => 로딩 시간이 **2.5초**에서 **1.2초**로 **50%** 단축됨
+  - UX향상을 위해 placeholder 이미지 기법을 이용하여 로딩전 placehloder 이미지로 유저 프로필과 UI를 먼저 보여준 후 마지막에 유저 프로필 이미지를 불러옴
+ 
+#### firebase_auth.js getAuthImg 함수 코드
+```javascript
+// 유저 이미지 Url를 가져오는 함수
+// 중복되는 유저 프로필 이미지를 저장할 변수
+const cachedImages = {};
+
+async function getAuthImg(auth) {
+  if (cachedImages[auth]) {
+    return cachedImages[auth];
+  }
+
+  const userRef = doc(db, "user", auth);
+  const res = await getDoc(userRef);
+  const datas = res.data();
+  const imgUrl = datas.profileImgUrl;
+
+  // 이미지 URL을 저장
+  cachedImages[auth] = imgUrl;
+  return imgUrl;
+}
+```
+
+#### allDiary.js 코드
+```javascript
+//                      '
+//                      '
+//                      '
+//                    (중략)
+
+async function renderAllDiary(data) {
+  if (data.length === 0) {
+    $allDiaryList.innerHTML = `
+    <li class="no-diary">
+      현재 다이어리가 없어요.
+    </li>
+    `;
+    return;
+  } 
+  // 최초로딩시에만 로딩화면을 보여주기 위해서
+  if (!isfirstLoding) $loadingModal.classList.add("active");
+  const frag = new DocumentFragment();
+
+  for (const diary of data) {
+    const listItem = document.createElement("li");
+    listItem.classList.add("diary");
+    // listItem.addEventListener("mouseover", ()=> getThorttle(diary.id))
+
+    const anchor = document.createElement("a");
+    anchor.href = `diary.html?id=${diary.id}`;
+    listItem.appendChild(anchor);
+
+    const img = document.createElement("img");
+    img.classList.add("diary-img");
+    img.src = diary.imgURL[0] || "./img/no-image.png";
+    img.alt = "다이어리 이미지";
+    anchor.appendChild(img);
+
+    const contentsDiv = document.createElement("div");
+    contentsDiv.classList.add("diary-contents");
+
+    const title = document.createElement("h3");
+    title.classList.add("diary-title");
+    title.textContent = diary.title;
+    contentsDiv.appendChild(title);
+
+    const text = document.createElement("p");
+    text.classList.add("diary-text");
+    text.textContent = diary.contents;
+    contentsDiv.appendChild(text);
+
+    const bottomDiv = document.createElement("div");
+    bottomDiv.classList.add("diary-bottom");
+
+    const profileImg = document.createElement("img");
+    profileImg.classList.add("diary-profileImg");
+    // 초기 유저 이미지의 경우 임시 이미지 사용 => 렌더링이 완료된후 유저 이미지를 불러옴
+    profileImg.src = "./img/placeholderImg.png";
+    profileImg.alt = "유저 프로필 이미지";
+    bottomDiv.appendChild(profileImg);
+
+    const auth = document.createElement("span");
+    auth.classList.add("diary-auth");
+    auth.textContent = diary.auth;
+    bottomDiv.appendChild(auth);
+
+    const createdAt = document.createElement("time");
+    createdAt.classList.add("diary-createdAt");
+    createdAt.datetime = new Date(diary.createdAt).toISOString();
+    createdAt.textContent = getCreatedAt(diary.createdAt);
+    bottomDiv.appendChild(createdAt);
+
+    contentsDiv.appendChild(bottomDiv);
+    
+    const empathy = document.createElement("span");
+    empathy.setAttribute("class", "diary-empathy");
+    empathy.textContent = `${diary.empathy}`;
+    contentsDiv.appendChild(empathy);
+
+    anchor.appendChild(contentsDiv);
+    
+    frag.appendChild(listItem);
+    
+    // 이미지 렌더링이 완료된후 유저 이미지를 적용
+    fetchAuthImg(profileImg, diary);
+    }
+    
+  $allDiaryList.appendChild(frag);
+  if (!isfirstLoding) $loadingModal.classList.remove("active");
+  isfirstLoding = true;
+}
+
+// 다이어리 작성자 이미지를 불러오는 함수 => placeholderImg 교체
+async function fetchAuthImg(profileImg, data) {
+  profileImg.src = (await getAuthImg(data.auth)) || "./img/profile.png";
+}
+
+//                    (생략)
+//                      '
+//                      '
+//                      '
+```
+
   - 적용 전
   
      ![placeholder-Before](https://github.com/MAIN6419/mini-diary/assets/113427991/8dc955d1-3877-4f31-a073-5cadb8a0e558)
