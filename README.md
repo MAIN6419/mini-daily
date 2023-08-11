@@ -202,7 +202,7 @@ async function getAuthImg(auth) {
 //                      '
 //                      '
 //                      '
-//                    (중략)
+//                    (생략)
 
 async function renderAllDiary(data) {
   if (data.length === 0) {
